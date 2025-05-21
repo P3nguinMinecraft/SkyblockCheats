@@ -32,6 +32,7 @@ public class SearchManager {
             active = true;
             found = false;
            	if (foundPos != null) {
+            	ChatUtils.sendMessage("§eSearch cleared.");
            		Render.removeBlock(foundPos);
            		foundPos = null;
            	}
@@ -41,7 +42,6 @@ public class SearchManager {
     }
 
     public static synchronized void clearSearch() {
-    	ChatUtils.sendMessage("§cSearch cleared.");
         found = false;
 
         if (scanTask != null) {
@@ -55,6 +55,7 @@ public class SearchManager {
         }
         
        	if (foundPos != null) {
+        	ChatUtils.sendMessage("§eSearch cleared.");
        		Render.removeBlock(foundPos);
        		foundPos = null;
        	}
@@ -66,7 +67,7 @@ public class SearchManager {
                 while (!Thread.currentThread().isInterrupted() && active && !found) {
                     runCommand("/warp forge");
 
-                    if (!waitForProfileOrDelay(1)) break; // 1 for testing!
+                    if (!waitForProfileOrDelay(0)) break; // 1 for testing! set to 0 when compiling
                     if (!active) break;
 
                     runCommand("/warp ch");
@@ -76,10 +77,12 @@ public class SearchManager {
 
                     AtomicBoolean foundInTask = new AtomicBoolean(false);
 
-                    scanTask = new ScanTask(pos -> {
+                    ScanTask glassScanTask = new ScanTask(pos -> {
                         foundInTask.set(true);
                         setFoundBlock(pos);
-                        ChatUtils.sendMessage("§aFound magenta stained glass at x: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ());
+                        double distance = Math.sqrt(Math.pow(client.player.getX() - pos.getX(), 2) + Math.pow(client.player.getY() - pos.getY(), 2) + Math.pow(client.player.getZ() - pos.getZ(), 2));
+                        double roundedDistance = Math.round(distance * 10.0) / 10.0;
+                        ChatUtils.sendMessage("§aFound Magenta Stained Glass at §rx: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ() + "\n§dDistance: §r" + roundedDistance);
                         String rgba = (String) ConfigManager.getConfig("rgbaBlockColor");
                         float r = 255, g = 0, b = 0, a = 1.0f;
                         if (rgba != null && !rgba.isEmpty()) {
@@ -94,14 +97,41 @@ public class SearchManager {
                                     }
                                 } catch (NumberFormatException e) {
                                 }
-                            } else {
                             }
                         }
                         Render.addBlock(pos, new ArrayList<Float>(List.of(r, g, b, a)), (boolean) ConfigManager.getConfig("fullHighlight") ? RenderMode.HIGHLIGHT : RenderMode.OUTLINE);
                         active = false;
                     }, pos -> client.world.getBlockState(pos).isOf(Blocks.MAGENTA_STAINED_GLASS));
 
-                    scanTask.start();
+                    ScanTask paneScanTask = new ScanTask(pos -> {
+                        foundInTask.set(true);
+                        setFoundBlock(pos);
+                        double distance = Math.sqrt(Math.pow(client.player.getX() - pos.getX(), 2) + Math.pow(client.player.getY() - pos.getY(), 2) + Math.pow(client.player.getZ() - pos.getZ(), 2));
+                        double roundedDistance = Math.round(distance * 10.0) / 10.0;
+                        ChatUtils.sendMessage("§aFound Magenta Stained Glass Pane at §rx: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ() + "\n§dDistance: §r" + roundedDistance);
+                        String rgba = (String) ConfigManager.getConfig("rgbaBlockColor");
+                        float r = 255, g = 0, b = 0, a = 1.0f;
+                        if (rgba != null && !rgba.isEmpty()) {
+                            String[] parts = rgba.split(",");
+                            if (parts.length >= 3) {
+                                try {
+                                    r = Float.parseFloat(parts[0].trim());
+                                    g = Float.parseFloat(parts[1].trim());
+                                    b = Float.parseFloat(parts[2].trim());
+                                    if (parts.length >= 4) {
+                                        a = Float.parseFloat(parts[3].trim());
+                                    }
+                                } catch (NumberFormatException e) {
+                                }
+                            }
+                        }
+                        Render.addBlock(pos, new ArrayList<Float>(List.of(r, g, b, a)), (boolean) ConfigManager.getConfig("fullHighlight") ? RenderMode.HIGHLIGHT : RenderMode.OUTLINE);
+                        active = false;
+                    }, pos -> client.world.getBlockState(pos).isOf(Blocks.MAGENTA_STAINED_GLASS_PANE));
+
+                    glassScanTask.start();
+                    if (!active) break;
+                    paneScanTask.start();
 
                     int timeout = 10_000;
                     long startTime = System.currentTimeMillis();

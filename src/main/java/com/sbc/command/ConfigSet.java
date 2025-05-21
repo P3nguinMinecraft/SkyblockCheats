@@ -34,15 +34,15 @@ public class ConfigSet {
                             try {
                                 if (currentValue instanceof Integer) {
                                     int parsedValue = Integer.parseInt(valueStr);
-                                    ChatUtils.sendMessage("Set " + key + " to " + parsedValue);
+                                    ChatUtils.sendMessage("§eSet " + key + " to " + parsedValue);
                                     ConfigManager.setConfig(key, parsedValue);
                                 } else if (currentValue instanceof Boolean) {
                                     boolean parsedValue = Boolean.parseBoolean(valueStr);
                                     ConfigManager.setConfig(key, parsedValue);
-                                    ChatUtils.sendMessage("Set " + key + " to " + parsedValue);
+                                    ChatUtils.sendMessage("§eSet " + key + " to " + parsedValue);
                                 } else {
                                     ConfigManager.setConfig(key, valueStr);
-                                    ChatUtils.sendMessage("Set " + key + " to \"" + valueStr + "\" (as string)");
+                                    ChatUtils.sendMessage("§eSet " + key + " to \"" + valueStr + "\" (as string)");
                                 }
                             } catch (Exception e) {
                                 ChatUtils.sendMessage("§cFailed to set " + key + ": " + e.getMessage());
