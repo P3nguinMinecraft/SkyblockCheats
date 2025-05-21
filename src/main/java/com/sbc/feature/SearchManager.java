@@ -104,6 +104,7 @@ public class SearchManager {
                     }, pos -> client.world.getBlockState(pos).isOf(Blocks.MAGENTA_STAINED_GLASS));
 
                     ScanTask paneScanTask = new ScanTask(pos -> {
+                        if (!active) return;
                         foundInTask.set(true);
                         setFoundBlock(pos);
                         double distance = Math.sqrt(Math.pow(client.player.getX() - pos.getX(), 2) + Math.pow(client.player.getY() - pos.getY(), 2) + Math.pow(client.player.getZ() - pos.getZ(), 2));
@@ -130,7 +131,6 @@ public class SearchManager {
                     }, pos -> client.world.getBlockState(pos).isOf(Blocks.MAGENTA_STAINED_GLASS_PANE));
 
                     glassScanTask.start();
-                    if (!active) break;
                     paneScanTask.start();
 
                     int timeout = 10_000;
