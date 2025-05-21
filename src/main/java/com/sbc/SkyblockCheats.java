@@ -2,7 +2,7 @@ package com.sbc;
 
 import net.fabricmc.api.ClientModInitializer;
 
-import com.sbc.render.RenderOutlines;
+import com.sbc.render.Render;
 import com.sbc.util.ChatUtils;
 import com.sbc.util.ConfigManager;
 import com.sbc.util.KeybindManager;
@@ -20,7 +20,7 @@ public class SkyblockCheats implements ClientModInitializer {
         LOGGER.info("Initializing AutoBlockFinder...");
         ConfigManager.init();
         KeybindManager.init();
-        RenderOutlines.init();
+        Render.init();
         ChatUtils.init();
         CommandManager.registerAll();
         LOGGER.info("AutoBlockFinder initialized!");

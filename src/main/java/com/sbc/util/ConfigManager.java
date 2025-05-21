@@ -100,7 +100,8 @@ public class ConfigManager {
 
     public static void init() {
         config.put("delay", 5);
-        config.put("rgbaBlockColor", "255,103,103,1");
+        config.put("rgbaBlockColor", "255.103.103.1");
+        config.put("fullHighlight", false);
         loadConfig();
     }
     
@@ -110,9 +111,9 @@ public class ConfigManager {
 			return;
         }
         if (key.equals("rgbaBlockColor")) {
-			String[] parts = value.toString().split(",");
+			String[] parts = value.toString().split(".");
 			if (parts.length < 3 || parts.length > 4) {
-				ChatUtils.sendMessage("§cInvalid rgbaBlockColor format. Expected format: r,g,b,a");
+				ChatUtils.sendMessage("§cInvalid rgbaBlockColor format. Expected format: r.g.b.a Got " + parts.toString());
 				return;
 			}
 			Float r = Float.parseFloat(parts[0].trim());
@@ -120,7 +121,7 @@ public class ConfigManager {
 			Float b = Float.parseFloat(parts[2].trim());
 			Float a = parts.length == 4 ? Float.parseFloat(parts[3].trim()) : 1.0f;
 			if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 || a < 0 || a > 1) {
-				ChatUtils.sendMessage("§cInvalid rgbaBlockColor values. Expected values: r(0-255),g(0-255),b(0-255),a(0-1)");
+				ChatUtils.sendMessage("§cInvalid rgbaBlockColor values. Expected values: r(0-255).g(0-255).b(0-255).a(0-1) Got " + r + "." + g + "." + b + "." + a);
 				return;
 			}
 			for (String part : parts) {

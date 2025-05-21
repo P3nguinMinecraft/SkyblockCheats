@@ -7,7 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.sbc.task.ScanTask;
 import com.sbc.util.ChatUtils;
 import com.sbc.util.ConfigManager;
-import com.sbc.render.RenderOutlines;
+import com.sbc.render.Render;
+import com.sbc.render.Render.RenderMode;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
@@ -16,7 +17,6 @@ import net.minecraft.util.math.BlockPos;
 public class SearchManager {
     private static volatile boolean active = false;
     private static volatile boolean found = false;
-    private static Object render = null;
     private static BlockPos foundPos = null;
     private static ScanTask scanTask = null;
     private static Thread searchThread = null;
@@ -24,19 +24,24 @@ public class SearchManager {
 
     public static synchronized void toggleSearch() {
         if (active) {
+        	active = false;
             clearSearch();
             ChatUtils.sendMessage("§cSearch stopped.");
         } 
         else {
             active = true;
             found = false;
-            foundPos = null;
+           	if (foundPos != null) {
+           		Render.removeBlock(foundPos);
+           		foundPos = null;
+           	}
             ChatUtils.sendMessage("§aSearch started...");
             runSearchLoop();
         }
     }
 
     public static synchronized void clearSearch() {
+    	ChatUtils.sendMessage("§cSearch cleared.");
         found = false;
 
         if (scanTask != null) {
@@ -50,7 +55,7 @@ public class SearchManager {
         }
         
        	if (foundPos != null) {
-       		RenderOutlines.removeBlock(foundPos);
+       		Render.removeBlock(foundPos);
        		foundPos = null;
        	}
     }
@@ -75,7 +80,6 @@ public class SearchManager {
                         foundInTask.set(true);
                         setFoundBlock(pos);
                         ChatUtils.sendMessage("§aFound magenta stained glass at x: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ());
-                        ArrayList<Integer> color = new ArrayList<>();
                         String rgba = (String) ConfigManager.getConfig("rgbaBlockColor");
                         float r = 255, g = 0, b = 0, a = 1.0f;
                         if (rgba != null && !rgba.isEmpty()) {
@@ -93,7 +97,7 @@ public class SearchManager {
                             } else {
                             }
                         }
-                        RenderOutlines.addBlock(pos, new ArrayList<Float>(List.of(r, g, b, a)));
+                        Render.addBlock(pos, new ArrayList<Float>(List.of(r, g, b, a)), (boolean) ConfigManager.getConfig("fullHighlight") ? RenderMode.HIGHLIGHT : RenderMode.OUTLINE);
                         active = false;
                     }, pos -> client.world.getBlockState(pos).isOf(Blocks.MAGENTA_STAINED_GLASS));
 
