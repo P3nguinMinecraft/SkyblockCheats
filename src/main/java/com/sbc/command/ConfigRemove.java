@@ -12,7 +12,7 @@ public class ConfigRemove {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher,
                                 CommandRegistryAccess registryAccess) {
         dispatcher.register(ClientCommandManager.literal("sbc")
-            .then(ClientCommandManager.literal("set")
+            .then(ClientCommandManager.literal("remove")
                 .then(ClientCommandManager.argument("key", StringArgumentType.word())
                     .suggests((ctx, builder) -> {
                         for (String key : ConfigManager.getAllKeys()) {
