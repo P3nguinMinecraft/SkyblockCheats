@@ -33,7 +33,7 @@ public class Render {
 
     public static void init() {
         renderQueue = new HashMap<>();
-        WorldRenderEvents.BEFORE_ENTITIES.register(Render::render);
+        WorldRenderEvents.AFTER_ENTITIES.register(Render::render);
     }
 
     public static void addBlock(BlockPos block, ArrayList<Float> color, RenderMode mode) {
@@ -127,41 +127,62 @@ public class Render {
     }
 
     private static void renderBlockOutline(BufferBuilder buffer, BlockPos block, ArrayList<Float> color) {
-        final float size = 1.0f;
-        final float offset = 0.001f;
-
-        final double x = block.getX();
-        final double y = block.getY();
-        final double z = block.getZ();
-
-        float r = color.get(0) / 255f;
-        float g = color.get(1) / 255f;
-        float b = color.get(2) / 255f;
-        float a = color.get(3);
+        final float r = color.get(0) / 255f;
+        final float g = color.get(1) / 255f;
+        final float b = color.get(2) / 255f;
+        final float a = color.get(3);
 
         if (a == 0f) {
             ChatUtils.sendMessage("§cWarning: Block color has zero alpha (fully transparent). It will not be visible.");
         }
 
-        drawEdge(buffer, x - offset, y - offset, z - offset, x + size + offset, y - offset, z - offset, r, g, b, a);
-        drawEdge(buffer, x - offset, y - offset, z + size + offset, x + size + offset, y - offset, z + size + offset, r, g, b, a);
-        drawEdge(buffer, x - offset, y - offset, z - offset, x - offset, y - offset, z + size + offset, r, g, b, a);
-        drawEdge(buffer, x + size + offset, y - offset, z - offset, x + size + offset, y - offset, z + size + offset, r, g, b, a);
+        final float min = 0.01f;
+        final float max = 0.99f;
+        final float thickness = 0.01f;
 
-        drawEdge(buffer, x - offset, y + size + offset, z - offset, x + size + offset, y + size + offset, z - offset, r, g, b, a);
-        drawEdge(buffer, x - offset, y + size + offset, z + size + offset, x + size + offset, y + size + offset, z + size + offset, r, g, b, a);
-        drawEdge(buffer, x - offset, y + size + offset, z - offset, x - offset, y + size + offset, z + size + offset, r, g, b, a);
-        drawEdge(buffer, x + size + offset, y + size + offset, z - offset, x + size + offset, y + size + offset, z + size + offset, r, g, b, a);
+        double x = block.getX();
+        double y = block.getY();
+        double z = block.getZ();
 
-        drawEdge(buffer, x - offset, y - offset, z - offset, x - offset, y + size + offset, z - offset, r, g, b, a);
-        drawEdge(buffer, x + size + offset, y - offset, z - offset, x + size + offset, y + size + offset, z - offset, r, g, b, a);
-        drawEdge(buffer, x - offset, y - offset, z + size + offset, x - offset, y + size + offset, z + size + offset, r, g, b, a);
-        drawEdge(buffer, x + size + offset, y - offset, z + size + offset, x + size + offset, y + size + offset, z + size + offset, r, g, b, a);
+        // Top (+Y)
+        drawEdge(buffer, x + min, y + 1, z + min, x + max, y + 1, z + min, thickness, r, g, b, a);
+        drawEdge(buffer, x + max, y + 1, z + min, x + max, y + 1, z + max, thickness, r, g, b, a);
+        drawEdge(buffer, x + max, y + 1, z + max, x + min, y + 1, z + max, thickness, r, g, b, a);
+        drawEdge(buffer, x + min, y + 1, z + max, x + min, y + 1, z + min, thickness, r, g, b, a);
+
+        // Bottom (-Y)
+        drawEdge(buffer, x + min, y, z + min, x + max, y, z + min, thickness, r, g, b, a);
+        drawEdge(buffer, x + max, y, z + min, x + max, y, z + max, thickness, r, g, b, a);
+        drawEdge(buffer, x + max, y, z + max, x + min, y, z + max, thickness, r, g, b, a);
+        drawEdge(buffer, x + min, y, z + max, x + min, y, z + min, thickness, r, g, b, a);
+
+        // North (-Z)
+        drawEdge(buffer, x + min, y + min, z, x + max, y + min, z, thickness, r, g, b, a);
+        drawEdge(buffer, x + max, y + min, z, x + max, y + max, z, thickness, r, g, b, a);
+        drawEdge(buffer, x + max, y + max, z, x + min, y + max, z, thickness, r, g, b, a);
+        drawEdge(buffer, x + min, y + max, z, x + min, y + min, z, thickness, r, g, b, a);
+
+        // South (+Z)
+        drawEdge(buffer, x + min, y + min, z + 1, x + max, y + min, z + 1, thickness, r, g, b, a);
+        drawEdge(buffer, x + max, y + min, z + 1, x + max, y + max, z + 1, thickness, r, g, b, a);
+        drawEdge(buffer, x + max, y + max, z + 1, x + min, y + max, z + 1, thickness, r, g, b, a);
+        drawEdge(buffer, x + min, y + max, z + 1, x + min, y + min, z + 1, thickness, r, g, b, a);
+
+        // West (-X)
+        drawEdge(buffer, x, y + min, z + min, x, y + max, z + min, thickness, r, g, b, a);
+        drawEdge(buffer, x, y + max, z + min, x, y + max, z + max, thickness, r, g, b, a);
+        drawEdge(buffer, x, y + max, z + max, x, y + min, z + max, thickness, r, g, b, a);
+        drawEdge(buffer, x, y + min, z + max, x, y + min, z + min, thickness, r, g, b, a);
+
+        // East (+X)
+        drawEdge(buffer, x + 1, y + min, z + min, x + 1, y + max, z + min, thickness, r, g, b, a);
+        drawEdge(buffer, x + 1, y + max, z + min, x + 1, y + max, z + max, thickness, r, g, b, a);
+        drawEdge(buffer, x + 1, y + max, z + max, x + 1, y + min, z + max, thickness, r, g, b, a);
+        drawEdge(buffer, x + 1, y + min, z + max, x + 1, y + min, z + min, thickness, r, g, b, a);
     }
 
-    private static void drawEdge(BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2,
+    private static void drawEdge(BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2, float thickness, 
             float r, float g, float b, float a) {
-        final float thickness = 0.002f;
 
         double dx = x2 - x1;
         double dy = y2 - y1;

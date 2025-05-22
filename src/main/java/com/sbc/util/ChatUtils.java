@@ -29,7 +29,8 @@ public class ChatUtils {
         return true;
     }
 
-    public static void sendMessage(String message) {
+    public static void sendMessage(Object msg) {
+    	String message = msg.toString();
         MinecraftClient mc = MinecraftClient.getInstance();
         mc.inGameHud.getChatHud().addMessage(Text.literal(message));
     }

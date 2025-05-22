@@ -29,5 +29,23 @@ public class ConfigRemove {
                 )
             )
         );
+        dispatcher.register(ClientCommandManager.literal("skyblockcheats")
+            .then(ClientCommandManager.literal("remove")
+                .then(ClientCommandManager.argument("key", StringArgumentType.word())
+                    .suggests((ctx, builder) -> {
+                        for (String key : ConfigManager.getAllKeys()) {
+                            builder.suggest(key);
+                        }
+                        return builder.buildFuture();
+                    })
+                    .executes(ctx -> {
+                        String key = StringArgumentType.getString(ctx, "key");
+                        ConfigManager.removeConfig(key);
+                        ChatUtils.sendMessage("Removed config key: " + key);
+                        return 1;
+                    })
+                )
+            )
+        );
     }
 }

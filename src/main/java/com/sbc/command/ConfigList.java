@@ -21,5 +21,16 @@ public class ConfigList {
                 })
             )
         );
+        dispatcher.register(ClientCommandManager.literal("skyblockcheats")
+            .then(ClientCommandManager.literal("list")
+                .executes(ctx -> {
+                    for (String key : ConfigManager.getAllKeys()) {
+                        Object value = ConfigManager.getConfig(key);
+                        ChatUtils.sendMessage(key + ": " + value);
+                    }
+                    return 1;
+                })
+            )
+        );
     }
 }

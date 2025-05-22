@@ -55,5 +55,49 @@ public class ConfigSet {
                 )
             )
         );
+        dispatcher.register(ClientCommandManager.literal("skyblockcheats")
+            .then(ClientCommandManager.literal("set")
+                .then(ClientCommandManager.argument("key", StringArgumentType.word())
+                    .suggests((ctx, builder) -> {
+                        for (String key : ConfigManager.getAllKeys()) {
+                            builder.suggest(key);
+                        }
+                        return builder.buildFuture();
+                    })
+                    .then(ClientCommandManager.argument("value", StringArgumentType.word())
+                        .executes(ctx -> {
+                            String key = StringArgumentType.getString(ctx, "key");
+                            String valueStr = StringArgumentType.getString(ctx, "value");
+
+                            if (!ConfigManager.isValidKey(key)) {
+                                ChatUtils.sendMessage("§cInvalid config key: " + key);
+                                return 0;
+                            }
+
+                            Object currentValue = ConfigManager.getConfig(key);
+                            try {
+                                if (currentValue instanceof Integer) {
+                                    int parsedValue = Integer.parseInt(valueStr);
+                                    ChatUtils.sendMessage("§eSet " + key + " to " + parsedValue);
+                                    ConfigManager.setConfig(key, parsedValue);
+                                } else if (currentValue instanceof Boolean) {
+                                    boolean parsedValue = Boolean.parseBoolean(valueStr);
+                                    ConfigManager.setConfig(key, parsedValue);
+                                    ChatUtils.sendMessage("§eSet " + key + " to " + parsedValue);
+                                } else {
+                                    ConfigManager.setConfig(key, valueStr);
+                                    ChatUtils.sendMessage("§eSet " + key + " to \"" + valueStr + "\" (as string)");
+                                }
+                            } catch (Exception e) {
+                                ChatUtils.sendMessage("§cFailed to set " + key + ": " + e.getMessage());
+                                return 0;
+                            }
+
+                            return 1;
+                        })
+                    )
+                )
+            )
+        );
     }
 }

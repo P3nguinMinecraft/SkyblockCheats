@@ -1,5 +1,6 @@
 {
   "category.sbc": "SkyblockCheats",
-  "key.sbc.toggle_search": "Toggle Search",
-  "key.sbc.clear_search": "Clear Search"
+  "key.sbc.search_toggle": "Search Loop Toggle",
+  "key.sbc.search_scan": "Scan Blocks",
+  "key.sbc.search_clear": "Clear Blocks"
 }

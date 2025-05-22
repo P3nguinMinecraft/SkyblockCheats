@@ -1,11 +1,15 @@
 package com.sbc.task;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.WorldChunk;
+import net.minecraft.world.chunk.ChunkStatus;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -34,42 +38,37 @@ public class ScanTask implements Runnable {
             return;
         }
 
-        BlockPos playerPos = client.player.getBlockPos();
-        int renderDistance = client.options.getViewDistance().getValue();
-        int chunkRadius = renderDistance;
-        int chunkX = playerPos.getX() >> 4;
-        int chunkZ = playerPos.getZ() >> 4;
+        int minY = world.getBottomY();
+        int maxY = world.getTopY();
 
-        Queue<BlockPos> queue = new ArrayDeque<>();
-        Set<BlockPos> visited = new HashSet<>();
+        ChunkPos centerChunk = new ChunkPos(client.player.getBlockPos());
+        int radius = client.options.getViewDistance().getValue();
 
-        queue.add(playerPos);
-        visited.add(playerPos);
+        List<ChunkPos> spiralChunks = generateSpiral(centerChunk, radius);
 
-        while (!queue.isEmpty()) {
+        outerLoop:
+        for (ChunkPos chunkPos : spiralChunks) {
             if (cancelled) break;
-            BlockPos pos = queue.poll();
 
-            if (!isInLoadedChunks(pos, chunkX, chunkZ, chunkRadius)) continue;
-            if (pos.getY() < world.getBottomY() || pos.getY() >= world.getTopY()) continue;
+            WorldChunk chunk = client.world.getChunkManager().getChunk(chunkPos.x, chunkPos.z, ChunkStatus.FULL, false);
+            if (chunk == null) continue;
 
-            if (blockPredicate.test(pos)) {
-                foundCallback.accept(pos);
-                break;
-            }
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    for (int y = minY; y < maxY; y++) {
+                        if (cancelled) break outerLoop;
 
-            // Add neighbors (6 directions)
-            for (BlockPos neighbor : Arrays.asList(
-                pos.north(),
-                pos.south(),
-                pos.east(),
-                pos.west(),
-                pos.up(),
-                pos.down()
-            )) {
-                if (!visited.contains(neighbor)) {
-                    visited.add(neighbor);
-                    queue.add(neighbor);
+                        BlockPos pos = chunkPos.getStartPos().add(x, y, z);
+                        BlockState state = chunk.getBlockState(pos);
+
+                        if (state.isAir()) continue;
+
+                        if (blockPredicate.test(pos)) {
+                            foundCallback.accept(pos);
+                            done = true;
+                            return;
+                        }
+                    }
                 }
             }
         }
@@ -77,10 +76,29 @@ public class ScanTask implements Runnable {
         done = true;
     }
 
-    private boolean isInLoadedChunks(BlockPos pos, int centerChunkX, int centerChunkZ, int chunkRadius) {
-        int cx = pos.getX() >> 4;
-        int cz = pos.getZ() >> 4;
-        return Math.abs(cx - centerChunkX) <= chunkRadius && Math.abs(cz - centerChunkZ) <= chunkRadius;
+    private List<ChunkPos> generateSpiral(ChunkPos center, int radius) {
+        List<ChunkPos> result = new ArrayList<>();
+        result.add(center);
+
+        int dx = 0, dz = -1;
+        int x = 0, z = 0;
+
+        for (int layer = 1; layer <= radius * 2; layer++) {
+            for (int i = 0; i < (layer < radius * 2 ? layer : radius * 2); i++) {
+                if (Math.abs(x) <= radius && Math.abs(z) <= radius) {
+                    result.add(new ChunkPos(center.x + x, center.z + z));
+                }
+
+                int temp = dx;
+                dx = -dz;
+                dz = temp;
+
+                x += dx;
+                z += dz;
+            }
+        }
+
+        return result;
     }
 
     public void cancel() {

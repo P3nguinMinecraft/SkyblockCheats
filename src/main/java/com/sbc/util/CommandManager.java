@@ -9,8 +9,10 @@ public class CommandManager {
         	ConfigSet.register(dispatcher, registryAccess);
         	ConfigList.register(dispatcher, registryAccess);
         	ConfigRemove.register(dispatcher, registryAccess);
-            ToggleSearch.register(dispatcher, registryAccess);
-            ClearSearch.register(dispatcher, registryAccess);
+            SearchToggle.register(dispatcher, registryAccess);
+            SearchClear.register(dispatcher, registryAccess);
+            SearchList.register(dispatcher, registryAccess);
+            SearchScan.register(dispatcher, registryAccess);
         });
     }
 }
