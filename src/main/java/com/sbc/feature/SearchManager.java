@@ -29,31 +29,27 @@ public class SearchManager {
     public static synchronized void toggleSearch() {
         if (loopActive) {
             clearSearch();
-            ChatUtils.sendMessage("§cSearch stopped.");
+            endTasks();
+            ChatUtils.sendMessage("§cSearch stopped");
         }
         else {
            	if (found) {
                 found = false;
-            	ChatUtils.sendMessage("§eSearch cleared.");
+            	ChatUtils.sendMessage("§eSearch cleared");
             	for (BlockPos pos : foundBlocks) {
 					Render.removeBlock(pos);
 				}
                 foundBlocks.clear();
            	}
-            ChatUtils.sendMessage("§aSearch started...");
+            ChatUtils.sendMessage("§aSearch started");
             runSearchLoop();
         }
     }
 
     public static synchronized void clearSearch() {
-    	loopActive = false;
-    	active = false;
-
-        endTasks();
-
         if (found) {
             found = false;
-        	ChatUtils.sendMessage("§eSearch cleared.");
+        	ChatUtils.sendMessage("§eSearch cleared");
         	for (BlockPos pos : foundBlocks) {
 				Render.removeBlock(pos);
 			}
@@ -64,11 +60,11 @@ public class SearchManager {
     public static synchronized void scan() {
     	if (active) {
 			active = false;
-			ChatUtils.sendMessage("§cScan cancelled.");
+			ChatUtils.sendMessage("§cScan cancelled");
 		    endTasks();
 		    return;
 		}
-    	ChatUtils.sendMessage("§aScan started.");
+    	ChatUtils.sendMessage("§aScan started");
 
 		manualScanTaskThread = new Thread(() -> {
 	    	Object lock = new Object();
@@ -94,7 +90,7 @@ public class SearchManager {
 
     public static void listSearch() {
     	if (foundBlocks.isEmpty()) {
-			ChatUtils.sendMessage("§cNo blocks found.");
+			ChatUtils.sendMessage("§cNo blocks found");
 		} else {
 			StringBuilder message = new StringBuilder("§aFound blocks:§r");
 			for (BlockPos pos : foundBlocks) {
@@ -162,7 +158,7 @@ public class SearchManager {
                     			try {
 									sleepInterruptibly(10);
 								} catch (InterruptedException e) {
-									e.printStackTrace();
+									Thread.currentThread().interrupt();
 								}
                     		}
                     	}
@@ -179,19 +175,12 @@ public class SearchManager {
 
     private static void runScanTaskAsync(int timeout, Runnable onFound, Runnable onTimeout, boolean single) {
         if (active) {
-            ChatUtils.sendMessage("§cA scan is already in progress.");
+            ChatUtils.sendMessage("§cA scan is already in progress!");
             return;
         }
         active = true;
 
-        if (found) {
-            found = false;
-            ChatUtils.sendMessage("§eSearch cleared.");
-            for (BlockPos pos : foundBlocks) {
-                Render.removeBlock(pos);
-            }
-            foundBlocks.clear();
-        }
+        clearSearch();
 
         AtomicBoolean foundInTask = new AtomicBoolean(false);
 
@@ -212,7 +201,7 @@ public class SearchManager {
                             + "\n§dDistance: §r" + roundedDistance);
                     active = false;
                     onFound.run();
-                    endTasks();
+                    endScanTasks();
                 }, pos -> client.world.getBlockState(pos).isOf(Blocks.MAGENTA_STAINED_GLASS));
 
                 paneScanTask = new ScanTask(pos -> {
@@ -226,7 +215,7 @@ public class SearchManager {
                             + "\n§dDistance: §r" + roundedDistance);
                     active = false;
                     onFound.run();
-                    endTasks();
+                    endScanTasks();
                 }, pos -> client.world.getBlockState(pos).isOf(Blocks.MAGENTA_STAINED_GLASS_PANE));
 
                 glassScanTask.start();
@@ -237,7 +226,7 @@ public class SearchManager {
                 		if ((timeout > 0) && System.currentTimeMillis() >= startTime + timeout) {
                 			active = false;
                 			onTimeout.run();
-                			endTasks();
+                			endScanTasks();
                 			break;
                 		}
                         Thread.sleep(20);
@@ -256,11 +245,11 @@ public class SearchManager {
         		}
         		
         		if (firstRun && !foundInTask.get()) {
-    				ChatUtils.sendMessage(single ? "§cNo blocks found." : "§cNo blocks found. Looping...");
+    				ChatUtils.sendMessage(single ? "§cNo blocks found" : "§cNo blocks found. Looping...");
         			firstRun = false;
         			if (single) {
         				active = false;
-        				endTasks();
+        				endScanTasks();
 						onTimeout.run();
 						break;
         			}
@@ -268,7 +257,7 @@ public class SearchManager {
             }
 
         	active = false;
-			endTasks();
+			endScanTasks();
 			
             if (!foundInTask.get()) {
                 onTimeout.run();
@@ -283,6 +272,8 @@ public class SearchManager {
 
 
     public static void endTasks() {
+    	loopActive = false;
+    	active = false;
 		if (glassScanTask != null) {
 	    	glassScanTask.cancel();
 	    	glassScanTask = null;
@@ -304,6 +295,21 @@ public class SearchManager {
 			manualScanTaskThread = null;
 		}
 	}
+    
+    public static void endScanTasks() {
+		if (glassScanTask != null) {
+	    	glassScanTask.cancel();
+	    	glassScanTask = null;
+		}
+		if (paneScanTask != null) {
+			paneScanTask.cancel();
+	    	paneScanTask = null;
+		}
+		if (scanTaskThread != null) {
+			scanTaskThread.interrupt();
+			scanTaskThread = null;
+		}
+    }
 
     private static void runCommand(String command) {
         if (client.player != null) {

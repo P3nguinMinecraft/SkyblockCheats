@@ -15,6 +15,7 @@ public class SearchClear {
 				.then(ClientCommandManager.literal("clear")
 					.executes(ctx -> {
 						SearchManager.clearSearch();
+						SearchManager.endTasks();
 						return 1;
 					})
 				)
@@ -25,6 +26,7 @@ public class SearchClear {
 				.then(ClientCommandManager.literal("clear")
 					.executes(ctx -> {
 						SearchManager.clearSearch();
+						SearchManager.endTasks();
 						return 1;
 					})
 				)

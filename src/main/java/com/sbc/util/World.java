@@ -50,5 +50,6 @@ public class World {
 	
 	public static void onServerSwitch() {
 		SearchManager.clearSearch();
+		SearchManager.endScanTasks();
 	}
 }
