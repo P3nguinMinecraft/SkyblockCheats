@@ -11,23 +11,23 @@ public class SearchScan {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher,
                               CommandRegistryAccess registryAccess) {
         dispatcher.register(ClientCommandManager.literal("sbc")
-        		.then(ClientCommandManager.literal("search")
-        				.then(ClientCommandManager.literal("scan")
-        						.executes(ctx -> {
-    								SearchManager.scan();
-        							return 1;
-        						})
-        				)
-        		)
+    		.then(ClientCommandManager.literal("search")
+				.then(ClientCommandManager.literal("scan")
+					.executes(ctx -> {
+						SearchManager.scan();
+						return 1;
+					})
+				)
+    		)
         );
         dispatcher.register(ClientCommandManager.literal("skyblockcheats")
     		.then(ClientCommandManager.literal("search")
-    				.then(ClientCommandManager.literal("scan")
-    						.executes(ctx -> {
-    							SearchManager.scan();
-    							return 1;
-    						})
-    				)
+				.then(ClientCommandManager.literal("scan")
+					.executes(ctx -> {
+						SearchManager.scan();
+						return 1;
+					})
+				)
     		)
         );
     }

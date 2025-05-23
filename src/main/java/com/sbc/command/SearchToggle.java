@@ -11,24 +11,24 @@ public class SearchToggle {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher,
                               CommandRegistryAccess registryAccess) {
         dispatcher.register(ClientCommandManager.literal("sbc")
-        		.then(ClientCommandManager.literal("search")
-        				.then(ClientCommandManager.literal("toggle")
-        						.executes(ctx -> {
-        							SearchManager.toggleSearch();
-        							return 1;
-        						})
-        				)
-        		)
+    		.then(ClientCommandManager.literal("search")
+				.then(ClientCommandManager.literal("toggle")
+					.executes(ctx -> {
+						SearchManager.toggleSearch();
+						return 1;
+					})
+				)
+    		)
         );
         dispatcher.register(ClientCommandManager.literal("skyblockcheats")
-        		.then(ClientCommandManager.literal("search")
-        				.then(ClientCommandManager.literal("toggle")
-        						.executes(ctx -> {
-        							SearchManager.toggleSearch();
-        							return 1;
-        						})
-        				)
-        		)
+    		.then(ClientCommandManager.literal("search")
+				.then(ClientCommandManager.literal("toggle")
+					.executes(ctx -> {
+						SearchManager.toggleSearch();
+						return 1;
+					})
+				)
+    		)
         );
     }
 }

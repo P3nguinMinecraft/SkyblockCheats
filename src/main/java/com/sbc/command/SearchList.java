@@ -11,24 +11,24 @@ public class SearchList {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher,
                               CommandRegistryAccess registryAccess) {
         dispatcher.register(ClientCommandManager.literal("sbc")
-        		.then(ClientCommandManager.literal("search")
-        				.then(ClientCommandManager.literal("list")
-        						.executes(ctx -> {
-        							SearchManager.listSearch();
-        							return 1;
-        						})
-        				)
-        		)
+    		.then(ClientCommandManager.literal("search")
+				.then(ClientCommandManager.literal("list")
+					.executes(ctx -> {
+						SearchManager.listSearch();
+						return 1;
+					})
+				)
+    		)
         );
         dispatcher.register(ClientCommandManager.literal("skyblockcheats")
-        		.then(ClientCommandManager.literal("search")
-        				.then(ClientCommandManager.literal("list")
-        						.executes(ctx -> {
-        							SearchManager.listSearch();
-        							return 1;
-        						})
-        				)
-        		)
+    		.then(ClientCommandManager.literal("search")
+				.then(ClientCommandManager.literal("list")
+					.executes(ctx -> {
+						SearchManager.listSearch();
+						return 1;
+					})
+				)
+    		)
         );
     }
 }

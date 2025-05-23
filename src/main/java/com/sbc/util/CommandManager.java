@@ -7,6 +7,7 @@ import com.sbc.command.SearchClear;
 import com.sbc.command.SearchList;
 import com.sbc.command.SearchScan;
 import com.sbc.command.SearchToggle;
+import com.sbc.command.Uptime;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 
@@ -20,6 +21,7 @@ public class CommandManager {
             SearchClear.register(dispatcher, registryAccess);
             SearchList.register(dispatcher, registryAccess);
             SearchScan.register(dispatcher, registryAccess);
+            Uptime.register(dispatcher, registryAccess);
         });
     }
 }

@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.sbc.render.Render;
 import com.sbc.render.Render.RenderMode;
 import com.sbc.task.ScanTask;
+import com.sbc.task.WorldLoaded;
 import com.sbc.util.ChatUtils;
 import com.sbc.util.ConfigManager;
 
@@ -74,13 +75,10 @@ public class SearchManager {
     	if (active) {
 			active = false;
 			ChatUtils.sendMessage("§cScan cancelled.");
-		    if (manualScanTaskThread != null) {
-				manualScanTaskThread.interrupt();
-			    manualScanTaskThread = null;
-		    }
 		    endTasks();
 		    return;
 		}
+    	ChatUtils.sendMessage("§aScan started.");
 
 		manualScanTaskThread = new Thread(() -> {
 	    	Object lock = new Object();
@@ -90,7 +88,7 @@ public class SearchManager {
 			    },
 			    () -> {
 			    	synchronized (lock) { lock.notify(); }
-			    }
+			    }, false
 			);
 
             synchronized (lock) {
@@ -122,20 +120,32 @@ public class SearchManager {
             try {
                 while (!Thread.currentThread().isInterrupted() && loopActive && !found) {
                     runCommand("/warp forge");
-
-                    if (!waitForProfileOrDelay(0) || !loopActive) {
-						break;
-					}
+                    
+                	if ((int) ConfigManager.getConfig("delay") > 0) {
+                		sleepInterruptibly((int) ConfigManager.getConfig("delay") * 1000);
+                	}
+                	else {
+                		ChatUtils.waitForChatMessage("Profile ID:", false, true, 5000, () -> {}, () -> {});
+                	}
 
                     runCommand("/warp ch");
 
-                    sleepInterruptibly(2000);
-                    if (!loopActive) {
-						break;
-					}
-
                     Object lock = new Object();
                     AtomicBoolean foundTask = new AtomicBoolean(false);
+
+                	AtomicBoolean chProfile = new AtomicBoolean(false);
+                	ChatUtils.waitForChatMessage("Profile ID:", false, false, 10000, 
+            			() -> {
+	                		if (chProfile != null)
+	                			chProfile.set(true);
+            			},
+						() -> {
+							if (chProfile != null)
+	                			chProfile.set(true);
+						}
+					);
+                	
+                	WorldLoaded.waitLoaded(10000);
 
                     runScanTaskAsync(10000,
                         () -> {
@@ -144,18 +154,30 @@ public class SearchManager {
                             synchronized (lock) { lock.notify(); }
                         },
                         () -> {
-                        	loopActive = false;
                             synchronized (lock) { lock.notify(); }
-                        }
+                        }, true
                     );
 
                     synchronized (lock) {
                         lock.wait();
                     }
 
-                    if (!foundTask.get() && !waitForProfileOrDelay((int) ConfigManager.getConfig("delay"))) {
-						break;
-                    }
+                    if (!foundTask.get()) {
+                    	if ((int) ConfigManager.getConfig("delay") > 0) {
+                    		sleepInterruptibly((int) ConfigManager.getConfig("delay") * 1000);
+                    	}
+                    	else {
+                    		while (!chProfile.get()) {
+                    			if (!loopActive) break;
+                    			try {
+									sleepInterruptibly(10);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+                    		}
+                    	}
+					}
+
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -165,7 +187,7 @@ public class SearchManager {
         searchLoopThread.start();
     }
 
-    private static void runScanTaskAsync(int timeout, Runnable onFound, Runnable onTimeout) {
+    private static void runScanTaskAsync(int timeout, Runnable onFound, Runnable onTimeout, boolean single) {
         if (active) {
             ChatUtils.sendMessage("§cA scan is already in progress.");
             return;
@@ -185,9 +207,10 @@ public class SearchManager {
 
         scanTaskThread = new Thread(() -> {
             long startTime = System.currentTimeMillis();
+            boolean firstRun = true;
 
             while (!Thread.currentThread().isInterrupted() && !foundInTask.get()
-                    && ((timeout <= 0) || (System.currentTimeMillis() - startTime) < timeout)) {
+                    && ((timeout <= 0) || (System.currentTimeMillis() < startTime + timeout)) && active) {
                 glassScanTask = new ScanTask(pos -> {
                     foundInTask.set(true);
                     setFoundBlock(pos);
@@ -219,8 +242,14 @@ public class SearchManager {
                 glassScanTask.start();
                 paneScanTask.start();
 
-                while (glassScanTask != null && paneScanTask != null && !glassScanTask.isDone() && !paneScanTask.isDone() && !foundInTask.get() && !Thread.currentThread().isInterrupted()) {
+                while (glassScanTask != null && paneScanTask != null && (!glassScanTask.isDone() || !paneScanTask.isDone()) && !foundInTask.get() && !Thread.currentThread().isInterrupted()) {
                 	try {
+                		if ((timeout > 0) && System.currentTimeMillis() >= startTime + timeout) {
+                			active = false;
+                			onTimeout.run();
+                			endTasks();
+                			break;
+                		}
                         Thread.sleep(20);
                     } catch (InterruptedException e) {
                         break;
@@ -235,11 +264,27 @@ public class SearchManager {
         			paneScanTask.cancel();
         	    	paneScanTask = null;
         		}
+        		
+        		if (firstRun) {
+    				ChatUtils.sendMessage(single ? "§cNo blocks found." : "§cNo blocks found. Looping...");
+        			firstRun = false;
+        			if (single) {
+        				active = false;
+        				endTasks();
+						onTimeout.run();
+						break;
+        			}
+        		}
             }
 
+        	active = false;
+			endTasks();
+			
             if (!foundInTask.get()) {
-                active = false;
                 onTimeout.run();
+            }
+            else {
+            	onFound.run();
             }
         }, "ScanTaskThread");
 
@@ -261,15 +306,6 @@ public class SearchManager {
 			scanTaskThread = null;
 		}
 	}
-
-    private static boolean waitForProfileOrDelay(int seconds) throws InterruptedException {
-        if (seconds > 0) {
-            sleepInterruptibly(seconds * 1000);
-            return true;
-        } else {
-            return ChatUtils.waitForChatMessage("You are playing on profile:", 10000);
-        }
-    }
 
     private static void runCommand(String command) {
         if (client.player != null) {
