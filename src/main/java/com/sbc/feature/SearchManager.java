@@ -74,8 +74,10 @@ public class SearchManager {
     	if (active) {
 			active = false;
 			ChatUtils.sendMessage("§cScan cancelled.");
-		    manualScanTaskThread.interrupt();
-		    manualScanTaskThread = null;
+		    if (manualScanTaskThread != null) {
+				manualScanTaskThread.interrupt();
+			    manualScanTaskThread = null;
+		    }
 		    endTasks();
 		    return;
 		}
@@ -151,10 +153,8 @@ public class SearchManager {
                         lock.wait();
                     }
 
-                    if (!foundTask.get()) {
-                        if (!waitForProfileOrDelay((int) ConfigManager.getConfig("delay"))) {
-							break;
-						}
+                    if (!foundTask.get() && !waitForProfileOrDelay((int) ConfigManager.getConfig("delay"))) {
+						break;
                     }
                 }
             } catch (InterruptedException e) {

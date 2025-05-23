@@ -10,6 +10,7 @@ public class ChatUtils {
     public static void init() {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             lastGameMessage = message != null ? message.getString() : "";
+            System.out.println(lastGameMessage);
         });
     }
 
@@ -26,7 +27,7 @@ public class ChatUtils {
             } catch (InterruptedException ignored) {}
         }
 
-        return true;
+        return false;
     }
 
     public static void sendMessage(Object msg) {
