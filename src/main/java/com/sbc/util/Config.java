@@ -14,7 +14,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class ConfigManager {
+public class Config {
     private static final Map<String, Object> config = new HashMap<>();
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final File configFile = new File("config/autoblockfinder/config.json");

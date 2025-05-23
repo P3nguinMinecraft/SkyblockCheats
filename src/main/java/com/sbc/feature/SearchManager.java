@@ -7,9 +7,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.sbc.render.Render;
 import com.sbc.render.Render.RenderMode;
 import com.sbc.task.ScanTask;
-import com.sbc.task.WorldLoaded;
 import com.sbc.util.ChatUtils;
-import com.sbc.util.ConfigManager;
+import com.sbc.util.Config;
+import com.sbc.util.World;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
@@ -49,16 +49,6 @@ public class SearchManager {
     	loopActive = false;
     	active = false;
 
-        if (searchLoopThread != null) {
-            searchLoopThread.interrupt();
-            searchLoopThread = null;
-        }
-
-        if (scanTaskThread != null) {
-			scanTaskThread.interrupt();
-			scanTaskThread = null;
-		}
-
         endTasks();
 
         if (found) {
@@ -95,7 +85,7 @@ public class SearchManager {
             	try {
 					lock.wait();
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					Thread.currentThread().interrupt();
 				}
             }
 	    }, "ManualScanTaskThread");
@@ -121,8 +111,8 @@ public class SearchManager {
                 while (!Thread.currentThread().isInterrupted() && loopActive && !found) {
                     runCommand("/warp forge");
                     
-                	if ((int) ConfigManager.getConfig("delay") > 0) {
-                		sleepInterruptibly((int) ConfigManager.getConfig("delay") * 1000);
+                	if ((int) Config.getConfig("delay") > 0) {
+                		sleepInterruptibly((int) Config.getConfig("delay") * 1000);
                 	}
                 	else {
                 		ChatUtils.waitForChatMessage("Profile ID:", false, true, 5000, () -> {}, () -> {});
@@ -145,7 +135,7 @@ public class SearchManager {
 						}
 					);
                 	
-                	WorldLoaded.waitLoaded(3000);
+                	World.waitLoaded(3000);
 
                     runScanTaskAsync(10000,
                         () -> {
@@ -163,8 +153,8 @@ public class SearchManager {
                     }
 
                     if (!foundTask.get()) {
-                    	if ((int) ConfigManager.getConfig("delay") > 0) {
-                    		sleepInterruptibly((int) ConfigManager.getConfig("delay") * 1000);
+                    	if ((int) Config.getConfig("delay") > 0) {
+                    		sleepInterruptibly((int) Config.getConfig("delay") * 1000);
                     	}
                     	else {
                     		while (!chProfile.get()) {
@@ -265,7 +255,7 @@ public class SearchManager {
         	    	paneScanTask = null;
         		}
         		
-        		if (firstRun) {
+        		if (firstRun && !foundInTask.get()) {
     				ChatUtils.sendMessage(single ? "§cNo blocks found." : "§cNo blocks found. Looping...");
         			firstRun = false;
         			if (single) {
@@ -292,7 +282,7 @@ public class SearchManager {
     }
 
 
-    private static void endTasks() {
+    public static void endTasks() {
 		if (glassScanTask != null) {
 	    	glassScanTask.cancel();
 	    	glassScanTask = null;
@@ -304,6 +294,14 @@ public class SearchManager {
 		if (scanTaskThread != null) {
 			scanTaskThread.interrupt();
 			scanTaskThread = null;
+		}
+		if (searchLoopThread != null) {
+			searchLoopThread.interrupt();
+			searchLoopThread = null;
+		}
+		if (manualScanTaskThread != null) {
+			manualScanTaskThread.interrupt();
+			manualScanTaskThread = null;
 		}
 	}
 
@@ -320,7 +318,7 @@ public class SearchManager {
     private static synchronized void setFoundBlock(BlockPos pos) {
         found = true;
         foundBlocks.add(pos);
-        String rgba = (String) ConfigManager.getConfig("rgbaBlockColor");
+        String rgba = (String) Config.getConfig("rgbaBlockColor");
         float r = 255, g = 0, b = 0, a = 1.0f;
         if (rgba != null && !rgba.isEmpty()) {
             String[] parts = rgba.split(",");
@@ -336,6 +334,6 @@ public class SearchManager {
                 }
             }
         }
-        Render.addBlock(pos, new ArrayList<>(List.of(r, g, b, a)), (boolean) ConfigManager.getConfig("fullHighlight") ? RenderMode.HIGHLIGHT : RenderMode.OUTLINE);
+        Render.addBlock(pos, new ArrayList<>(List.of(r, g, b, a)), (boolean) Config.getConfig("fullHighlight") ? RenderMode.HIGHLIGHT : RenderMode.OUTLINE);
     }
 }

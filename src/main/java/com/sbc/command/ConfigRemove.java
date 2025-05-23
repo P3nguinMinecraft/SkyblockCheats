@@ -3,7 +3,7 @@ package com.sbc.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.sbc.util.ChatUtils;
-import com.sbc.util.ConfigManager;
+import com.sbc.util.Config;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -17,14 +17,14 @@ public class ConfigRemove {
 	            .then(ClientCommandManager.literal("remove")
 	                .then(ClientCommandManager.argument("key", StringArgumentType.word())
 	                    .suggests((ctx, builder) -> {
-	                        for (String key : ConfigManager.getAllKeys()) {
+	                        for (String key : Config.getAllKeys()) {
 	                            builder.suggest(key);
 	                        }
 	                        return builder.buildFuture();
 	                    })
 	                    .executes(ctx -> {
 	                        String key = StringArgumentType.getString(ctx, "key");
-	                        ConfigManager.removeConfig(key);
+	                        Config.removeConfig(key);
 	                        ChatUtils.sendMessage("Removed config key: " + key);
 	                        return 1;
 	                    })
@@ -37,14 +37,14 @@ public class ConfigRemove {
 	            .then(ClientCommandManager.literal("remove")
 	                .then(ClientCommandManager.argument("key", StringArgumentType.word())
 	                    .suggests((ctx, builder) -> {
-	                        for (String key : ConfigManager.getAllKeys()) {
+	                        for (String key : Config.getAllKeys()) {
 	                            builder.suggest(key);
 	                        }
 	                        return builder.buildFuture();
 	                    })
 	                    .executes(ctx -> {
 	                        String key = StringArgumentType.getString(ctx, "key");
-	                        ConfigManager.removeConfig(key);
+	                        Config.removeConfig(key);
 	                        ChatUtils.sendMessage("Removed config key: " + key);
 	                        return 1;
 	                    })

@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.sbc.object.Coordinate;
 import com.sbc.util.ChatUtils;
-import com.sbc.util.ConfigManager;
+import com.sbc.util.Config;
 
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -146,7 +146,7 @@ public class Render {
     }
 
     private static void renderFaceOutline(BufferBuilder buffer, ArrayList<Float> color, Coordinate coord, int direction) {
-		final float thickness = (float) ConfigManager.getConfig("outlineWeight");
+		final float thickness = (float) Config.getConfig("outlineWeight");
 		ArrayList<Coordinate> coords = new ArrayList<>();
 		ArrayList<Integer> directions = new ArrayList<>();
 

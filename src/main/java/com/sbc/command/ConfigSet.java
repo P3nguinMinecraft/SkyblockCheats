@@ -3,7 +3,7 @@ package com.sbc.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.sbc.util.ChatUtils;
-import com.sbc.util.ConfigManager;
+import com.sbc.util.Config;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -17,7 +17,7 @@ public class ConfigSet {
 	            .then(ClientCommandManager.literal("set")
 	                .then(ClientCommandManager.argument("key", StringArgumentType.word())
 	                    .suggests((ctx, builder) -> {
-	                        for (String key : ConfigManager.getAllKeys()) {
+	                        for (String key : Config.getAllKeys()) {
 	                            builder.suggest(key);
 	                        }
 	                        return builder.buildFuture();
@@ -27,36 +27,36 @@ public class ConfigSet {
 	                            String key = StringArgumentType.getString(ctx, "key");
 	                            String valueStr = StringArgumentType.getString(ctx, "value");
 
-	                            if (!ConfigManager.isValidKey(key)) {
+	                            if (!Config.isValidKey(key)) {
 	                                ChatUtils.sendMessage("§cInvalid config key: " + key);
 	                                return 0;
 	                            }
 
-	                            Object currentValue = ConfigManager.getConfig(key);
+	                            Object currentValue = Config.getConfig(key);
 	                            try {
 	                                if (currentValue instanceof Integer) {
 	                                    int parsedValue = Integer.parseInt(valueStr);
-	                                    if (ConfigManager.setConfig(key, parsedValue)) {
+	                                    if (Config.setConfig(key, parsedValue)) {
 											ChatUtils.sendMessage("§eSet " + key + " to " + parsedValue);
 										}
 	                                }
 	                                else if (currentValue instanceof Float) {
 										float parsedValue = Float.parseFloat(valueStr);
-										if (ConfigManager.setConfig(key, parsedValue)) {
+										if (Config.setConfig(key, parsedValue)) {
 											ChatUtils.sendMessage("§eSet " + key + " to " + parsedValue);
 										}
 									} else if (currentValue instanceof Double) {
 										double parsedValue = Double.parseDouble(valueStr);
-										if (ConfigManager.setConfig(key, parsedValue)) {
+										if (Config.setConfig(key, parsedValue)) {
 											ChatUtils.sendMessage("§eSet " + key + " to " + parsedValue);
 										}
 	                                } else if (currentValue instanceof Boolean) {
 	                                    boolean parsedValue = Boolean.parseBoolean(valueStr);
-	                                    if (ConfigManager.setConfig(key, parsedValue)) {
+	                                    if (Config.setConfig(key, parsedValue)) {
 											ChatUtils.sendMessage("§eSet " + key + " to " + parsedValue);
 										}
 	                                } else {
-	                                    if (ConfigManager.setConfig(key, valueStr)) {
+	                                    if (Config.setConfig(key, valueStr)) {
 											ChatUtils.sendMessage("§eSet " + key + " to \"" + valueStr + "\" (as string)");
 										}
 	                                }
@@ -77,7 +77,7 @@ public class ConfigSet {
 	            .then(ClientCommandManager.literal("set")
 	                .then(ClientCommandManager.argument("key", StringArgumentType.word())
 	                    .suggests((ctx, builder) -> {
-	                        for (String key : ConfigManager.getAllKeys()) {
+	                        for (String key : Config.getAllKeys()) {
 	                            builder.suggest(key);
 	                        }
 	                        return builder.buildFuture();
@@ -87,36 +87,36 @@ public class ConfigSet {
 	                            String key = StringArgumentType.getString(ctx, "key");
 	                            String valueStr = StringArgumentType.getString(ctx, "value");
 
-	                            if (!ConfigManager.isValidKey(key)) {
+	                            if (!Config.isValidKey(key)) {
 	                                ChatUtils.sendMessage("§cInvalid config key: " + key);
 	                                return 0;
 	                            }
 
-	                            Object currentValue = ConfigManager.getConfig(key);
+	                            Object currentValue = Config.getConfig(key);
 	                            try {
 	                                if (currentValue instanceof Integer) {
 	                                    int parsedValue = Integer.parseInt(valueStr);
-	                                    if (ConfigManager.setConfig(key, parsedValue)) {
+	                                    if (Config.setConfig(key, parsedValue)) {
 											ChatUtils.sendMessage("§eSet " + key + " to " + parsedValue);
 										}
 	                                }
 	                                else if (currentValue instanceof Float) {
 										float parsedValue = Float.parseFloat(valueStr);
-										if (ConfigManager.setConfig(key, parsedValue)) {
+										if (Config.setConfig(key, parsedValue)) {
 											ChatUtils.sendMessage("§eSet " + key + " to " + parsedValue);
 										}
 									} else if (currentValue instanceof Double) {
 										double parsedValue = Double.parseDouble(valueStr);
-										if (ConfigManager.setConfig(key, parsedValue)) {
+										if (Config.setConfig(key, parsedValue)) {
 											ChatUtils.sendMessage("§eSet " + key + " to " + parsedValue);
 										}
 	                                } else if (currentValue instanceof Boolean) {
 	                                    boolean parsedValue = Boolean.parseBoolean(valueStr);
-	                                    if (ConfigManager.setConfig(key, parsedValue)) {
+	                                    if (Config.setConfig(key, parsedValue)) {
 											ChatUtils.sendMessage("§eSet " + key + " to " + parsedValue);
 										}
 	                                } else {
-	                                    if (ConfigManager.setConfig(key, valueStr)) {
+	                                    if (Config.setConfig(key, valueStr)) {
 											ChatUtils.sendMessage("§eSet " + key + " to \"" + valueStr + "\" (as string)");
 										}
 	                                }

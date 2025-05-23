@@ -11,7 +11,7 @@ import com.sbc.command.Uptime;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 
-public class CommandManager {
+public class Command {
     public static void registerAll() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
         	ConfigSet.register(dispatcher, registryAccess);

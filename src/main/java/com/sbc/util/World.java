@@ -1,12 +1,26 @@
-package com.sbc.task;
+package com.sbc.util;
 
-import com.sbc.util.ChatUtils;
+import com.sbc.feature.SearchManager;
 
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.ChunkStatus;
 
-public class WorldLoaded {
+public class World {
+	private static ClientWorld lastWorld = null;
+		public static void init() {
+			ClientTickEvents.END_CLIENT_TICK.register(client -> {
+				if (client.world != lastWorld) {
+	                lastWorld = client.world;
+	                if (client.world != null) {
+	                    onServerSwitch();
+	                }
+	            }
+	        });
+		}
+	
 	public static void waitLoaded(long timeoutMs) throws InterruptedException {
 	    MinecraftClient client = MinecraftClient.getInstance();
 	    if (client.world == null || client.player == null) return;
@@ -32,5 +46,9 @@ public class WorldLoaded {
 	        if (allLoaded) return;
 	        Thread.sleep(50);
 	    }
+	}
+	
+	public static void onServerSwitch() {
+		SearchManager.clearSearch();
 	}
 }

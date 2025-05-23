@@ -2,7 +2,7 @@ package com.sbc.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.sbc.util.ChatUtils;
-import com.sbc.util.ConfigManager;
+import com.sbc.util.Config;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -15,8 +15,8 @@ public class ConfigList {
         	.then(ClientCommandManager.literal("config")
 	            .then(ClientCommandManager.literal("list")
 	                .executes(ctx -> {
-	                    for (String key : ConfigManager.getAllKeys()) {
-	                        Object value = ConfigManager.getConfig(key);
+	                    for (String key : Config.getAllKeys()) {
+	                        Object value = Config.getConfig(key);
 	                        ChatUtils.sendMessage(key + ": " + value);
 	                    }
 	                    return 1;
@@ -28,8 +28,8 @@ public class ConfigList {
     		.then(ClientCommandManager.literal("config")
 	            .then(ClientCommandManager.literal("list")
 	                .executes(ctx -> {
-	                    for (String key : ConfigManager.getAllKeys()) {
-	                        Object value = ConfigManager.getConfig(key);
+	                    for (String key : Config.getAllKeys()) {
+	                        Object value = Config.getConfig(key);
 	                        ChatUtils.sendMessage(key + ": " + value);
 	                    }
 	                    return 1;

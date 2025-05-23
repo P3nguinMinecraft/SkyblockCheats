@@ -5,9 +5,10 @@ import org.slf4j.LoggerFactory;
 
 import com.sbc.render.Render;
 import com.sbc.util.ChatUtils;
-import com.sbc.util.CommandManager;
-import com.sbc.util.ConfigManager;
-import com.sbc.util.KeybindManager;
+import com.sbc.util.Command;
+import com.sbc.util.Config;
+import com.sbc.util.Keybind;
+import com.sbc.util.World;
 
 import net.fabricmc.api.ClientModInitializer;
 
@@ -17,13 +18,14 @@ public class SkyblockCheats implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        LOGGER.info("Initializing AutoBlockFinder...");
-        ConfigManager.init();
-        KeybindManager.init();
+        LOGGER.info("Starting AutoBlockFinder...");
+        Config.init();
+        Keybind.init();
         Render.init();
         ChatUtils.init();
-        CommandManager.registerAll();
-        LOGGER.info("AutoBlockFinder initialized!");
+        Command.registerAll();
+        World.init();
+        LOGGER.info("AutoBlockFinder started!");
 
     }
 }
