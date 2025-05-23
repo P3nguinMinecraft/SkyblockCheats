@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.sbc.render.Render;
+import com.sbc.render.Render.RenderMode;
 import com.sbc.task.ScanTask;
 import com.sbc.util.ChatUtils;
 import com.sbc.util.ConfigManager;
-import com.sbc.render.Render;
-import com.sbc.render.Render.RenderMode;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
@@ -29,7 +29,7 @@ public class SearchManager {
         if (loopActive) {
             clearSearch();
             ChatUtils.sendMessage("§cSearch stopped.");
-        } 
+        }
         else {
            	if (found) {
                 found = false;
@@ -47,19 +47,19 @@ public class SearchManager {
     public static synchronized void clearSearch() {
     	loopActive = false;
     	active = false;
-    	
+
         if (searchLoopThread != null) {
             searchLoopThread.interrupt();
             searchLoopThread = null;
         }
-        
+
         if (scanTaskThread != null) {
 			scanTaskThread.interrupt();
 			scanTaskThread = null;
 		}
-        
+
         endTasks();
-        
+
         if (found) {
             found = false;
         	ChatUtils.sendMessage("§eSearch cleared.");
@@ -69,7 +69,7 @@ public class SearchManager {
             foundBlocks.clear();
        	}
     }
-    
+
     public static synchronized void scan() {
     	if (active) {
 			active = false;
@@ -79,7 +79,7 @@ public class SearchManager {
 		    endTasks();
 		    return;
 		}
-		
+
 		manualScanTaskThread = new Thread(() -> {
 	    	Object lock = new Object();
 			runScanTaskAsync(0,
@@ -90,7 +90,7 @@ public class SearchManager {
 			    	synchronized (lock) { lock.notify(); }
 			    }
 			);
-			
+
             synchronized (lock) {
             	try {
 					lock.wait();
@@ -101,7 +101,7 @@ public class SearchManager {
 	    }, "ManualScanTaskThread");
 		manualScanTaskThread.start();
     }
-    
+
     public static void listSearch() {
     	if (foundBlocks.isEmpty()) {
 			ChatUtils.sendMessage("§cNo blocks found.");
@@ -121,13 +121,16 @@ public class SearchManager {
                 while (!Thread.currentThread().isInterrupted() && loopActive && !found) {
                     runCommand("/warp forge");
 
-                    if (!waitForProfileOrDelay(0)) break; // 1 for testing! set to 0 when compiling
-                    if (!loopActive) break;
+                    if (!waitForProfileOrDelay(0) || !loopActive) {
+						break;
+					}
 
                     runCommand("/warp ch");
 
                     sleepInterruptibly(2000);
-                    if (!loopActive) break;
+                    if (!loopActive) {
+						break;
+					}
 
                     Object lock = new Object();
                     AtomicBoolean foundTask = new AtomicBoolean(false);
@@ -149,7 +152,9 @@ public class SearchManager {
                     }
 
                     if (!foundTask.get()) {
-                        if (!waitForProfileOrDelay((int) ConfigManager.getConfig("delay"))) break;
+                        if (!waitForProfileOrDelay((int) ConfigManager.getConfig("delay"))) {
+							break;
+						}
                     }
                 }
             } catch (InterruptedException e) {
@@ -221,7 +226,7 @@ public class SearchManager {
                         break;
                     }
                 }
-                
+
                 if (glassScanTask != null) {
         	    	glassScanTask.cancel();
         	    	glassScanTask = null;
@@ -231,8 +236,8 @@ public class SearchManager {
         	    	paneScanTask = null;
         		}
             }
-            
-            if (!foundInTask.get()) {	
+
+            if (!foundInTask.get()) {
                 active = false;
                 onTimeout.run();
             }
@@ -241,7 +246,7 @@ public class SearchManager {
         scanTaskThread.start();
     }
 
-    
+
     private static void endTasks() {
 		if (glassScanTask != null) {
 	    	glassScanTask.cancel();
@@ -256,7 +261,7 @@ public class SearchManager {
 			scanTaskThread = null;
 		}
 	}
-    
+
     private static boolean waitForProfileOrDelay(int seconds) throws InterruptedException {
         if (seconds > 0) {
             sleepInterruptibly(seconds * 1000);
@@ -295,6 +300,6 @@ public class SearchManager {
                 }
             }
         }
-        Render.addBlock(pos, new ArrayList<Float>(List.of(r, g, b, a)), (boolean) ConfigManager.getConfig("fullHighlight") ? RenderMode.HIGHLIGHT : RenderMode.OUTLINE);
+        Render.addBlock(pos, new ArrayList<>(List.of(r, g, b, a)), (boolean) ConfigManager.getConfig("fullHighlight") ? RenderMode.HIGHLIGHT : RenderMode.OUTLINE);
     }
 }

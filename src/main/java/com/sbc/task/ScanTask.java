@@ -1,17 +1,17 @@
 package com.sbc.task;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.chunk.WorldChunk;
 import net.minecraft.world.chunk.ChunkStatus;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
+import net.minecraft.world.chunk.WorldChunk;
 
 public class ScanTask implements Runnable {
     private final MinecraftClient client = MinecraftClient.getInstance();
@@ -48,20 +48,28 @@ public class ScanTask implements Runnable {
 
         outerLoop:
         for (ChunkPos chunkPos : spiralChunks) {
-            if (cancelled) break;
+            if (cancelled) {
+				break;
+			}
 
             WorldChunk chunk = client.world.getChunkManager().getChunk(chunkPos.x, chunkPos.z, ChunkStatus.FULL, false);
-            if (chunk == null) continue;
+            if (chunk == null) {
+				continue;
+			}
 
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     for (int y = minY; y < maxY; y++) {
-                        if (cancelled) break outerLoop;
+                        if (cancelled) {
+							break outerLoop;
+						}
 
                         BlockPos pos = chunkPos.getStartPos().add(x, y, z);
                         BlockState state = chunk.getBlockState(pos);
 
-                        if (state.isAir()) continue;
+                        if (state.isAir()) {
+							continue;
+						}
 
                         if (blockPredicate.test(pos)) {
                             foundCallback.accept(pos);

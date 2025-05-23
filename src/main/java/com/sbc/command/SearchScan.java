@@ -2,7 +2,6 @@ package com.sbc.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.sbc.feature.SearchManager;
-import com.sbc.util.ChatUtils;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;

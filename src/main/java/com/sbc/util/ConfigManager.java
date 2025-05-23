@@ -25,21 +25,22 @@ public class ConfigManager {
             Object value = entry.getValue();
             Map<String, Object> wrapper = new HashMap<>();
 
-            if (value instanceof Integer) 
-                wrapper.put("type", "int");
-            else if (value instanceof Boolean)
-                wrapper.put("type", "boolean");
-            else if (value instanceof Double)
-                wrapper.put("type", "double");
-            else if (value instanceof Float)
-                wrapper.put("type", "float");
-            else if (value instanceof Long)
-                wrapper.put("type", "long");
-            else if (value instanceof String)
-                wrapper.put("type", "string");
-            else 
-                continue;
-            
+            if (value instanceof Integer) {
+				wrapper.put("type", "int");
+			} else if (value instanceof Boolean) {
+				wrapper.put("type", "boolean");
+			} else if (value instanceof Double) {
+				wrapper.put("type", "double");
+			} else if (value instanceof Float) {
+				wrapper.put("type", "float");
+			} else if (value instanceof Long) {
+				wrapper.put("type", "long");
+			} else if (value instanceof String) {
+				wrapper.put("type", "string");
+			} else {
+				continue;
+			}
+
 
             wrapper.put("value", value);
             wrapped.put(entry.getKey(), wrapper);
@@ -53,9 +54,11 @@ public class ConfigManager {
             e.printStackTrace();
         }
     }
-    
+
     public static void loadConfig() {
-        if (!configFile.exists()) return;
+        if (!configFile.exists()) {
+			return;
+		}
 
         try (FileReader reader = new FileReader(configFile)) {
             JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
@@ -93,7 +96,7 @@ public class ConfigManager {
             }
         }
         catch (IOException e) {
-        	
+
 			e.printStackTrace();
         }
     }
@@ -101,20 +104,21 @@ public class ConfigManager {
     public static void init() {
         config.put("delay", 5);
         config.put("rgbaBlockColor", "255.103.103.1");
-        config.put("fullHighlight", false);
+        config.put("fullHighlight", true);
+        config.put("outlineWeight", 0.1f);
         loadConfig();
     }
-    
-    public static void setConfig(String key, Object value) {
+
+    public static boolean setConfig(String key, Object value) {
         if (!config.containsKey(key)) {
         	ChatUtils.sendMessage("§cInvalid config key: " + key);
-			return;
+			return false;
         }
         if (key.equals("rgbaBlockColor")) {
 			String[] parts = value.toString().split(".");
 			if (parts.length < 3 || parts.length > 4) {
 				ChatUtils.sendMessage("§cInvalid rgbaBlockColor format. Expected format: r.g.b.a Got " + parts.toString());
-				return;
+				return false;
 			}
 			Float r = Float.parseFloat(parts[0].trim());
 			Float g = Float.parseFloat(parts[1].trim());
@@ -122,22 +126,32 @@ public class ConfigManager {
 			Float a = parts.length == 4 ? Float.parseFloat(parts[3].trim()) : 1.0f;
 			if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 || a < 0 || a > 1) {
 				ChatUtils.sendMessage("§cInvalid rgbaBlockColor values. Expected values: r(0-255).g(0-255).b(0-255).a(0-1) Got " + r + "." + g + "." + b + "." + a);
-				return;
+				return false;
 			}
 			for (String part : parts) {
 				try {
 					Float.parseFloat(part.trim());
 				} catch (NumberFormatException e) {
 					ChatUtils.sendMessage("§cInvalid rgbaBlockColor value: " + part);
-					return;
+					return false;
 				}
 			}
 		}
-        
+
+        if (key.equals("outlineWeight")) {
+        	float val = (float) value;
+        	if (val < 0.0 || val > 1.0) {
+        		ChatUtils.sendMessage("§cInvalid outlineWeight value. Expected value: 0.0-1.0 Got " + val);
+        		return false;
+        	}
+        }
+
         config.put(key, value);
         saveConfig();
+
+        return true;
     }
-    
+
     public static void removeConfig(String key) {
 		if (config.containsKey(key)) {
 			config.remove(key);
@@ -147,11 +161,11 @@ public class ConfigManager {
 			ChatUtils.sendMessage("§cInvalid config key: " + key);
 		}
 	}
-    
+
     public static Object getConfig(String key) {
         return config.get(key);
     }
-    
+
 
     public static Set<String> getAllKeys() {
         return config.keySet();

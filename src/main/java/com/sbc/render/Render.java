@@ -4,8 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.lwjgl.opengl.GL11;
+
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.sbc.object.Coordinate;
 import com.sbc.util.ChatUtils;
+import com.sbc.util.ConfigManager;
 
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -20,9 +26,6 @@ import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.lwjgl.opengl.GL11;
 
 public class Render {
     private static VertexBuffer vertexBuffer;
@@ -70,6 +73,10 @@ public class Render {
 
             for (BlockPos block : renderQueue.keySet()) {
                 RenderEntry entry = renderQueue.get(block);
+                if (entry.color.get(3) <= 0) {
+                	ChatUtils.sendMessage("Alpha value is 0, render will not appear!");
+                	continue;
+                }
                 if (entry.mode == RenderMode.HIGHLIGHT) {
                     renderBlockFaces(buffer, block, entry.color);
                 } else {
@@ -80,6 +87,7 @@ public class Render {
             vertexBuffer.bind();
             vertexBuffer.upload(buffer.end());
             VertexBuffer.unbind();
+
         }
 
         if (vertexBuffer != null) {
@@ -127,85 +135,78 @@ public class Render {
     }
 
     private static void renderBlockOutline(BufferBuilder buffer, BlockPos block, ArrayList<Float> color) {
-        final float r = color.get(0) / 255f;
+    	Coordinate coord = Coordinate.convertBlockPos(block);
+
+        renderFaceOutline(buffer, color, coord.shift(0, 0.5, 0.5), 0);
+        renderFaceOutline(buffer, color, coord.shift(1, 0.5, 0.5), 0);
+        renderFaceOutline(buffer, color, coord.shift(0.5, 0, 0.5), 1);
+        renderFaceOutline(buffer, color, coord.shift(0.5, 1, 0.5), 1);
+        renderFaceOutline(buffer, color, coord.shift(0.5, 0.5, 0), 2);
+        renderFaceOutline(buffer, color, coord.shift(0.5, 0.5, 1), 2);
+    }
+
+    private static void renderFaceOutline(BufferBuilder buffer, ArrayList<Float> color, Coordinate coord, int direction) {
+		final float thickness = (float) ConfigManager.getConfig("outlineWeight");
+		ArrayList<Coordinate> coords = new ArrayList<>();
+		ArrayList<Integer> directions = new ArrayList<>();
+
+		float dist = 0.5f - thickness / 2f;
+
+		if (direction == 0) {
+	        coords.add(coord.shift(0, -dist, -dist));
+	        directions.add(2);
+	        coords.add(coord.shift(0, -dist, dist));
+	        directions.add(1);
+	        coords.add(coord.shift(0, dist, dist));
+	        directions.add(2);
+	        coords.add(coord.shift(0, dist, -dist));
+	        directions.add(1);
+	    } else if (direction == 1) {
+	        coords.add(coord.shift(-dist, 0, -dist));
+	        directions.add(2);
+	        coords.add(coord.shift(-dist, 0, dist));
+	        directions.add(0);
+	        coords.add(coord.shift(dist, 0, dist));
+	        directions.add(2);
+	        coords.add(coord.shift(dist, 0, -dist));
+	        directions.add(0);
+	    } else if (direction == 2) {
+	        coords.add(coord.shift(-dist, -dist, 0));
+	        directions.add(1);
+	        coords.add(coord.shift(-dist, dist, 0));
+	        directions.add(0);
+	        coords.add(coord.shift(dist, dist, 0));
+	        directions.add(1);
+	        coords.add(coord.shift(dist, -dist, 0));
+	        directions.add(0);
+	    }
+
+		drawEdge(buffer, color, coords.get(0), coords.get(1), thickness, directions.get(0));
+		drawEdge(buffer, color, coords.get(1), coords.get(2), thickness, directions.get(1));
+		drawEdge(buffer, color, coords.get(2), coords.get(3), thickness, directions.get(2));
+		drawEdge(buffer, color, coords.get(3), coords.get(0), thickness, directions.get(3));
+    }
+
+
+    private static void drawEdge(BufferBuilder buffer, ArrayList<Float> color, Coordinate coord1, Coordinate coord2, float thickness, int direction) {
+    	final float r = color.get(0) / 255f;
         final float g = color.get(1) / 255f;
         final float b = color.get(2) / 255f;
         final float a = color.get(3);
 
-        if (a == 0f) {
-            ChatUtils.sendMessage("§cWarning: Block color has zero alpha (fully transparent). It will not be visible.");
-        }
+        float px = 0, py = 0, pz = 0;
+        if (direction == 0) {
+			px = thickness;
+		} else if (direction == 1) {
+			py = thickness;
+		} else if (direction == 2) {
+			pz = thickness;
+		}
 
-        final float min = 0.01f;
-        final float max = 0.99f;
-        final float thickness = 0.01f;
-
-        double x = block.getX();
-        double y = block.getY();
-        double z = block.getZ();
-
-        // Top (+Y)
-        drawEdge(buffer, x + min, y + 1, z + min, x + max, y + 1, z + min, thickness, r, g, b, a);
-        drawEdge(buffer, x + max, y + 1, z + min, x + max, y + 1, z + max, thickness, r, g, b, a);
-        drawEdge(buffer, x + max, y + 1, z + max, x + min, y + 1, z + max, thickness, r, g, b, a);
-        drawEdge(buffer, x + min, y + 1, z + max, x + min, y + 1, z + min, thickness, r, g, b, a);
-
-        // Bottom (-Y)
-        drawEdge(buffer, x + min, y, z + min, x + max, y, z + min, thickness, r, g, b, a);
-        drawEdge(buffer, x + max, y, z + min, x + max, y, z + max, thickness, r, g, b, a);
-        drawEdge(buffer, x + max, y, z + max, x + min, y, z + max, thickness, r, g, b, a);
-        drawEdge(buffer, x + min, y, z + max, x + min, y, z + min, thickness, r, g, b, a);
-
-        // North (-Z)
-        drawEdge(buffer, x + min, y + min, z, x + max, y + min, z, thickness, r, g, b, a);
-        drawEdge(buffer, x + max, y + min, z, x + max, y + max, z, thickness, r, g, b, a);
-        drawEdge(buffer, x + max, y + max, z, x + min, y + max, z, thickness, r, g, b, a);
-        drawEdge(buffer, x + min, y + max, z, x + min, y + min, z, thickness, r, g, b, a);
-
-        // South (+Z)
-        drawEdge(buffer, x + min, y + min, z + 1, x + max, y + min, z + 1, thickness, r, g, b, a);
-        drawEdge(buffer, x + max, y + min, z + 1, x + max, y + max, z + 1, thickness, r, g, b, a);
-        drawEdge(buffer, x + max, y + max, z + 1, x + min, y + max, z + 1, thickness, r, g, b, a);
-        drawEdge(buffer, x + min, y + max, z + 1, x + min, y + min, z + 1, thickness, r, g, b, a);
-
-        // West (-X)
-        drawEdge(buffer, x, y + min, z + min, x, y + max, z + min, thickness, r, g, b, a);
-        drawEdge(buffer, x, y + max, z + min, x, y + max, z + max, thickness, r, g, b, a);
-        drawEdge(buffer, x, y + max, z + max, x, y + min, z + max, thickness, r, g, b, a);
-        drawEdge(buffer, x, y + min, z + max, x, y + min, z + min, thickness, r, g, b, a);
-
-        // East (+X)
-        drawEdge(buffer, x + 1, y + min, z + min, x + 1, y + max, z + min, thickness, r, g, b, a);
-        drawEdge(buffer, x + 1, y + max, z + min, x + 1, y + max, z + max, thickness, r, g, b, a);
-        drawEdge(buffer, x + 1, y + max, z + max, x + 1, y + min, z + max, thickness, r, g, b, a);
-        drawEdge(buffer, x + 1, y + min, z + max, x + 1, y + min, z + min, thickness, r, g, b, a);
-    }
-
-    private static void drawEdge(BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2, float thickness, 
-            float r, float g, float b, float a) {
-
-        double dx = x2 - x1;
-        double dy = y2 - y1;
-        double dz = z2 - z1;
-
-        boolean isVertical = Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > Math.abs(dz);
-
-        double px, py, pz;
-
-        if (isVertical) {
-            px = thickness;
-            py = 0;
-            pz = 0;
-        } else {
-            px = 0;
-            py = thickness;
-            pz = 0;
-        }
-
-        buffer.vertex(x1 - px, y1 - py, z1 - pz).color(r, g, b, a).next();
-        buffer.vertex(x1 + px, y1 + py, z1 + pz).color(r, g, b, a).next();
-        buffer.vertex(x2 + px, y2 + py, z2 + pz).color(r, g, b, a).next();
-        buffer.vertex(x2 - px, y2 - py, z2 - pz).color(r, g, b, a).next();
+        buffer.vertex(coord1.x - px, coord1.y - py, coord1.z - pz).color(r, g, b, a).next();
+        buffer.vertex(coord1.x + px, coord1.y + py, coord1.z + pz).color(r, g, b, a).next();
+        buffer.vertex(coord2.x + px, coord2.y + py, coord2.z + pz).color(r, g, b, a).next();
+        buffer.vertex(coord2.x - px, coord2.y - py, coord2.z - pz).color(r, g, b, a).next();
     }
 
     private static void renderBlockFaces(BufferBuilder buffer, BlockPos block, ArrayList<Float> color) {
@@ -220,10 +221,6 @@ public class Render {
         float g = color.get(1) / 255f;
         float b = color.get(2) / 255f;
         float a = color.get(3);
-
-        if (a == 0f) {
-            ChatUtils.sendMessage("§cWarning: Block color has zero alpha (fully transparent). It will not be visible.");
-        }
 
         buffer.vertex(x - offset, y - offset, z + size + offset).color(r, g, b, a).next();
         buffer.vertex(x + size + offset, y - offset, z + size + offset).color(r, g, b, a).next();

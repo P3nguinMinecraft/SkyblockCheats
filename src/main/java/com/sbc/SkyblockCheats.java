@@ -1,15 +1,15 @@
 package com.sbc;
 
-import net.fabricmc.api.ClientModInitializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sbc.render.Render;
 import com.sbc.util.ChatUtils;
+import com.sbc.util.CommandManager;
 import com.sbc.util.ConfigManager;
 import com.sbc.util.KeybindManager;
-import com.sbc.util.CommandManager;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.fabricmc.api.ClientModInitializer;
 
 public class SkyblockCheats implements ClientModInitializer {
     public static final String MOD_ID = "autoblockfinder";
