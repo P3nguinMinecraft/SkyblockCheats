@@ -145,7 +145,7 @@ public class SearchManager {
 						}
 					);
                 	
-                	WorldLoaded.waitLoaded(10000);
+                	WorldLoaded.waitLoaded(3000);
 
                     runScanTaskAsync(10000,
                         () -> {

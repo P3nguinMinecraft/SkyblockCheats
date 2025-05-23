@@ -32,7 +32,5 @@ public class WorldLoaded {
 	        if (allLoaded) return;
 	        Thread.sleep(50);
 	    }
-
-	    ChatUtils.sendMessage("§eTimeout waiting for chunks to load.");
 	}
 }
