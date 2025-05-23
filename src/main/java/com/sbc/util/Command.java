@@ -3,6 +3,7 @@ package com.sbc.util;
 import com.sbc.command.ConfigList;
 import com.sbc.command.ConfigRemove;
 import com.sbc.command.ConfigSet;
+import com.sbc.command.PlaySound;
 import com.sbc.command.SearchClear;
 import com.sbc.command.SearchList;
 import com.sbc.command.SearchScan;
@@ -22,6 +23,7 @@ public class Command {
             SearchList.register(dispatcher, registryAccess);
             SearchScan.register(dispatcher, registryAccess);
             Uptime.register(dispatcher, registryAccess);
+            PlaySound.register(dispatcher, registryAccess);
         });
     }
 }

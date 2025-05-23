@@ -9,10 +9,14 @@ import com.sbc.render.Render.RenderMode;
 import com.sbc.task.ScanTask;
 import com.sbc.util.ChatUtils;
 import com.sbc.util.Config;
+import com.sbc.util.SoundUtils;
 import com.sbc.util.World;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.registry.Registries;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 public class SearchManager {
@@ -137,6 +141,16 @@ public class SearchManager {
                         () -> {
                         	loopActive = false;
                             foundTask.set(true);
+                            if ((boolean) Config.getConfig("pingOnFound")) {
+                        		String soundId = (String) Config.getConfig("pingSound");
+                                float volume = (Float) Config.getConfig("pingVolume");
+                                float pitch = (Float) Config.getConfig("pingPitch");
+
+                                Identifier id = new Identifier(soundId);
+                                SoundEvent soundEvent = Registries.SOUND_EVENT.get(id);
+
+                                SoundUtils.playSound((float) volume, (float) pitch, soundEvent);
+                        	}
                             synchronized (lock) { lock.notify(); }
                         },
                         () -> {
@@ -148,13 +162,15 @@ public class SearchManager {
                         lock.wait();
                     }
 
+        			if (!loopActive) {
+        				break;
+        			}
                     if (!foundTask.get()) {
                     	if ((int) Config.getConfig("delay") > 0) {
                     		sleepInterruptibly((int) Config.getConfig("delay") * 1000);
                     	}
                     	else {
                     		while (!chProfile.get()) {
-                    			if (!loopActive) break;
                     			try {
 									sleepInterruptibly(10);
 								} catch (InterruptedException e) {

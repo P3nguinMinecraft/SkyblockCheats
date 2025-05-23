@@ -15,7 +15,7 @@ public class Uptime {
 			.then(ClientCommandManager.literal("uptime")
 				.executes(ctx -> {
 					long uptime = MinecraftClient.getInstance().world.getTimeOfDay();
-					double days = Math.round(uptime / 24000 * 100.0) / 100.0;
+					double days = Math.round(uptime / 24000.0 * 100.0) / 100.0;
 					ChatUtils.sendMessage("Uptime: Day " + days);
 					return 1;
 				})
@@ -25,7 +25,7 @@ public class Uptime {
 			.then(ClientCommandManager.literal("uptime")
 				.executes(ctx -> {
 					long uptime = MinecraftClient.getInstance().world.getTimeOfDay();
-					double days = Math.round(uptime / 24000 * 100.0) / 100.0;
+					double days = Math.round(uptime / 24000.0 * 100.0) / 100.0;
 					ChatUtils.sendMessage("Uptime: Day " + days);
 					return 1;
 				})

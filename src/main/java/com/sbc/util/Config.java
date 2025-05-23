@@ -14,6 +14,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import net.minecraft.registry.Registries;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
+
 public class Config {
     private static final Map<String, Object> config = new HashMap<>();
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -106,6 +110,10 @@ public class Config {
         config.put("rgbaBlockColor", "255.103.103.1");
         config.put("fullHighlight", true);
         config.put("outlineWeight", 0.1f);
+        config.put("pingOnFound", true);
+        config.put("pingSound", "minecraft:block.anvil.land");
+        config.put("pingVolume", 1.0f);
+        config.put("pingPitch", 1.0f);
         loadConfig();
     }
 
@@ -113,6 +121,10 @@ public class Config {
         if (!config.containsKey(key)) {
         	ChatUtils.sendMessage("§cInvalid config key: " + key);
 			return false;
+        }
+        if (getConfig(key) instanceof Float && (Float) value < 0f) {
+        	ChatUtils.sendMessage("§cInvalid value: " + value + ". Expected value >= 0");
+        	return false;
         }
         if (key.equals("rgbaBlockColor")) {
 			String[] parts = value.toString().split(".");
@@ -144,6 +156,22 @@ public class Config {
         		ChatUtils.sendMessage("§cInvalid outlineWeight value. Expected value: 0.0-1.0 Got " + val);
         		return false;
         	}
+        }
+        if (key.equals("pingSound")) {
+			String soundId = (String) value;
+			if (!soundId.startsWith("minecraft:")) {
+				soundId = "minecraft:" + soundId;
+				value = soundId;
+			}
+
+            Identifier id = new Identifier(soundId);
+            SoundEvent soundEvent = Registries.SOUND_EVENT.get(id);
+            
+            if (soundEvent == null) {
+                ChatUtils.sendMessage("§cSound not found: " + soundId);
+                return false;
+        	}
+        	
         }
 
         config.put(key, value);
