@@ -3,12 +3,14 @@ package com.sbc.util;
 import com.sbc.command.ConfigList;
 import com.sbc.command.ConfigRemove;
 import com.sbc.command.ConfigSet;
+import com.sbc.command.LookBlock;
+import com.sbc.command.LookPos;
 import com.sbc.command.PlaySound;
 import com.sbc.command.SearchClear;
 import com.sbc.command.SearchList;
 import com.sbc.command.SearchScan;
 import com.sbc.command.SearchToggle;
-import com.sbc.command.Uptime;
+import com.sbc.command.UptimeCommand;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 
@@ -22,8 +24,10 @@ public class Command {
             SearchClear.register(dispatcher, registryAccess);
             SearchList.register(dispatcher, registryAccess);
             SearchScan.register(dispatcher, registryAccess);
-            Uptime.register(dispatcher, registryAccess);
+            UptimeCommand.register(dispatcher, registryAccess);
             PlaySound.register(dispatcher, registryAccess);
+            LookBlock.register(dispatcher, registryAccess);
+            LookPos.register(dispatcher, registryAccess);
         });
     }
 }

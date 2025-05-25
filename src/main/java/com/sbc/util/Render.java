@@ -1,4 +1,4 @@
-package com.sbc.render;
+package com.sbc.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,8 +10,6 @@ import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.sbc.object.Coordinate;
-import com.sbc.util.ChatUtils;
-import com.sbc.util.Config;
 
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;

@@ -7,6 +7,9 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import com.sbc.util.Config;
+import com.sbc.util.Constants;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
@@ -15,22 +18,37 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.WorldChunk;
 
-public class ScanTask implements Runnable {
+public class BlockScanTask implements Runnable {
     private final MinecraftClient client = MinecraftClient.getInstance();
     private volatile boolean cancelled = false;
     private volatile boolean done = false;
     private final int threadCount = 4;
-
+    private final boolean maxYCapEnabled = (boolean) Config.getConfig("filterY");
+    private final int maxYCap = (int) Config.getConfig("filterYMax");
+    
     private final Consumer<BlockPos> foundCallback;
     private final Predicate<BlockPos> blockPredicate;
 
-    public ScanTask(Consumer<BlockPos> foundCallback, Predicate<BlockPos> blockPredicate) {
-        this.foundCallback = foundCallback;
-        this.blockPredicate = blockPredicate;
-    }
+    public BlockScanTask(
+    	    Consumer<BlockPos> foundCallback,
+    	    Predicate<BlockPos> basePredicate
+    	) {
+    	    this.foundCallback = foundCallback;
+    	    
+
+    	    this.blockPredicate = pos -> {
+    	        BlockState state = client.world.getBlockState(pos);
+    	        if (state.isAir()) return false;
+    	        if (!basePredicate.test(pos)) return false;
+    	        if (maxYCapEnabled && pos.getY() > maxYCap) return false;
+    	        if (Constants.MAGENTA_GLASS_RECTANGLE_EXCLUSION.test(pos)) return false;
+    	        return true;
+    	    };
+
+    	}
 
     public void start() {
-        new Thread(this, "ScanTaskMasterThread").start();
+        new Thread(this, "BlockScanTaskMasterThread").start();
     }
 
     @Override
@@ -68,11 +86,9 @@ public class ScanTask implements Runnable {
                         for (int z = 0; z < 16 && !cancelled && !done; z++) {
                             for (int y = minY; y < maxY && !cancelled && !done; y++) {
                                 pos.set(chunkPos.getStartX() + x, y, chunkPos.getStartZ() + z);
-                                BlockState state = chunk.getBlockState(pos);
-                                if (state.isAir()) continue;
 
                                 if (blockPredicate.test(pos)) {
-                                    client.execute(() -> foundCallback.accept(pos.toImmutable())); // ensure it's on main thread
+                                    client.execute(() -> foundCallback.accept(pos.toImmutable()));
                                     cancelled = true;
                                     done = true;
                                     return;
@@ -83,7 +99,7 @@ public class ScanTask implements Runnable {
                 }
             };
 
-            threads.add(new Thread(subTask, "ScanWorker-" + i));
+            threads.add(new Thread(subTask, "BlockScanWorker-" + i));
         }
 
         for (Thread thread : threads) thread.start();

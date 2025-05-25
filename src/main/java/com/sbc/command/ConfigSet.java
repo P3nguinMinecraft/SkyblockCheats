@@ -10,8 +10,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.command.CommandRegistryAccess;
 
 public class ConfigSet {
-    public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher,
-                                CommandRegistryAccess registryAccess) {
+    public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
         dispatcher.register(ClientCommandManager.literal("sbc")
     		.then(ClientCommandManager.literal("config")
 	            .then(ClientCommandManager.literal("set")

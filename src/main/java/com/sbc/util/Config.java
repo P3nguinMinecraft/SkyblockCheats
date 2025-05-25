@@ -114,6 +114,10 @@ public class Config {
         config.put("pingSound", "minecraft:block.anvil.land");
         config.put("pingVolume", 1.0f);
         config.put("pingPitch", 1.0f);
+        config.put("warpIn", "ch");
+        config.put("warpOut", "forge");
+        config.put("filterY", false);
+        config.put("filterYMax", 100);
         loadConfig();
     }
 

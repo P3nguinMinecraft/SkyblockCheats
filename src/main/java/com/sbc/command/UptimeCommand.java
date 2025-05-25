@@ -1,22 +1,18 @@
 package com.sbc.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.sbc.util.ChatUtils;
+import com.sbc.feature.Uptime;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandRegistryAccess;
 
-public class Uptime {
-	public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher,
-        CommandRegistryAccess registryAccess) {
+public class UptimeCommand {
+	public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
 		dispatcher.register(ClientCommandManager.literal("sbc")
 			.then(ClientCommandManager.literal("uptime")
 				.executes(ctx -> {
-					long uptime = MinecraftClient.getInstance().world.getTimeOfDay();
-					double days = Math.round(uptime / 24000.0 * 100.0) / 100.0;
-					ChatUtils.sendMessage("Uptime: Day " + days);
+					Uptime.displayUptime();
 					return 1;
 				})
 			)
@@ -24,9 +20,7 @@ public class Uptime {
 		dispatcher.register(ClientCommandManager.literal("skyblockcheats")
 			.then(ClientCommandManager.literal("uptime")
 				.executes(ctx -> {
-					long uptime = MinecraftClient.getInstance().world.getTimeOfDay();
-					double days = Math.round(uptime / 24000.0 * 100.0) / 100.0;
-					ChatUtils.sendMessage("Uptime: Day " + days);
+					Uptime.displayUptime();
 					return 1;
 				})
 			)

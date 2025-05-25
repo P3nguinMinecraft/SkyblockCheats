@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 public class ChatUtils {
+    private static final MinecraftClient client = MinecraftClient.getInstance();
 	private static ArrayList<QueueItem> queue = new ArrayList<>();
     private static volatile String lastGameMessage = "";
     private static ArrayList<String> lastGameMessages = new ArrayList<>();
@@ -63,9 +65,29 @@ public class ChatUtils {
 
     public static void sendMessage(Object msg) {
     	String message = msg.toString();
-        MinecraftClient mc = MinecraftClient.getInstance();
-        mc.inGameHud.getChatHud().addMessage(Text.literal(message));
-    } 
+        client.inGameHud.getChatHud().addMessage(Text.literal(message));
+    }
+    
+    public static void sendServerMessage(Object msg) {
+    	if (client == null || client.inGameHud == null || client.player == null) return;
+        client.execute(() -> client.player.networkHandler.sendChatMessage(msg.toString()));
+	}
+    
+    public static void sendActionBar(Object msg) {
+    	if (client == null || client.inGameHud == null) return;
+		client.inGameHud.setOverlayMessage(Text.literal(msg.toString()), false);
+	}
+    
+    public static void sendFormattedMessage(Text... components) {
+        if (client == null || client.inGameHud == null) return;
+        
+        MutableText fullMessage = Text.empty();
+        for (Text component : components) {
+            fullMessage = fullMessage.append(component);
+        }
+
+        client.inGameHud.getChatHud().addMessage(fullMessage);
+    }
 }
 
 class QueueItem {

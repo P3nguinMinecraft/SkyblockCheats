@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.sbc.render.Render;
-import com.sbc.render.Render.RenderMode;
-import com.sbc.task.ScanTask;
+import com.sbc.task.BlockScanTask;
 import com.sbc.util.ChatUtils;
 import com.sbc.util.Config;
+import com.sbc.util.Render;
+import com.sbc.util.Render.RenderMode;
 import com.sbc.util.SoundUtils;
 import com.sbc.util.World;
 
@@ -16,6 +16,10 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
@@ -27,7 +31,7 @@ public class SearchManager {
     private static Thread searchLoopThread = null;
     private static Thread manualScanTaskThread = null;
     private static Thread scanTaskThread = null;
-    private static ScanTask glassScanTask, paneScanTask;
+    private static BlockScanTask glassScanTask, paneScanTask;
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
     public static synchronized void toggleSearch() {
@@ -96,11 +100,19 @@ public class SearchManager {
     	if (foundBlocks.isEmpty()) {
 			ChatUtils.sendMessage("§cNo blocks found");
 		} else {
-			StringBuilder message = new StringBuilder("§aFound blocks:§r");
 			for (BlockPos pos : foundBlocks) {
-				message.append("\n").append(pos.getX()).append(", ").append(pos.getY()).append(", ").append(pos.getZ());
+				String block = pos.getX() + " " + pos.getY() + " " + pos.getZ();
+				ChatUtils.sendFormattedMessage(
+                	Text.literal("§b" + block).setStyle(Style.EMPTY
+            			.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, block))
+            			.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§eCLICK §rto copy")))
+                	),
+                	Text.literal(" §r[Look]").setStyle(Style.EMPTY
+						.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sbc look block " + block))
+						.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§eCLICK §rto look at block")))
+                	)
+        		);
 			}
-			ChatUtils.sendMessage(message.toString());
 		}
     }
 
@@ -109,7 +121,7 @@ public class SearchManager {
         searchLoopThread = new Thread(() -> {
             try {
                 while (!Thread.currentThread().isInterrupted() && loopActive && !found) {
-                    runCommand("/warp forge");
+                    ChatUtils.sendServerMessage("/warp " + (String) Config.getConfig("warpOut"));
                     
                 	if ((int) Config.getConfig("delay") > 0) {
                 		sleepInterruptibly((int) Config.getConfig("delay") * 1000);
@@ -117,8 +129,10 @@ public class SearchManager {
                 	else {
                 		ChatUtils.waitForChatMessage("Profile ID:", false, true, 5000, () -> {}, () -> {});
                 	}
+                	
+                	if (!loopActive) break;
 
-                    runCommand("/warp ch");
+                	ChatUtils.sendServerMessage("/warp " + (String) Config.getConfig("warpIn"));
 
                     Object lock = new Object();
                     AtomicBoolean foundTask = new AtomicBoolean(false);
@@ -155,16 +169,16 @@ public class SearchManager {
                         },
                         () -> {
                             synchronized (lock) { lock.notify(); }
-                        }, true
+                        }, 
+                        true
                     );
 
                     synchronized (lock) {
                         lock.wait();
                     }
 
-        			if (!loopActive) {
-        				break;
-        			}
+        			if (!loopActive) break;
+        			
                     if (!foundTask.get()) {
                     	if ((int) Config.getConfig("delay") > 0) {
                     		sleepInterruptibly((int) Config.getConfig("delay") * 1000);
@@ -206,33 +220,59 @@ public class SearchManager {
 
             while (!Thread.currentThread().isInterrupted() && !foundInTask.get()
                     && ((timeout <= 0) || (System.currentTimeMillis() < startTime + timeout)) && active) {
-                glassScanTask = new ScanTask(pos -> {
-                    foundInTask.set(true);
-                    setFoundBlock(pos);
-                    double distance = Math.sqrt(Math.pow(client.player.getX() - pos.getX(), 2)
-                            + Math.pow(client.player.getY() - pos.getY(), 2)
-                            + Math.pow(client.player.getZ() - pos.getZ(), 2));
-                    double roundedDistance = Math.round(distance * 10.0) / 10.0;
-                    ChatUtils.sendMessage("§aFound Magenta Stained Glass at §rx: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ()
-                            + "\n§dDistance: §r" + roundedDistance);
-                    active = false;
-                    onFound.run();
-                    endScanTasks();
-                }, pos -> client.world.getBlockState(pos).isOf(Blocks.MAGENTA_STAINED_GLASS));
+                glassScanTask = new BlockScanTask(
+            		pos -> {
+		                foundInTask.set(true);
+		                setFoundBlock(pos);
+		                double distance = Math.sqrt(Math.pow(client.player.getX() - pos.getX(), 2)
+	                            + Math.pow(client.player.getY() - pos.getY(), 2)
+	                            + Math.pow(client.player.getZ() - pos.getZ(), 2));
+	                    double roundedDistance = Math.round(distance * 10.0) / 10.0;
+	                    ChatUtils.sendMessage("§aFound Magenta Stained Glass §r" + roundedDistance + " blocks away");
+	                    String block = pos.getX() + " " + pos.getY() + " " + pos.getZ();
+	                    ChatUtils.sendFormattedMessage(
+                        	Text.literal("§b" + block).setStyle(Style.EMPTY
+                        		.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, block))
+                    			.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§eCLICK §rto copy")))
+                        	),
+                        	Text.literal(" §r[Look]").setStyle(Style.EMPTY
+        						.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sbc look block " + block))
+        						.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§eCLICK §rto look at block")))
+                        	)
+                		);
+		                active = false;
+		                onFound.run();
+		                endScanTasks();
+            		},
+            		pos -> client.world.getBlockState(pos).isOf(Blocks.MAGENTA_STAINED_GLASS)
+            	);
 
-                paneScanTask = new ScanTask(pos -> {
-                    foundInTask.set(true);
-                    setFoundBlock(pos);
-                    double distance = Math.sqrt(Math.pow(client.player.getX() - pos.getX(), 2)
-                            + Math.pow(client.player.getY() - pos.getY(), 2)
-                            + Math.pow(client.player.getZ() - pos.getZ(), 2));
-                    double roundedDistance = Math.round(distance * 10.0) / 10.0;
-                    ChatUtils.sendMessage("§aFound Magenta Stained Glass Pane at §rx: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ()
-                            + "\n§dDistance: §r" + roundedDistance);
-                    active = false;
-                    onFound.run();
-                    endScanTasks();
-                }, pos -> client.world.getBlockState(pos).isOf(Blocks.MAGENTA_STAINED_GLASS_PANE));
+                paneScanTask = new BlockScanTask(
+            		pos -> {
+	                    foundInTask.set(true);
+	                    setFoundBlock(pos);
+	                    double distance = Math.sqrt(Math.pow(client.player.getX() - pos.getX(), 2)
+	                            + Math.pow(client.player.getY() - pos.getY(), 2)
+	                            + Math.pow(client.player.getZ() - pos.getZ(), 2));
+	                    double roundedDistance = Math.round(distance * 10.0) / 10.0;
+	                    ChatUtils.sendMessage("§aFound Magenta Stained Glass Pane §r" + roundedDistance + " blocks away");
+	                    String block = pos.getX() + " " + pos.getY() + " " + pos.getZ();
+	                    ChatUtils.sendFormattedMessage(
+                        	Text.literal("§b" + block).setStyle(Style.EMPTY
+                    			.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, block))
+                    			.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§eCLICK §rto copy")))
+                        	),
+                        	Text.literal(" §r[Look]").setStyle(Style.EMPTY
+        						.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sbc look block " + block))
+        						.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§eCLICK §rto look at block")))
+                        	)
+                		);
+	                    active = false;
+	                    onFound.run();
+	                    endScanTasks();
+	                },
+            		pos -> client.world.getBlockState(pos).isOf(Blocks.MAGENTA_STAINED_GLASS_PANE)
+                );
 
                 glassScanTask.start();
                 paneScanTask.start();
@@ -261,7 +301,7 @@ public class SearchManager {
         		}
         		
         		if (firstRun && !foundInTask.get()) {
-    				ChatUtils.sendMessage(single ? "§cNo blocks found" : "§cNo blocks found. Looping...");
+    				ChatUtils.sendMessage(single ? "§cNo blocks found" : "§cNo blocks found. §r§eLooping...");
         			firstRun = false;
         			if (single) {
         				active = false;
@@ -290,26 +330,11 @@ public class SearchManager {
     public static void endTasks() {
     	loopActive = false;
     	active = false;
-		if (glassScanTask != null) {
-	    	glassScanTask.cancel();
-	    	glassScanTask = null;
-		}
-		if (paneScanTask != null) {
-			paneScanTask.cancel();
-	    	paneScanTask = null;
-		}
-		if (scanTaskThread != null) {
-			scanTaskThread.interrupt();
-			scanTaskThread = null;
-		}
 		if (searchLoopThread != null) {
 			searchLoopThread.interrupt();
 			searchLoopThread = null;
 		}
-		if (manualScanTaskThread != null) {
-			manualScanTaskThread.interrupt();
-			manualScanTaskThread = null;
-		}
+		endScanTasks();
 	}
     
     public static void endScanTasks() {
@@ -325,12 +350,10 @@ public class SearchManager {
 			scanTaskThread.interrupt();
 			scanTaskThread = null;
 		}
-    }
-
-    private static void runCommand(String command) {
-        if (client.player != null) {
-            client.execute(() -> client.player.networkHandler.sendChatMessage(command));
-        }
+		if (manualScanTaskThread != null) {
+			manualScanTaskThread.interrupt();
+			manualScanTaskThread = null;
+		}
     }
 
     private static void sleepInterruptibly(int ms) throws InterruptedException {

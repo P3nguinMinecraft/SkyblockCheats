@@ -3,11 +3,11 @@ package com.sbc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sbc.render.Render;
 import com.sbc.util.ChatUtils;
 import com.sbc.util.Command;
 import com.sbc.util.Config;
 import com.sbc.util.Keybind;
+import com.sbc.util.Render;
 import com.sbc.util.World;
 
 import net.fabricmc.api.ClientModInitializer;
