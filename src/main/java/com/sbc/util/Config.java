@@ -196,6 +196,7 @@ public class Config {
     public static void removeConfig(String key) {
 		if (config.containsKey(key)) {
 			config.remove(key);
+			defaults();
 			saveConfig();
 		}
 		else {

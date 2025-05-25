@@ -16,7 +16,7 @@ public class Uptime {
 		double hours = Math.round((uptime % 24000) / 20.0 / 3600.0 * 100.0) / 100.0;
 		double minutes = Math.round((uptime % 24000) / 20.0 / 60.0 * 100.0) / 100.0;
 		ChatUtils.sendFormattedMessage(
-        	Text.literal("§gUptime: §r§dDay " + (int) Math.floor(days)).setStyle(Style.EMPTY),
+        	Text.literal("§pUptime: §r§dDay " + (int) Math.floor(days)).setStyle(Style.EMPTY),
         	Text.literal(" §r§7[Hover for details]").setStyle(Style.EMPTY
         		.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§6Or: §r§c" + days + " days | " + hours + " hours | " + minutes + " minutes | " + uptime + " ticks")))
         	)
