@@ -23,6 +23,12 @@ public class Config {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final File configFile = new File("config/autoblockfinder/config.json");
 
+    public static void init() {
+        loadConfig();
+    	defaults();
+        saveConfig();
+    }
+    
     public static void saveConfig() {
         Map<String, Map<String, Object>> wrapped = new HashMap<>();
         for (Map.Entry<String, Object> entry : config.entrySet()) {
@@ -100,26 +106,28 @@ public class Config {
             }
         }
         catch (IOException e) {
-
 			e.printStackTrace();
         }
     }
-
-    public static void init() {
-        config.put("delay", 5);
-        config.put("rgbaBlockColor", "255.103.103.1");
-        config.put("fullHighlight", true);
-        config.put("outlineWeight", 0.1f);
-        config.put("pingOnFound", true);
-        config.put("pingSound", "minecraft:block.anvil.land");
-        config.put("pingVolume", 1.0f);
-        config.put("pingPitch", 1.0f);
-        config.put("warpIn", "ch");
-        config.put("warpOut", "forge");
-        config.put("filterY", false);
-        config.put("filterYMax", 100);
-        loadConfig();
+    
+    public static void defaults() {
+        setDefault("delay", 5);
+        setDefault("rgbaBlockColor", "255.103.103.1");
+        setDefault("fullHighlight", true);
+        setDefault("outlineWeight", 0.1f);
+        setDefault("pingOnFound", true);
+        setDefault("pingSound", "minecraft:block.anvil.land");
+        setDefault("pingVolume", 1.0f);
+        setDefault("pingPitch", 1.0f);
+        setDefault("warpIn", "ch");
+        setDefault("warpOut", "forge");
+        setDefault("filterY", false);
+        setDefault("filterYMax", 100);
     }
+    
+    private static void setDefault(String key, Object value) {
+		if (!isValid(key)) config.put(key, value);
+	}
 
     public static boolean setConfig(String key, Object value) {
         if (!config.containsKey(key)) {
@@ -179,6 +187,7 @@ public class Config {
         }
 
         config.put(key, value);
+		defaults();
         saveConfig();
 
         return true;
@@ -203,7 +212,7 @@ public class Config {
         return config.keySet();
     }
 
-    public static boolean isValidKey(String key) {
+    public static boolean isValid(String key) {
         return config.containsKey(key);
     }
 

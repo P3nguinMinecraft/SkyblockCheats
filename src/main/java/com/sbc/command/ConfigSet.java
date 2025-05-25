@@ -26,7 +26,7 @@ public class ConfigSet {
 	                            String key = StringArgumentType.getString(ctx, "key");
 	                            String valueStr = StringArgumentType.getString(ctx, "value");
 
-	                            if (!Config.isValidKey(key)) {
+	                            if (!Config.isValid(key)) {
 	                                ChatUtils.sendMessage("§cInvalid config key: " + key);
 	                                return 0;
 	                            }
@@ -86,7 +86,7 @@ public class ConfigSet {
 	                            String key = StringArgumentType.getString(ctx, "key");
 	                            String valueStr = StringArgumentType.getString(ctx, "value");
 
-	                            if (!Config.isValidKey(key)) {
+	                            if (!Config.isValid(key)) {
 	                                ChatUtils.sendMessage("§cInvalid config key: " + key);
 	                                return 0;
 	                            }
