@@ -63,20 +63,30 @@ public class ChatUtils {
 		}
     }
 
-    public static void sendMessage(Object msg) {
-    	String message = msg.toString();
-        client.inGameHud.getChatHud().addMessage(Text.literal(message));
+    public static void addMessage(Object msg) {
+    	if (client == null || client.inGameHud == null) return;
+        client.inGameHud.getChatHud().addMessage(Text.literal(msg.toString()));
     }
+    
+    public static void sendMessage(Object msg) {
+		if (client == null || client.inGameHud == null || client.player == null) return;
+		client.execute(() -> client.player.sendMessage(Text.literal(msg.toString()), false));
+	}
     
     public static void sendServerMessage(Object msg) {
     	if (client == null || client.inGameHud == null || client.player == null) return;
         client.execute(() -> client.player.networkHandler.sendChatMessage(msg.toString()));
 	}
     
-    public static void sendActionBar(Object msg) {
+    public static void setActionBar(Object msg) {
     	if (client == null || client.inGameHud == null) return;
 		client.inGameHud.setOverlayMessage(Text.literal(msg.toString()), false);
 	}
+    
+    public static void sendActionBar(Object msg) {
+		if (client == null || client.inGameHud == null || client.player == null) return;
+		client.execute(() -> client.player.sendMessage(Text.literal(msg.toString()), true));
+    }
     
     public static void sendFormattedMessage(Text... components) {
         if (client == null || client.inGameHud == null) return;
