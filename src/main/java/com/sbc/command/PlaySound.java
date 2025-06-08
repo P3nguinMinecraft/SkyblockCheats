@@ -29,7 +29,7 @@ public class PlaySound {
                     				soundId = "minecraft:" + soundId;
                     			}
                     			
-                                Identifier id = new Identifier(soundId);
+                                Identifier id = Identifier.of(soundId);
                                 SoundEvent soundEvent = Registries.SOUND_EVENT.get(id);
                                 
                                 if (soundEvent == null) {
@@ -60,7 +60,7 @@ public class PlaySound {
                     				soundId = "minecraft:" + soundId;
                     			}
                     			
-                                Identifier id = new Identifier(soundId);
+                                Identifier id = Identifier.of(soundId);
                                 SoundEvent soundEvent = Registries.SOUND_EVENT.get(id);
                                 
                                 if (soundEvent == null) {

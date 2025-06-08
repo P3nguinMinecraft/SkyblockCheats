@@ -1,9 +1,9 @@
 package com.sbc.feature;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.sbc.object.Color;
 import com.sbc.task.BlockScanTask;
 import com.sbc.util.ChatUtils;
 import com.sbc.util.Config;
@@ -99,19 +99,21 @@ public class SearchManager {
     public static void listSearch() {
     	if (foundBlocks.isEmpty()) {
 			ChatUtils.addMessage("§2[SBC] §r§cNo blocks found");
-		} else {
+		}
+    	else {
 			for (BlockPos pos : foundBlocks) {
 				String block = pos.getX() + " " + pos.getY() + " " + pos.getZ();
+
 				ChatUtils.sendFormattedMessage(
-                	Text.literal("§b" + block).setStyle(Style.EMPTY
-            			.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, block))
-            			.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§eCLICK §rto copy")))
-                	),
-                	Text.literal(" §r[Look]").setStyle(Style.EMPTY
-						.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sbc look block " + block))
-						.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§eCLICK §rto look at block")))
-                	)
-        		);
+				    Text.literal("§b" + block).setStyle(Style.EMPTY
+				        .withClickEvent(new ClickEvent.CopyToClipboard(block))
+				        .withHoverEvent(new HoverEvent.ShowText(Text.literal("§eCLICK §rto copy")))
+				    ),
+				    Text.literal(" §r[Look]").setStyle(Style.EMPTY
+				        .withClickEvent(new ClickEvent.RunCommand("/sbc look block " + block))
+				        .withHoverEvent(new HoverEvent.ShowText(Text.literal("§eCLICK §rto look at block")))
+				    )
+				);
 			}
 		}
     }
@@ -160,7 +162,7 @@ public class SearchManager {
                                 float volume = (Float) Config.getConfig("pingVolume");
                                 float pitch = (Float) Config.getConfig("pingPitch");
 
-                                Identifier id = new Identifier(soundId);
+                                Identifier id = Identifier.tryParse(soundId);
                                 SoundEvent soundEvent = Registries.SOUND_EVENT.get(id);
 
                                 SoundUtils.playSound((float) volume, (float) pitch, soundEvent);
@@ -217,7 +219,7 @@ public class SearchManager {
         scanTaskThread = new Thread(() -> {
             long startTime = System.currentTimeMillis();
             boolean firstRun = true;
-
+            
             while (!Thread.currentThread().isInterrupted() && !foundInTask.get()
                     && ((timeout <= 0) || (System.currentTimeMillis() < startTime + timeout)) && active) {
                 glassScanTask = new BlockScanTask(
@@ -231,15 +233,15 @@ public class SearchManager {
 	                    ChatUtils.addMessage("§2[SBC] §r§aFound Magenta Stained Glass §r" + roundedDistance + " blocks away");
 	                    String block = pos.getX() + " " + pos.getY() + " " + pos.getZ();
 	                    ChatUtils.sendFormattedMessage(
-                        	Text.literal("§b" + block).setStyle(Style.EMPTY
-                        		.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, block))
-                    			.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§eCLICK §rto copy")))
-                        	),
-                        	Text.literal(" §r[Look]").setStyle(Style.EMPTY
-        						.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sbc look block " + block))
-        						.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§eCLICK §rto look at block")))
-                        	)
-                		);
+        				    Text.literal("§b" + block).setStyle(Style.EMPTY
+        				        .withClickEvent(new ClickEvent.CopyToClipboard(block))
+        				        .withHoverEvent(new HoverEvent.ShowText(Text.literal("§eCLICK §rto copy")))
+        				    ),
+        				    Text.literal(" §r[Look]").setStyle(Style.EMPTY
+        				        .withClickEvent(new ClickEvent.RunCommand("/sbc look block " + block))
+        				        .withHoverEvent(new HoverEvent.ShowText(Text.literal("§eCLICK §rto look at block")))
+        				    )
+        				);
 		                active = false;
 		                onFound.run();
 		                endScanTasks();
@@ -258,15 +260,15 @@ public class SearchManager {
 	                    ChatUtils.addMessage("§2[SBC] §r§aFound Magenta Stained Glass Pane §r" + roundedDistance + " blocks away");
 	                    String block = pos.getX() + " " + pos.getY() + " " + pos.getZ();
 	                    ChatUtils.sendFormattedMessage(
-                        	Text.literal("§b" + block).setStyle(Style.EMPTY
-                    			.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, block))
-                    			.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§eCLICK §rto copy")))
-                        	),
-                        	Text.literal(" §r[Look]").setStyle(Style.EMPTY
-        						.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sbc look block " + block))
-        						.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§eCLICK §rto look at block")))
-                        	)
-                		);
+        				    Text.literal("§b" + block).setStyle(Style.EMPTY
+        				        .withClickEvent(new ClickEvent.CopyToClipboard(block))
+        				        .withHoverEvent(new HoverEvent.ShowText(Text.literal("§eCLICK §rto copy")))
+        				    ),
+        				    Text.literal(" §r[Look]").setStyle(Style.EMPTY
+        				        .withClickEvent(new ClickEvent.RunCommand("/sbc look block " + block))
+        				        .withHoverEvent(new HoverEvent.ShowText(Text.literal("§eCLICK §rto look at block")))
+        				    )
+        				);
 	                    active = false;
 	                    onFound.run();
 	                    endScanTasks();
@@ -277,12 +279,10 @@ public class SearchManager {
                 glassScanTask.start();
                 paneScanTask.start();
 
-                while (glassScanTask != null && paneScanTask != null && (!glassScanTask.isDone() || !paneScanTask.isDone()) && !foundInTask.get() && !Thread.currentThread().isInterrupted()) {
+                while (active && glassScanTask != null && paneScanTask != null && (!glassScanTask.isDone() || !paneScanTask.isDone()) && !foundInTask.get() && !Thread.currentThread().isInterrupted()) {
                 	try {
                 		if ((timeout > 0) && System.currentTimeMillis() >= startTime + timeout) {
                 			active = false;
-                			onTimeout.run();
-                			endScanTasks();
                 			break;
                 		}
                         Thread.sleep(20);
@@ -301,26 +301,21 @@ public class SearchManager {
         		}
         		
         		if (firstRun && !foundInTask.get()) {
-    				ChatUtils.addMessage("§2[SBC] §r" + (single ? "§cNo blocks found" : "§cNo blocks found. §r§eLooping..."));
         			firstRun = false;
+    				ChatUtils.addMessage("§2[SBC] §r" + (single ? "§cNo blocks found" : "§cNo blocks found. §r§eLooping..."));
         			if (single) {
-        				active = false;
-        				endScanTasks();
-						onTimeout.run();
+						active = false;
 						break;
         			}
         		}
             }
 
-        	active = false;
-			endScanTasks();
-			
             if (!foundInTask.get()) {
                 onTimeout.run();
             }
-            else {
-            	onFound.run();
-            }
+
+        	active = false;
+			endScanTasks();
         }, "ScanTaskThread");
 
         scanTaskThread.start();
@@ -364,21 +359,6 @@ public class SearchManager {
         found = true;
         foundBlocks.add(pos);
         String rgba = (String) Config.getConfig("rgbaBlockColor");
-        float r = 255, g = 0, b = 0, a = 1.0f;
-        if (rgba != null && !rgba.isEmpty()) {
-            String[] parts = rgba.split(",");
-            if (parts.length >= 3) {
-                try {
-                    r = Float.parseFloat(parts[0].trim());
-                    g = Float.parseFloat(parts[1].trim());
-                    b = Float.parseFloat(parts[2].trim());
-                    if (parts.length >= 4) {
-                        a = Float.parseFloat(parts[3].trim());
-                    }
-                } catch (NumberFormatException e) {
-                }
-            }
-        }
-        Render.addBlock(pos, new ArrayList<>(List.of(r, g, b, a)), (boolean) Config.getConfig("fullHighlight") ? RenderMode.HIGHLIGHT : RenderMode.OUTLINE);
+        Render.addBlock(pos, Color.parseString(rgba), (boolean) Config.getConfig("fullHighlight") ? RenderMode.HIGHLIGHT : RenderMode.OUTLINE);
     }
 }

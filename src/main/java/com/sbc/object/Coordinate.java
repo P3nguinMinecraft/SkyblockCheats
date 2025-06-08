@@ -6,62 +6,62 @@ import java.util.Arrays;
 import net.minecraft.util.math.BlockPos;
 
 public class Coordinate {
-	public double x;
-	public double y;
-	public double z;
+	public float x;
+	public float y;
+	public float z;
 
-	public Coordinate(double x, double y, double z) {
+	public Coordinate(float x, float y, float z) {
 	    this.x = x;
 	    this.y = y;
 	    this.z = z;
 	}
 
-	public double getX() {
+	public float getX() {
 	    return x;
 	}
 
-	public double getY() {
+	public float getY() {
 	    return y;
 	}
 
-	public double getZ() {
+	public float getZ() {
 	    return z;
 	}
 
-	public ArrayList<Double> toArray() {
+	public ArrayList<Float> toArray() {
 	    return new ArrayList<>(Arrays.asList(x, y, z));
 	}
 
-	public Coordinate setX(double x) {
+	public Coordinate setX(float x) {
 	    this.x = x;
 	    return this;
 	}
 
-	public Coordinate setY(double y) {
+	public Coordinate setY(float y) {
 	    this.y = y;
 	    return this;
 	}
 
-	public Coordinate setZ(double z) {
+	public Coordinate setZ(float z) {
 	    this.z = z;
 	    return this;
 	}
 
-	public Coordinate setCoordinate(double x, double y, double z) {
+	public Coordinate setCoordinate(float x, float y, float z) {
 	    this.x = x;
 	    this.y = y;
 	    this.z = z;
 	    return this;
 	}
 
-	public Coordinate move(double x, double y, double z) {
+	public Coordinate move(float x, float y, float z) {
 	    this.x += x;
 	    this.y += y;
 	    this.z += z;
 	    return this;
 	}
 
-	public Coordinate shift(double dx, double dy, double dz) {
+	public Coordinate shift(float dx, float dy, float dz) {
 	    return new Coordinate(this.x + dx, this.y + dy, this.z + dz);
 	}
 

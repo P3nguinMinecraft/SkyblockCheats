@@ -114,10 +114,9 @@ public class Config {
     
     public static void defaults() {
     	validKeys.clear();
-        setDefault("delay", 5);
+        setDefault("delay", 0);
         setDefault("rgbaBlockColor", "255.103.103.1");
         setDefault("fullHighlight", true);
-        setDefault("outlineWeight", 0.1f);
         setDefault("pingOnFound", true);
         setDefault("pingSound", "minecraft:block.anvil.land");
         setDefault("pingVolume", 1.0f);
@@ -192,7 +191,7 @@ public class Config {
 				value = soundId;
 			}
 
-            Identifier id = new Identifier(soundId);
+            Identifier id = Identifier.tryParse(soundId);
             SoundEvent soundEvent = Registries.SOUND_EVENT.get(id);
             
             if (soundEvent == null) {

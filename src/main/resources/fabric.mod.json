@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "id": "sbc",
-  "version": "1.0.0",
+  "version": "1.1.0+1.21.5",
   "name": "SkyblockCheats",
   "description": "A funny client-side mod",
   "authors": [
     "Penguin"
   ],
   "contact": {
-    "homepage": "https://example.com",
-    "sources": "https://github.com/P3nguinMinecraft/SBC"
+    "homepage": "https://nohomepage.com",
+    "sources": "https://github.com/P3nguinMinecraft/SkyblockCheats"
   },
   "license": "MIT",
   "environment": "*",
@@ -19,11 +19,11 @@
     ]
   },
   "depends": {
-    "fabricloader": ">=0.14.0",
+    "fabricloader": ">=0.16.14",
     "fabric": "*",
-    "minecraft": "1.20.1",
+    "minecraft": "1.21.5",
 	"java": ">=17",
 	"fabric-api": "*"
   },
-  "accessWidener" : "sbc.accesswidener"
+  "accessWidener": "sbc.accesswidener"
 }

@@ -10,6 +10,8 @@ import com.sbc.command.SearchClear;
 import com.sbc.command.SearchList;
 import com.sbc.command.SearchScan;
 import com.sbc.command.SearchToggle;
+import com.sbc.command.SendCoords;
+import com.sbc.command.ServerTPS;
 import com.sbc.command.UptimeCommand;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -28,6 +30,8 @@ public class Command {
             PlaySound.register(dispatcher, registryAccess);
             LookBlock.register(dispatcher, registryAccess);
             LookPos.register(dispatcher, registryAccess);
+            SendCoords.register(dispatcher, registryAccess);
+            ServerTPS.register(dispatcher, registryAccess);
         });
     }
 }

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.sbc.feature.AutoMelody;
 import com.sbc.feature.GhostBlock;
+import com.sbc.feature.TPSTracker;
 import com.sbc.util.ChatUtils;
 import com.sbc.util.Command;
 import com.sbc.util.Config;
@@ -29,6 +30,7 @@ public class SkyblockCheats implements ClientModInitializer {
         World.init();
         AutoMelody.init();
         GhostBlock.init();
+        TPSTracker.init();
         LOGGER.info("SkyblockCheats started!");
 
     }

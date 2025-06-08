@@ -23,7 +23,7 @@ public class LookPos {
 									float y = FloatArgumentType.getFloat(context, "y");
 									float z = FloatArgumentType.getFloat(context, "z");
 									
-									ChatUtils.sendMessage("§eLooking at: §r" + x + ", " + y + ", " + z);
+									ChatUtils.addMessage("§eLooking at: §r" + x + ", " + y + ", " + z);
 									Camera.lookPos(x, y, z);
 									
 									return 1;
@@ -45,7 +45,7 @@ public class LookPos {
 										float y = FloatArgumentType.getFloat(context, "y");
 										float z = FloatArgumentType.getFloat(context, "z");
 										
-										ChatUtils.sendMessage("§eLooking at: §r" + x + ", " + y + ", " + z);
+										ChatUtils.addMessage("§eLooking at: §r" + x + ", " + y + ", " + z);
 										Camera.lookPos(x, y, z);
 										
 										return 1;
