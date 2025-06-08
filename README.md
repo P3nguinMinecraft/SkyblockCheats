@@ -8,24 +8,35 @@
 ### Config
 `/sbc config list`: Lists all config options and values
 `/sbc config set [name] [new value]`: Changes configs
-`/sbc config remove [name]`: Deletes config (if not deprecated, will reset to default)
 
 ## Features
 ### Grotto Search
-`/sbc search [clear / list / scan / toggle]`
+`/sbc search [clear / list / scan / toggle]` <br>
 Searches for Magenta Stained Glass and Panes (only in Fairy Grottos)
 - Highlights the found blocks
-  - fullHighlight = false DOES NOT WORK CURRENTLY
+  - fullHighlight false does not work currently :(
 - List out all highlighted blocks
 - Togglable Search Loop with **server hop**
 - Single click block search
 - Ping when found
 - Copiable coordinates
+
 ### Uptime
+`/sbc uptime` <br>
 Displays Server Uptime
-`/sbc uptime`
 - Displayed in Day count, Hours, Minutes, Ticks
-## Look At
-`/sbc look [block / pos] [x] [y], [z]`
+
+### Ghost Block
+`/sbc config set ghostblock true` <br>
+Makes ghost blocks without tools
+- Turn on Ghost Block in config and hold keybind to create ghost blocks when you mine!
+
+### Automelody
+`/sbc config set automelody true` <br>
+Automatically completes melody harp song
+- Very slightly ping dependent
+
+### Look At
+`/sbc look [block / pos] [x] [y], [z]` <br>
 Quick util to face a certain position
 - Look at blocks and specific positions

@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,10 +24,11 @@ public class Config {
     private static final Map<String, Object> config = new HashMap<>();
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final File configFile = new File("config/autoblockfinder/config.json");
-
+    private static ArrayList<String> validKeys = new ArrayList<>();
     public static void init() {
         loadConfig();
     	defaults();
+    	cleanConfig();
         saveConfig();
     }
     
@@ -50,7 +53,6 @@ public class Config {
 			} else {
 				continue;
 			}
-
 
             wrapper.put("value", value);
             wrapped.put(entry.getKey(), wrapper);
@@ -111,6 +113,7 @@ public class Config {
     }
     
     public static void defaults() {
+    	validKeys.clear();
         setDefault("delay", 5);
         setDefault("rgbaBlockColor", "255.103.103.1");
         setDefault("fullHighlight", true);
@@ -123,11 +126,24 @@ public class Config {
         setDefault("warpOut", "forge");
         setDefault("filterY", false);
         setDefault("filterYMax", 100);
+        setDefault("automelody", false);
+        setDefault("ghostblock", true);
     }
     
     private static void setDefault(String key, Object value) {
+    	validKeys.add(key);
 		if (!isValid(key)) config.put(key, value);
 	}
+    
+    private static void cleanConfig() {
+        Iterator<String> iter = config.keySet().iterator();
+        while (iter.hasNext()) {
+            String key = iter.next();
+            if (!validKeys.contains(key)) {
+                iter.remove();
+            }
+        }
+    }
 
     public static boolean setConfig(String key, Object value) {
         if (!config.containsKey(key)) {

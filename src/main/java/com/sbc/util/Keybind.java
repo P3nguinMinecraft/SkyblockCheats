@@ -2,6 +2,7 @@ package com.sbc.util;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.sbc.feature.GhostBlock;
 import com.sbc.feature.SearchManager;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -12,6 +13,7 @@ public class Keybind {
     private static KeyBinding searchToggleKey;
     private static KeyBinding searchScanKey;
     private static KeyBinding searchClearKey;
+    private static KeyBinding ghostBlockKey;
 
     public static void init() {
         searchToggleKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -22,6 +24,9 @@ public class Keybind {
 
         searchClearKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.sbc.search_clear", GLFW.GLFW_KEY_H, "category.sbc"));
+        
+        ghostBlockKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+			"key.sbc.ghost_block", GLFW.GLFW_KEY_V, "category.sbc"));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (searchToggleKey.wasPressed()) {
@@ -33,6 +38,7 @@ public class Keybind {
             while (searchClearKey.wasPressed()) {
                 SearchManager.clearSearch();
             }
+			GhostBlock.handleKeyPress(ghostBlockKey.isPressed());
         });
     }
 }

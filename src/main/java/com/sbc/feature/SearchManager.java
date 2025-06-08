@@ -38,18 +38,18 @@ public class SearchManager {
         if (loopActive) {
             clearSearch();
             endTasks();
-            ChatUtils.sendMessage("§cSearch stopped");
+            ChatUtils.addMessage("§2[SBC] §r§cSearch stopped");
         }
         else {
            	if (found) {
                 found = false;
-            	ChatUtils.sendMessage("§eSearch cleared");
+            	ChatUtils.addMessage("§2[SBC] §r§eSearch cleared");
             	for (BlockPos pos : foundBlocks) {
 					Render.removeBlock(pos);
 				}
                 foundBlocks.clear();
            	}
-            ChatUtils.sendMessage("§aSearch started");
+            ChatUtils.addMessage("§2[SBC] §r§aSearch started");
             runSearchLoop();
         }
     }
@@ -57,7 +57,7 @@ public class SearchManager {
     public static synchronized void clearSearch() {
         if (found) {
             found = false;
-        	ChatUtils.sendMessage("§eSearch cleared");
+        	ChatUtils.addMessage("§2[SBC] §r§eSearch cleared");
         	for (BlockPos pos : foundBlocks) {
 				Render.removeBlock(pos);
 			}
@@ -68,11 +68,11 @@ public class SearchManager {
     public static synchronized void scan() {
     	if (active) {
 			active = false;
-			ChatUtils.sendMessage("§cScan cancelled");
+			ChatUtils.addMessage("§2[SBC] §r§cScan cancelled");
 		    endTasks();
 		    return;
 		}
-    	ChatUtils.sendMessage("§aScan started");
+    	ChatUtils.addMessage("§2[SBC] §r§aScan started");
 
 		manualScanTaskThread = new Thread(() -> {
 	    	Object lock = new Object();
@@ -98,7 +98,7 @@ public class SearchManager {
 
     public static void listSearch() {
     	if (foundBlocks.isEmpty()) {
-			ChatUtils.sendMessage("§cNo blocks found");
+			ChatUtils.addMessage("§2[SBC] §r§cNo blocks found");
 		} else {
 			for (BlockPos pos : foundBlocks) {
 				String block = pos.getX() + " " + pos.getY() + " " + pos.getZ();
@@ -205,7 +205,7 @@ public class SearchManager {
 
     private static void runScanTaskAsync(int timeout, Runnable onFound, Runnable onTimeout, boolean single) {
         if (active) {
-            ChatUtils.sendMessage("§cA scan is already in progress!");
+            ChatUtils.addMessage("§2[SBC] §r§cA scan is already in progress!");
             return;
         }
         active = true;
@@ -228,7 +228,7 @@ public class SearchManager {
 	                            + Math.pow(client.player.getY() - pos.getY(), 2)
 	                            + Math.pow(client.player.getZ() - pos.getZ(), 2));
 	                    double roundedDistance = Math.round(distance * 10.0) / 10.0;
-	                    ChatUtils.sendMessage("§aFound Magenta Stained Glass §r" + roundedDistance + " blocks away");
+	                    ChatUtils.addMessage("§2[SBC] §r§aFound Magenta Stained Glass §r" + roundedDistance + " blocks away");
 	                    String block = pos.getX() + " " + pos.getY() + " " + pos.getZ();
 	                    ChatUtils.sendFormattedMessage(
                         	Text.literal("§b" + block).setStyle(Style.EMPTY
@@ -255,7 +255,7 @@ public class SearchManager {
 	                            + Math.pow(client.player.getY() - pos.getY(), 2)
 	                            + Math.pow(client.player.getZ() - pos.getZ(), 2));
 	                    double roundedDistance = Math.round(distance * 10.0) / 10.0;
-	                    ChatUtils.sendMessage("§aFound Magenta Stained Glass Pane §r" + roundedDistance + " blocks away");
+	                    ChatUtils.addMessage("§2[SBC] §r§aFound Magenta Stained Glass Pane §r" + roundedDistance + " blocks away");
 	                    String block = pos.getX() + " " + pos.getY() + " " + pos.getZ();
 	                    ChatUtils.sendFormattedMessage(
                         	Text.literal("§b" + block).setStyle(Style.EMPTY
@@ -301,7 +301,7 @@ public class SearchManager {
         		}
         		
         		if (firstRun && !foundInTask.get()) {
-    				ChatUtils.sendMessage(single ? "§cNo blocks found" : "§cNo blocks found. §r§eLooping...");
+    				ChatUtils.addMessage("§2[SBC] §r" + (single ? "§cNo blocks found" : "§cNo blocks found. §r§eLooping..."));
         			firstRun = false;
         			if (single) {
         				active = false;
