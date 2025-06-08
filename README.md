@@ -49,3 +49,6 @@ Sends your coords like in Patcher or other mods
 `/sbc look [block / pos] [x] [y], [z]` <br>
 Quick util to face a certain position
 - Look at blocks and specific positions
+
+## Contact
+DM `windows1267` on discord for any questions, issues, or suggestions
