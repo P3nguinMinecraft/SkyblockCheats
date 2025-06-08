@@ -23,7 +23,7 @@ public class LookBlock {
 									int y = IntegerArgumentType.getInteger(context, "y");
 									int z = IntegerArgumentType.getInteger(context, "z");
 									
-									ChatUtils.sendMessage("§eLooking at block: §r" + x + ", " + y + ", " + z);
+									ChatUtils.addMessage("§eLooking at block: §r" + x + ", " + y + ", " + z);
 									Camera.lookBlock(x, y, z);
 									
 									return 1;
@@ -45,7 +45,7 @@ public class LookBlock {
 									int y = IntegerArgumentType.getInteger(context, "y");
 									int z = IntegerArgumentType.getInteger(context, "z");
 									
-									ChatUtils.sendMessage("§eLooking at block: §r" + x + ", " + y + ", " + z);
+									ChatUtils.addMessage("§eLooking at block: §r" + x + ", " + y + ", " + z);
 									Camera.lookBlock(x, y, z);
 									
 									return 1;

@@ -10,7 +10,7 @@ public class SoundUtils {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player != null && client.world != null) {
             Vec3d pos = client.player.getPos();
-            client.world.playSound(
+            client.world.playSoundClient(
                 pos.x, pos.y, pos.z,
                 sound,
                 SoundCategory.PLAYERS,

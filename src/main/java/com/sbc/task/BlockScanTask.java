@@ -60,7 +60,7 @@ public class BlockScanTask implements Runnable {
         }
 
         int minY = world.getBottomY();
-        int maxY = world.getTopY();
+        int maxY = world.getTopYInclusive();
 
         ChunkPos centerChunk = new ChunkPos(client.player.getBlockPos());
         int radius = client.options.getViewDistance().getValue();

@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandler;
@@ -55,7 +56,7 @@ public class AutoMelody {
 	                    client.interactionManager.clickSlot(handler.syncId, slot.id, 1, SlotActionType.CLONE, client.player);
 	                });
 	                ItemStack stack = new ItemStack(Items.DIAMOND_BLOCK, 1);
-	                stack.setCustomName(Text.literal("§2[SBC] §r§dAutoMelody"));
+	                stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("§2[SBC] §r§dAutoMelody"));
 	                slot.setStack(stack);
 	                if (handler.slots.get(i - 9).getStack().getItem().getTranslationKey().contains("wool")) {
 	                    delayedClick[0] = i;
