@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "sbc",
-  "version": "1.1.0+1.21.5",
+  "version": "1.1.1+1.21.5",
   "name": "SkyblockCheats",
   "description": "A funny client-side mod",
   "authors": [
