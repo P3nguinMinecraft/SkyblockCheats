@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "id": "sbc",
-  "version": "1.1.1+1.21.5",
   "name": "SkyblockCheats",
+  "version": "$mod_version",
   "description": "A funny client-side mod",
   "authors": [
     "Penguin"
@@ -12,7 +12,8 @@
     "sources": "https://github.com/P3nguinMinecraft/SkyblockCheats"
   },
   "license": "MIT",
-  "environment": "*",
+  "icon": "assets/sbc/icon.png",
+  "environment": "client",
   "entrypoints": {
     "client": [
       "com.sbc.SkyblockCheats"
@@ -25,5 +26,8 @@
 	"java": ">=17",
 	"fabric-api": "*"
   },
+  "mixins": [
+     "sbc.mixins.json"
+	 ],
   "accessWidener": "sbc.accesswidener"
 }

@@ -1,15 +1,23 @@
-package com.sbc.feature;
+package com.sbc.util;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.Vec3d;
 
-public class Camera {
+public class PlayerCamera {
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
     public static void lookBlock(int x, int y, int z) {
         lookPos(x + 0.5F, y + 0.5F, z + 0.5F);
     }
-    
+
+	public static void lookPos(Vec3d vec){
+		lookPos(vec.x, vec.y, vec.z);
+	}
+
+	public static void lookPos(double x, double y, double z){
+		lookPos((float) x, (float) y, (float) z);
+	}
+
     public static void lookPos(float x, float y, float z) {
 		if (client.player == null) return;
 
@@ -26,7 +34,23 @@ public class Camera {
 		float yaw = (float) Math.toDegrees(Math.atan2(dz, dx)) - 90F;
 		float pitch = (float) -Math.toDegrees(Math.atan2(dy, distanceXZ));
 
-		client.player.setYaw(yaw);
+		setYaw(yaw);
+		setPitch(pitch);
+	}
+    
+    public static void setYaw(float yaw) {
+    	client.player.setYaw(yaw);
+    }
+    
+    public static float getYaw() {
+		return client.player.getYaw();
+	}
+    
+    public static void setPitch(float pitch) {
 		client.player.setPitch(pitch);
+	}
+    
+    public static float getPitch() {
+		return client.player.getPitch();
 	}
 }

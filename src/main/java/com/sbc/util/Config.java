@@ -23,7 +23,7 @@ import net.minecraft.util.Identifier;
 public class Config {
     private static final Map<String, Object> config = new HashMap<>();
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private static final File configFile = new File("config/autoblockfinder/config.json");
+    private static final File configFile = new File("config/skyblockcheats/config.json");
     private static ArrayList<String> validKeys = new ArrayList<>();
     public static void init() {
         loadConfig();
@@ -114,10 +114,10 @@ public class Config {
     
     public static void defaults() {
     	validKeys.clear();
-        setDefault("delay", 0);
+        setDefault("delay", 0.0f);
         setDefault("rgba-block-color", "255-103-103-0.6");
         setDefault("solid-highlight", true);
-        setDefault("outline-weight", 10f);
+        setDefault("outline-weight", 10.0f);
         setDefault("ping-on-found", true);
         setDefault("ping-sound", "minecraft:block.anvil.land");
         setDefault("ping-volume", 1.0f);
@@ -129,6 +129,14 @@ public class Config {
         setDefault("auto-melody", false);
         setDefault("ghost-block", false);
         setDefault("max-log-time", 600);
+        setDefault("left-click-cps", 10.0f);
+        setDefault("right-click-cps", 10.0f);
+        setDefault("auto-impel", false);
+        setDefault("impel-delay", 0.3f);
+        setDefault("impel-rate", 0.5f);
+        setDefault("beachball-predictor", true);
+        setDefault("auto-beachball", false);
+        setDefault("fullauto-beachball", false);
     }
     
     private static void setDefault(String key, Object value) {
@@ -151,7 +159,11 @@ public class Config {
         	ChatUtils.sendMessage("§cInvalid config key: " + key);
 			return false;
         }
-        if (getConfig(key) instanceof Float && (Float) value < 0f) {
+        if (getConfig(key) instanceof Integer && (int) value < 0) {
+        	ChatUtils.sendMessage("§cInvalid value: " + value + ". Expected value >= 0");
+        	return false;
+        }
+        if (getConfig(key) instanceof Float && (float) value < 0f) {
         	ChatUtils.sendMessage("§cInvalid value: " + value + ". Expected value >= 0");
         	return false;
         }
@@ -202,6 +214,13 @@ public class Config {
         	}
         	
         }
+        if (key.equals("left-click-cps") || key.equals("right-click-cps")) {
+			float cps = (float) value;
+			if (cps > 20.0f) {
+				ChatUtils.sendMessage("§cCPS cannot be above 20 for safety reasons.");
+				return false;
+			}
+		}
 
         config.put(key, value);
 		defaults();

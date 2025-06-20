@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import com.sbc.data.ModInfo;
 
 public class ChatUtils {
     private static final MinecraftClient client = MinecraftClient.getInstance();
@@ -16,6 +17,7 @@ public class ChatUtils {
     public static void init() {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
             onGameMessage(message.getString());
+            ListenerManager.onMessage(message.getString());
         });
     }
     
@@ -98,6 +100,12 @@ public class ChatUtils {
 
         client.inGameHud.getChatHud().addMessage(fullMessage);
     }
+
+	public static void sendDebugMessage(Object msg){
+		if (!ModInfo.DEV) return;
+		addMessage(msg);
+		System.out.println(msg.toString());
+	}
 }
 
 class QueueItem {

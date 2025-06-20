@@ -4,6 +4,7 @@ import com.sbc.command.Action;
 import com.sbc.command.ConfigList;
 import com.sbc.command.ConfigReset;
 import com.sbc.command.ConfigSet;
+import com.sbc.command.Debug;
 import com.sbc.command.GrottoSearchClear;
 import com.sbc.command.GrottoSearchList;
 import com.sbc.command.GrottoSearchScan;
@@ -38,6 +39,7 @@ public class Command {
             Action.register(dispatcher, registryAccess);
             ServerHistoryList.register(dispatcher, registryAccess);
             ServerHistoryClear.register(dispatcher, registryAccess);
+            Debug.register(dispatcher, registryAccess);
         });
     }
 }

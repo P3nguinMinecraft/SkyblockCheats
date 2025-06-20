@@ -1,0 +1,24 @@
+v1.1.2
+
+- Added Autoclicker
+	- Added config "left-click-cps" and "right-click-cps" to set the clicks per second for left and right mouse buttons respectively
+	- Added keybinds for toggling left and right autoclickers
+
+- Config "delay" changed to accept decimal values
+- All numeric config values now filter out negative values
+
+- Added icon yay!
+
+- Added AutoImpel
+
+- Added Debug Command (secret :3)
+
+- Removed Coordinate object, replaced with Vec3d
+
+- Added Year of the Seal Beach Ball predictor / automator / macro
+    - Added config "beachball-predictor" -> shows lines and predicted landing position, required for auto and fullauto
+    - Added config "auto-beachball" -> automatically moves under the ball
+    - Added config "fullauto-beachball" -> automatically cycles beach balls
+           - hold beach balls in hand, go to (-100, 102, 0) in Dungeon Hub using Etherwarp
+
+- Moved config files to be under skyblockcheats

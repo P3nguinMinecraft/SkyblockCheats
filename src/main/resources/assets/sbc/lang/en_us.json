@@ -2,6 +2,7 @@
   "category.sbc": "SkyblockCheats",
   "key.sbc.search_toggle": "Search Loop Toggle",
   "key.sbc.search_scan": "Scan Blocks",
-  "key.sbc.search_clear": "Clear Blocks",
-  "key.sbc.ghost_block": "Ghost Block Hotkey"
+  "key.sbc.ghost_block": "Ghost Block Hotkey",
+  "key.sbc.auto_left_click": "Auto Left Click",
+  "key.sbc.auto_right_click": "Auto Right Click"
 }

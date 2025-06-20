@@ -1,4 +1,4 @@
-# CURRENT RELEASE: v1.1.1
+# CURRENT RELEASE: v1.1.2
 ## About
 #### Fabric 1.21.5 Mod for Hypixel Skyblock
 
@@ -53,14 +53,29 @@ Plays a sound effect
 Tracks servers and notifies when a server was visited recently
 - Useful to avoid duplicate servers or to find a server you were on before
 
+#### Autoclicker
+Keybind Only <br>
+Automatically clicks for you at a set CPS (Clicks Per Second)
+- Toggled by keybind
+
+#### Auto Impel
+Completes impels automatically in Vampire Slayer
+- Delays configurable
+
+#### Beach Ball
+Features for Bouncy Beach Ball in Year of the Seal
+- Renders landing prediction
+- Auto bounce
+- Full auto bounce (macro)
+
 ## Config
 `/sbc config list`: Lists all config options and values
 `/sbc config set [name] [new value]`: Changes configs
 `/sbc config reset [name / all]`: Resets config options to default
 
-<b>delay</b>: Time in seconds between each server hop in the Grotto Search loop (0 = no delay) <br>
-Default: 0 <br>
-<b>rgba-block-color</b>: Color of the highlighted blocks in RGBA format (r-g-b-a) <br>
+<b>delay</b>: Time in seconds between each server hop in the Grotto Search loop (0.0 = no delay) <br>
+Default: 0.0 <br>
+<b>rgba-block-color</b>: Color of the highlighted blocks in RGBA format (r(255)-g(255)-b(255)-a(1)) <br>
 Default: 255-103-103-0.6 <br>
 <b>solid-highlight</b>: Whether to use solid color for highlighted blocks (true/false) <br>
 Default: true <br>
@@ -88,6 +103,22 @@ Default: false <br>
 Default: false <br>
 <b>max-log-time</b>: Maximum time in seconds to keep server logs for Server History <br>
 Default: 600 <br>
+<b>left-click-cps</b>: Clicks per second for Autoclicker when left-clicking (0.0 to 20.0)<br>
+Default: 10.0 <br>
+<b>right-click-cps</b>: Clicks per second for Autoclicker when right-clicking (0.0 to 20.0) <br>
+Default: 10.0 <br>
+<b>auto-impel</b>: Automatically completes impels for Vampire Slayer <br>
+Default: false <br>
+<b>impel-delay</b>: Delay for the pop-up before reacting and completing it (sec) <br>
+Default: 0.3 <br>
+<b>impel-rate</b>: Rate at which the mod attempts to impel, in case that it fails (sec) <br>
+Default: 0.5 <br>
+<b>beachball-predictor</b>: Enables all beach ball features and draws a predicted trajectory based on projectile models. Required for all beach ball features <br>
+Default: true <br>
+<b>auto-beachball</b>: Automatically bounces the beach ball, requires predictor to be on
+Default: false <br>
+<b>fullauto-beachball</b>: Fuly automatically bounces the beach ball, requires auto-beachball. Hold beach ball items and go to -100 102 0 in Dungeon Hub using Etherwarp <br>
+Default: false <br>
 
 ## Contact
 DM `windows1267` on discord for any questions, issues, or suggestions

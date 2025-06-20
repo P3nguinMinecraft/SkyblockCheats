@@ -1,5 +1,6 @@
 package com.sbc.util;
 
+import com.sbc.feature.BeachBall;
 import com.sbc.feature.GrottoSearchManager;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -51,5 +52,6 @@ public class World {
 	public static void onServerSwitch() {
 		GrottoSearchManager.clearSearch();
 		GrottoSearchManager.endScanTasks();
+		BeachBall.activated = false;
 	}
 }

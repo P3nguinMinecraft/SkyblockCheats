@@ -1,18 +1,30 @@
+import net.fabricmc.loom.task.RemapJarTask
+
 plugins {
 	id 'fabric-loom' version "1.10-SNAPSHOT"
 	id 'maven-publish'
+	id 'java'
+	id 'com.gradleup.shadow' version "9.0.0-beta17"
 }
 
 version = project.mod_version
 group = project.maven_group
 
 base {
-	archivesName = project.archives_base_name
+	group = project.group + "." + project.mod_id
+	archivesName = project.mod_file_name
+	version = project.mod_version
+
+	if (mod_version.endsWith('-dev')) {
+		version += "." + new Date().format('MMdd.HHmmss')
+	} else {
+		version += "+" + project.minecraft_version
+	}
 }
 
 repositories {
-    mavenCentral()
-    maven { url = 'https://maven.fabricmc.net/' }
+	mavenCentral()
+	maven { url = "https://maven.fabricmc.net/" }
 }
 
 dependencies {
@@ -20,10 +32,11 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	shadow(implementation "org.apache.commons:commons-math4-legacy:4.0-beta1")
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/SBC.accesswidener")
+	accessWidenerPath = file("src/main/resources/SBC.accesswidener")
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -32,26 +45,45 @@ tasks.withType(JavaCompile).configureEach {
 
 java {
 	withSourcesJar()
-
 	sourceCompatibility = JavaVersion.VERSION_17
 	targetCompatibility = JavaVersion.VERSION_17
 }
 
 jar {
 	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}"}
+		rename { "${it}_${base.archivesName}" }
+	}
+}
+
+shadowJar {
+	configurations = [project.configurations.shadow]
+	archiveClassifier.set("shadow")
+	relocate "org.apache.commons", "com.sbc.shadow.org.apache.commons"
+}
+
+remapJar {
+	dependsOn(shadowJar)
+	inputFile = tasks.shadowJar.archiveFile
+}
+
+processResources {
+	inputs.property "mod_version", project.mod_version
+	inputs.property "minecraft_version", project.minecraft_version
+
+	filesMatching("fabric.mod.json") {
+		expand "mod_version": project.mod_version + "+" + project.minecraft_version
 	}
 }
 
 sourceSets {
-    main {
-        java {
-            srcDirs = ['src/main/java']
-        }
-        resources {
-            srcDirs = ['src/main/resources']
-        }
-    }
+	main {
+		java {
+			srcDirs = ['src/main/java']
+		}
+		resources {
+			srcDirs = ['src/main/resources']
+		}
+	}
 }
 
 publishing {
@@ -60,7 +92,28 @@ publishing {
 			from components.java
 		}
 	}
-	
 	repositories {
+		// published repos
 	}
 }
+
+def generatedConstantsDir = "$buildDir/generated/sources/constants"
+sourceSets.main.java.srcDirs += generatedConstantsDir
+
+tasks.register("generateModConstants") {
+	doLast {
+		def outputDir = file(generatedConstantsDir + "/com/sbc/constants")
+		outputDir.mkdirs()
+		def file = new File(outputDir, "ModInfo.java")
+		file.text = """
+            package com.sbc.data;
+
+            public class ModInfo {
+                public static final String VERSION = "${project.version}";
+                public static final boolean DEV = VERSION.contains("-dev");
+            }
+        """.stripIndent()
+	}
+}
+
+compileJava.dependsOn(tasks.generateModConstants)

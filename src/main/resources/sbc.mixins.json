@@ -1,6 +1,12 @@
 {
   "required": false,
-  "package": "com.autoblockfinder.mixin",
+  "package": "com.sbc.mixin",
   "compatibilityLevel": "JAVA_17",
-  "mixins": []
+  "mixins": [
+	"MinecraftClientMixin",
+	"KeyboardInputMixin",
+	"InGameHudMixin",
+	"ClientPlayNetworkHandlerMixin",
+	"CameraMixin"
+  ]
 }
