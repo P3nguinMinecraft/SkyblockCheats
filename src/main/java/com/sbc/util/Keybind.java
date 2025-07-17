@@ -4,7 +4,7 @@ import org.lwjgl.glfw.GLFW;
 
 import com.sbc.feature.Autoclicker;
 import com.sbc.feature.GhostBlock;
-import com.sbc.feature.GrottoSearchManager;
+import com.sbc.feature.mining.GrottoSearchManager;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -28,10 +28,10 @@ public class Keybind {
 			"key.sbc.ghost_block", GLFW.GLFW_KEY_V, "category.sbc"));
         
         autoLeftClickKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-			"key.sbc.auto_left_click", GLFW.GLFW_KEY_F, "category.sbc"));
+			"key.sbc.auto_left_click", GLFW.GLFW_KEY_G, "category.sbc"));
 
         autoRightClickKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-			"key.sbc.auto_right_click", GLFW.GLFW_KEY_G, "category.sbc"));
+			"key.sbc.auto_right_click", GLFW.GLFW_KEY_H, "category.sbc"));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (searchToggleKey.wasPressed()) {

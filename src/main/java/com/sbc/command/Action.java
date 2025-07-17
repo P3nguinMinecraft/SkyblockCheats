@@ -13,7 +13,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.command.CommandRegistryAccess;
 
 public class Action {
-	private static HashMap<String, UniqueAction> actions = new HashMap<>();
+	private static final HashMap<String, UniqueAction> actions = new HashMap<>();
     public static void add(UUID id, Runnable action) {
     	UniqueAction uniqueAction = new UniqueAction(action, id);
     	actions.put(id.toString(), uniqueAction);

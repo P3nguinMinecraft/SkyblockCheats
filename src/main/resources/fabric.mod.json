@@ -1,33 +1,33 @@
 {
-  "schemaVersion": 1,
-  "id": "sbc",
-  "name": "SkyblockCheats",
-  "version": "$mod_version",
-  "description": "A funny client-side mod",
-  "authors": [
-    "Penguin"
-  ],
-  "contact": {
-    "homepage": "https://nohomepage.com",
-    "sources": "https://github.com/P3nguinMinecraft/SkyblockCheats"
-  },
-  "license": "MIT",
-  "icon": "assets/sbc/icon.png",
-  "environment": "client",
-  "entrypoints": {
-    "client": [
-      "com.sbc.SkyblockCheats"
-    ]
-  },
-  "depends": {
-    "fabricloader": ">=0.16.14",
-    "fabric": "*",
-    "minecraft": "1.21.5",
-	"java": ">=17",
-	"fabric-api": "*"
-  },
-  "mixins": [
-     "sbc.mixins.json"
-	 ],
-  "accessWidener": "sbc.accesswidener"
+    "schemaVersion": 1,
+    "id": "sbc",
+    "name": "SkyblockCheats",
+    "version": "$mod_version",
+    "description": "A funny client-side mod - /sbc",
+    "authors": [
+        "Penguin"
+    ],
+    "contact": {
+        "homepage": "https://nohomepage.com",
+        "sources": "https://github.com/P3nguinMinecraft/SkyblockCheats"
+    },
+    "license": "MIT",
+    "icon": "assets/sbc/icon.png",
+    "environment": "client",
+    "entrypoints": {
+        "client": [
+            "com.sbc.SkyblockCheats"
+        ]
+    },
+    "depends": {
+        "fabricloader": ">=0.16.14",
+        "fabric": "*",
+        "minecraft": "1.21.5",
+        "java": ">=17",
+        "fabric-api": "*"
+    },
+    "mixins": [
+        "sbc.mixins.json"
+    ],
+    "accessWidener": "sbc.accesswidener"
 }

@@ -2,6 +2,7 @@ package com.sbc.data;
 
 import net.minecraft.util.math.BlockPos;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 import net.minecraft.util.math.Vec3d;
 
@@ -15,4 +16,10 @@ public class Constants {
                              z >= pos1.z && z <= pos2.z;
         return isInRegion;
     };
+
+    public static final Vec3d DUNGEON_HUB_BALL = new Vec3d(-110, 102, 0);
+
+    public static final Pattern IMPEL_REGEX = Pattern.compile("Impel:\\s+(?:§.\\s*)*([A-Z]+(?:\\s+[A-Z]+)*)\\s+(?:§.\\s*)*(\\d+(?:\\.\\d+)?)s");
+
+    public static final String CONFIG_FILE_PATH = "./config/skyblockcheats/config.toml";
 }

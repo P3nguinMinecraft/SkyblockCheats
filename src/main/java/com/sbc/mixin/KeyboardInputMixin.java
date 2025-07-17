@@ -32,12 +32,12 @@ public abstract class KeyboardInputMixin extends Input {
     private void customMovement(CallbackInfo ci) {
         if (client.currentScreen == null){
             this.playerInput = new PlayerInput(
-                    KeyboardUtils.walkForward ? true : this.settings.forwardKey.isPressed(),
-                    KeyboardUtils.walkBack ? true : this.settings.backKey.isPressed(),
-                    KeyboardUtils.walkLeft ? true : this.settings.leftKey.isPressed(),
-                    KeyboardUtils.walkRight ? true : this.settings.rightKey.isPressed(),
+                    KeyboardUtils.walkForward || this.settings.forwardKey.isPressed(),
+                    KeyboardUtils.walkBack || this.settings.backKey.isPressed(),
+                    KeyboardUtils.walkLeft || this.settings.leftKey.isPressed(),
+                    KeyboardUtils.walkRight || this.settings.rightKey.isPressed(),
                     this.settings.jumpKey.isPressed(),
-                    KeyboardUtils.sneaking ? true : this.settings.sneakKey.isPressed(),
+                    KeyboardUtils.sneaking || this.settings.sneakKey.isPressed(),
                     this.settings.sprintKey.isPressed()
             );
         }

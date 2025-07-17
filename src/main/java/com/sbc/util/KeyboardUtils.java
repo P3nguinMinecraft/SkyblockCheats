@@ -8,7 +8,6 @@ public class KeyboardUtils {
 	public static boolean walkRight = false;
 
 	public static void reset(){
-		sneaking = false;
 		walkForward = false;
 		walkBack = false;
 		walkLeft = false;

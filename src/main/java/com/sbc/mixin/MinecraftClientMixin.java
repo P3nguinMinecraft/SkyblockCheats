@@ -16,5 +16,5 @@ public abstract class MinecraftClientMixin implements IMinecraftClientAccessor {
 
     @Invoker("doItemUse")
     @Override
-    public abstract void invokeItemUse();   
+    public abstract void invokeItemUse();
 }

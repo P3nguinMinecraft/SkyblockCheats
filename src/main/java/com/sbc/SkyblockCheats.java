@@ -1,18 +1,21 @@
 package com.sbc;
 
+import com.sbc.command.Render;
 import com.sbc.feature.*;
+import com.sbc.feature.rift.AutoImpel;
+import com.sbc.feature.rift.UbikCube;
+import com.sbc.feature.rift.timite.TimiteHelper;
+import com.sbc.feature.rift.timite.TimiteState;
+import com.sbc.feature.skyblock.AnvilHelper;
+import com.sbc.feature.skyblock.AutoMelody;
+import com.sbc.feature.skyblock.AutoVisit;
+import com.sbc.feature.skyblock.beachball.BeachBall;
+import com.sbc.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sbc.render.RenderHelper;
 import com.sbc.render.RenderQueue;
-import com.sbc.util.ChatUtils;
-import com.sbc.util.Command;
-import com.sbc.util.Config;
-import com.sbc.util.DebugList;
-import com.sbc.util.DelayUtils;
-import com.sbc.util.Keybind;
-import com.sbc.util.World;
 
 import net.fabricmc.api.ClientModInitializer;
 
@@ -39,7 +42,15 @@ public class SkyblockCheats implements ClientModInitializer {
         DebugList.init();
         DelayUtils.init();
         BeachBall.init();
+        Render.init();
+        ScoreboardUtils.init();
+        TimiteHelper.init();
+        TimiteState.init();
+        UbikCube.init();
+        AutoVisit.init();
+        AnvilHelper.init();
+        config.Config.INSTANCE.init();
         LOGGER.info("SkyblockCheats started!");
-        ChatUtils.sendDebugMessage("DEBUG MODE is enabled!");
+        ChatUtils.sendDebugMessage("[SBC] DEBUG MODE is enabled!");
     }
 }

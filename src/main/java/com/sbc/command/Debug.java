@@ -11,7 +11,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.command.CommandRegistryAccess;
 
 public class Debug {
-	private static HashMap<String, Runnable> debugCommands = new HashMap<>();
+	private static final HashMap<String, Runnable> debugCommands = new HashMap<>();
 	
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
     	var command = ClientCommandManager.argument("key", StringArgumentType.greedyString())

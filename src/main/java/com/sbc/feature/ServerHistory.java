@@ -9,8 +9,8 @@ import com.sbc.util.Config;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 
 public class ServerHistory {
-	private static ArrayList<String> serverList = new ArrayList<>();
-	private static LinkedHashMap<String, Long> serverLog = new LinkedHashMap<>();
+	private static final ArrayList<String> serverList = new ArrayList<>();
+	private static final LinkedHashMap<String, Long> serverLog = new LinkedHashMap<>();
 	
 	public static void init() {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {

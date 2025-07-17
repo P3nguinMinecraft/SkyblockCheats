@@ -34,7 +34,7 @@ public class ConfigReset {
                             Action.add(id, () -> Config.resetAllConfigs());
                             ChatUtils.sendFormattedMessage(
             				    Text.literal("§4[!] Click to reset all configs [!]").setStyle(Style.EMPTY
-            				        .withClickEvent(new ClickEvent.RunCommand("/sbc action " + id.toString()))
+            				        .withClickEvent(new ClickEvent.RunCommand("/sbc action " + id))
             				        .withHoverEvent(new HoverEvent.ShowText(Text.literal("§eCLICK")))
         				    ));
                         }

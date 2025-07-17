@@ -24,7 +24,7 @@ public class Config {
     private static final Map<String, Object> config = new HashMap<>();
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final File configFile = new File("config/skyblockcheats/config.json");
-    private static ArrayList<String> validKeys = new ArrayList<>();
+    private static final ArrayList<String> validKeys = new ArrayList<>();
     public static void init() {
         loadConfig();
     	defaults();
@@ -137,6 +137,21 @@ public class Config {
         setDefault("beachball-predictor", true);
         setDefault("auto-beachball", false);
         setDefault("fullauto-beachball", false);
+        setDefault("lumie-hitboxes", false);
+        setDefault("lumie-hideblocks", false);
+        setDefault("hide-leaves", false);
+        setDefault("block-blank-hit-sound", false);
+        setDefault("timite-helper", false);
+        setDefault("timite-hitboxes", false);
+        setDefault("gun-cd", 10);
+        setDefault("youngite-ratio", 2);
+        setDefault("timite-ratio", 2);
+        setDefault("obsolite-ratio", 1);
+        setDefault("auto-ubik", false);
+        setDefault("disable-break-cooldown", false);
+        setDefault("auto-visit", false);
+        setDefault("anvil-helper", false);
+        setDefault("anvil-delay", 4);
     }
     
     private static void setDefault(String key, Object value) {
@@ -216,8 +231,8 @@ public class Config {
         }
         if (key.equals("left-click-cps") || key.equals("right-click-cps")) {
 			float cps = (float) value;
-			if (cps > 20.0f) {
-				ChatUtils.sendMessage("§cCPS cannot be above 20 for safety reasons.");
+			if (cps > 50.0f) {
+				ChatUtils.sendMessage("§cCPS cannot be above 50 for safety reasons.");
 				return false;
 			}
 		}

@@ -1,13 +1,13 @@
-package com.sbc.feature;
+package com.sbc.feature.skyblock.beachball;
 
 import java.util.*;
 
+import com.sbc.data.Constants;
 import com.sbc.data.Textures;
 import com.sbc.object.Color;
 import com.sbc.render.RenderHelper;
 import com.sbc.util.*;
 
-import com.sbc.feature.Predictor;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -16,7 +16,6 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.Vec3d;
@@ -25,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 public class BeachBall {
     private static final walkMethod method = walkMethod.QUAD_DIRECTION;
     private static final MinecraftClient client = MinecraftClient.getInstance();
-    private static final Map<Integer, Predictor> predictors = new HashMap<>();
+    public static final Map<Integer, Predictor> predictors = new HashMap<>();
     private static final Set<Integer> ids = new HashSet<>();
     private static int bounces = -1;
     private static Vec3d walkTarget;
@@ -45,7 +44,7 @@ public class BeachBall {
             }
         });
         ListenerManager.registerMessageListener((s) -> {
-            if (s.contains("in the air for")){
+            if (s.contains("in the air for") || s.contains("hit the wall after")){
                 activated = true;
                 if (state == BallState.BOUNCING){
                     if ((boolean) Config.getConfig("fullauto-beachball")){
@@ -175,7 +174,7 @@ public class BeachBall {
                     }
 
                     case GO_TO_CENTER -> {
-                        walkTarget = new Vec3d(-100, 102, 0);
+                        walkTarget = Constants.DUNGEON_HUB_BALL;
                         if (client.player.getPos().distanceTo(walkTarget) < 3) {
                             KeyboardUtils.reset();
                             state = BallState.WAIT_FOR_LAND_AND_RESTART;

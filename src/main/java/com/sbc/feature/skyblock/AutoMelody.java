@@ -1,4 +1,4 @@
-package com.sbc.feature;
+package com.sbc.feature.skyblock;
 
 import com.sbc.util.ChatUtils;
 import com.sbc.util.Config;
@@ -16,18 +16,22 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 
 public class AutoMelody {
+	private static final ItemStack DIAMOND_BLOCK_STACK = new ItemStack(Items.DIAMOND_BLOCK);
+	private static final ItemStack QUARTZ_BLOCK_STACK = new ItemStack(Items.QUARTZ_BLOCK);
+
     private static Screen currentScreen;
     private static ScreenHandler handler;
     private static int tick = 0;
     public static volatile boolean active = false;
-    private static int[] delayedClick = new int[2];
-    
+    private static final int[] delayedClick = new int[2];
+
     public static void init() {
     	delayedClick[0] = -1;
     	delayedClick[1] = -1;
-    	
+
+		DIAMOND_BLOCK_STACK.set(DataComponentTypes.CUSTOM_NAME, Text.literal("§2[SBC] §r§dAutoMelody"));
+
     	ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
-    		System.out.println(screen.getTitle().getString());
     		if (!(boolean) Config.getConfig("auto-melody")) return;
     		if (!(screen instanceof HandledScreen<?>)) return;
     	    if (!screen.getTitle().getString().contains("Harp")) return;
@@ -43,7 +47,7 @@ public class AutoMelody {
     	    }
     	    
     	    if (delayedClick[1] == tick) {
-    	    	handler.slots.get(delayedClick[0]).setStack(new ItemStack(Items.QUARTZ_BLOCK, 1));
+    	    	handler.slots.get(delayedClick[0]).setStack(QUARTZ_BLOCK_STACK.copy());
     	    	delayedClick[0] = -1;
     	    	delayedClick[1] = -1;
     	    }
@@ -55,9 +59,7 @@ public class AutoMelody {
 	                client.execute(() -> {
 	                    client.interactionManager.clickSlot(handler.syncId, slot.id, 1, SlotActionType.CLONE, client.player);
 	                });
-	                ItemStack stack = new ItemStack(Items.DIAMOND_BLOCK, 1);
-	                stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal("§2[SBC] §r§dAutoMelody"));
-	                slot.setStack(stack);
+	                slot.setStack(DIAMOND_BLOCK_STACK.copy());
 	                if (handler.slots.get(i - 9).getStack().getItem().getTranslationKey().contains("wool")) {
 	                    delayedClick[0] = i;
 	                	delayedClick[1] = tick + 5;

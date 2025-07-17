@@ -1,8 +1,10 @@
 package com.sbc.util;
 
-import com.sbc.feature.BeachBall;
-import com.sbc.feature.GrottoSearchManager;
+import com.sbc.feature.rift.AutoImpel;
+import com.sbc.feature.skyblock.beachball.BeachBall;
+import com.sbc.feature.mining.GrottoSearchManager;
 
+import com.sbc.feature.rift.timite.TimiteHelper;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
@@ -52,6 +54,9 @@ public class World {
 	public static void onServerSwitch() {
 		GrottoSearchManager.clearSearch();
 		GrottoSearchManager.endScanTasks();
+		BeachBall.predictors.clear();
 		BeachBall.activated = false;
+		AutoImpel.reset();
+		TimiteHelper.trackers.clear();
 	}
 }

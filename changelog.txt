@@ -1,24 +1,32 @@
-v1.1.2
+v1.1.4
 
-- Added Autoclicker
-	- Added config "left-click-cps" and "right-click-cps" to set the clicks per second for left and right mouse buttons respectively
-	- Added keybinds for toggling left and right autoclickers
+- Added Scoreboard / Sidebar Util
+    - Used for checking locations and perhaps more checks in the future
 
-- Config "delay" changed to accept decimal values
-- All numeric config values now filter out negative values
+- Timite Helper
+    - /sbc config set timite-helper [true/false]
+    - Automatically ages and mines timite based on your configurations, prioritizing finishing "sets" or the ratio set below:
+    - /sbc config set gun-cd -> Cooldown for the Time Gun in ticks, anything <15 works, 10 is recommended
+    - /sbc config set youngite-ratio / timite-ratio / obsolite-ratio
+    - /sbc config set timite-hitboxes [true/false] to modify interaction boxes and change the texture to a normal stained glass block
+        - Applies Sodium compatibility mixin because of new pipeline
 
-- Added icon yay!
+- Auto Ubik
+    - /sbc config set auto-ubik [true/false]
+    - Automatically steals when playing Split or Steal against a 100% Split opponent
 
-- Added AutoImpel
+- Disable Block Breaking Cooldown
+    - /sbc config set disable-break-cooldown [true/false]
+    - Disables the 4gt cooldown between breaking blocks
 
-- Added Debug Command (secret :3)
+- Auto Visit
+    - /sbc config set auto-visit [true/false]
+    - Automatically confirms visit to island when you do /visit
 
-- Removed Coordinate object, replaced with Vec3d
+- Anvil Helper
+    - /sbc config set anvil-helper [true/false]
+    - Displays a book (toggle) in anvil screen that, when clicked, starts to combine books in your inventory with exactly matching enchants
 
-- Added Year of the Seal Beach Ball predictor / automator / macro
-    - Added config "beachball-predictor" -> shows lines and predicted landing position, required for auto and fullauto
-    - Added config "auto-beachball" -> automatically moves under the ball
-    - Added config "fullauto-beachball" -> automatically cycles beach balls
-           - hold beach balls in hand, go to (-100, 102, 0) in Dungeon Hub using Etherwarp
+- Separated features into more packages
 
-- Moved config files to be under skyblockcheats
+Looking towards a functional config GUI using Malilib or Essential Vigilance / Elementa

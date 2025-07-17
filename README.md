@@ -1,4 +1,4 @@
-# CURRENT RELEASE: v1.1.2
+# CURRENT RELEASE: v1.1.3
 ## About
 #### Fabric 1.21.5 Mod for Hypixel Skyblock
 
@@ -68,6 +68,40 @@ Features for Bouncy Beach Ball in Year of the Seal
 - Auto bounce
 - Full auto bounce (macro)
 
+#### Entity Rendering
+`/sbc render [entity]`
+Toggles specific entity rendering
+- BlockDisplay
+- ArmorStand
+- Player (Other than yourself)
+- FallingBlock
+
+#### Timite Helper
+`/sbc config set timite-helper [true/false]`
+Automatically ages and mines timite that you look at
+- Customizable Time Gun cooldown, anything below 15 works, 10 is recommended
+  - `/sbc config set gun-cd`
+- Prioritizes mining low "set" counts based on your inventory and preset amounts 
+  - `/sbc config set youngite-ratio / timite-ratio / obsolite-ratio`
+- Must have Chrono Pickaxe and Time Gun in your hotbar
+
+#### Auto Ubik
+`/sbc config set auto-ubik [true/false]`
+Automatically steals when playing Split or Steal against a 100% Split opponent
+
+#### Disable Block Breaking Cooldown
+`/sbc config set disable-break-cooldown [true/false]`
+Disables the 4gt cooldown between breaking blocks
+
+#### Auto Visit
+`/sbc config set auto-visit [true/false]`
+Automatically confirms visit to island when you do /visit
+
+#### Anvil Helper
+`/sbc config set anvil-helper [true/false]`
+Displays a book (toggle) in anvil screen that, when clicked, starts to combine books in your inventory with exactly matching enchants
+
+
 ## Config
 `/sbc config list`: Lists all config options and values
 `/sbc config set [name] [new value]`: Changes configs
@@ -117,8 +151,35 @@ Default: 0.5 <br>
 Default: true <br>
 <b>auto-beachball</b>: Automatically bounces the beach ball, requires predictor to be on
 Default: false <br>
-<b>fullauto-beachball</b>: Fuly automatically bounces the beach ball, requires auto-beachball. Hold beach ball items and go to -100 102 0 in Dungeon Hub using Etherwarp <br>
+<b>fullauto-beachball</b>: Fully automatically bounces the beach ball, requires auto-beachball. Hold beach ball items and go to -100 102 0 in Dungeon Hub using Etherwarp <br>
 Default: false <br>
+<b>lumie-hitboxes</b>: Changes Sea Pickle interaction boxes to 1x1x1, removes it for Kelp and Seagrass (true/false) <br>
+Default: false <br>
+<b>lumie-hideblocks</b>: Stops the rendering of Kelp and Seagrass blocks (true/false) <br>
+Default: false<br>
+<b>hide-leaves</b>: Stops the rendering of leaves for Fig and Mangrove trees and allows you to break through them (true/false) <br>
+Default: false<br>
+<b>block-blank-hit-sound</b>: Blocks the sound of hits that deal no damage (true/false) <br>
+Default: false<br>
+<b>timite-helper</b>: Automatically ages and mines timite that you look at (true/false) <br>
+Default: false<br>
+<b>timite-hitboxes</b>: Modifies timite hitboxes to be 1x1x1 stained glass block (true/false) <br>
+Default: false<br>
+<b>gun-cd</b>: Cooldown for Time Gun in ticks, anything below 15 works, 10 is recommended <br>
+Default: 10<br>
+<b>youngite-ratio</b>: Amount of Youngite in a "set"<br>
+Default: 2<br>
+<b>timite-ratio</b>: Amount of Timite in a "set"<br>
+Default: 2<br>
+<b>obsolite-ratio</b>: Amount of Obsolite in a "set"<br>
+Default: 1<br>
+<b>auto-ubik</b>: Automatically steals in Split or Steal against a 100% Split opponent (true/false) <br>
+Default: false<br>
+<b>disable-break-cooldown</b>: Disables the 4gt cooldown between breaking blocks (true/false) <br>
+Default: false<br>
+<b>auto-visit</b>: Automatically confirms visit to island when you do /visit (true/false) <br>
+Default: false<br>
+
 
 ## Contact
 DM `windows1267` on discord for any questions, issues, or suggestions

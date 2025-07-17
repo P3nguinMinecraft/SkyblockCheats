@@ -1,12 +1,26 @@
 {
-  "required": false,
-  "package": "com.sbc.mixin",
-  "compatibilityLevel": "JAVA_17",
-  "mixins": [
-	"MinecraftClientMixin",
-	"KeyboardInputMixin",
-	"InGameHudMixin",
-	"ClientPlayNetworkHandlerMixin",
-	"CameraMixin"
-  ]
+    "required": false,
+    "package": "com.sbc.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "mixins": [
+        "AbstractBlockMixin",
+        "AbstractPlantPartBlockMixin",
+        "BlockModelsMixin",
+        "CameraMixin",
+        "ClientPlayerInteractionManagerMixin",
+        "ClientPlayNetworkHandlerMixin",
+        "ClientWorldMixin",
+        "EntityRenderDispatcherMixin",
+        "HandledScreenMixin",
+        "HorizontalConnectingBlockMixin",
+        "InGameHudMixin",
+        "KeyboardInputMixin",
+        "MinecraftClientMixin",
+        "SeagrassBlockMixin",
+        "SeaPickleBlockMixin",
+        "SectionBuilderMixin",
+        "TallSeagrassBlockMixin",
+        "sodium.LevelSliceMixin"
+    ],
+    "verbose": true
 }

@@ -40,9 +40,8 @@ public class BlockScanTask implements Runnable {
     	        if (state.isAir()) return false;
     	        if (!basePredicate.test(pos)) return false;
     	        if (maxYCapEnabled && pos.getY() > maxYCap) return false;
-    	        if (Constants.MAGENTA_GLASS_RECTANGLE_EXCLUSION.test(pos)) return false;
-    	        return true;
-    	    };
+                return !Constants.MAGENTA_GLASS_RECTANGLE_EXCLUSION.test(pos);
+            };
 
     	}
 

@@ -10,9 +10,9 @@ import com.sbc.data.ModInfo;
 
 public class ChatUtils {
     private static final MinecraftClient client = MinecraftClient.getInstance();
-	private static ArrayList<QueueItem> queue = new ArrayList<>();
+	private static final ArrayList<QueueItem> queue = new ArrayList<>();
     private static volatile String lastGameMessage = "";
-    private static ArrayList<String> lastGameMessages = new ArrayList<>();
+    private static final ArrayList<String> lastGameMessages = new ArrayList<>();
 
     public static void init() {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
@@ -66,6 +66,10 @@ public class ChatUtils {
     }
 
     public static void addMessage(Object msg) {
+		if (msg instanceof Text){
+			client.inGameHud.getChatHud().addMessage((Text) msg);
+			return;
+		}
     	if (client == null || client.inGameHud == null) return;
         client.inGameHud.getChatHud().addMessage(Text.literal(msg.toString()));
     }
@@ -106,13 +110,19 @@ public class ChatUtils {
 		addMessage(msg);
 		System.out.println(msg.toString());
 	}
+
+	public static void sendTimedDebugMessage(Object msg){
+		if (!ModInfo.DEV) return;
+		String text = System.currentTimeMillis() % 10000 + " - " + msg.toString();
+		System.out.println(text);
+	}
 }
 
 class QueueItem {
-	private String message;
-	private boolean match;
-	private long end;
-	private Runnable completion;
+	private final String message;
+	private final boolean match;
+	private final long end;
+	private final Runnable completion;
 	
 	public QueueItem(String message, boolean match, long end, Runnable completion) {
 		this.message = message;

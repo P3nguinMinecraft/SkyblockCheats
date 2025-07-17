@@ -13,8 +13,8 @@ public class ServerUptime {
 	public static void displayUptime() {
 		long uptime = client.world.getTimeOfDay();
 		double days = Math.round(uptime / 24000.0 * 100.0) / 100.0;
-		double hours = Math.round(uptime / 72000 * 100.0) / 100.0;
-		double minutes = Math.round(uptime / 1200 * 100.0) / 100.0;
+		double hours = Math.round(uptime / 72000.0 * 100.0) / 100.0;
+		double minutes = Math.round(uptime / 1200.0 * 100.0) / 100.0;
 		ChatUtils.sendFormattedMessage(
         	Text.literal("§2[SBC] §r§pUptime: §r§dDay " + (int) Math.floor(days)).setStyle(Style.EMPTY),
         	Text.literal(" §r§7[Hover for details]").setStyle(Style.EMPTY

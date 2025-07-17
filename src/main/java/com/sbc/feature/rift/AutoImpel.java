@@ -1,32 +1,25 @@
-package com.sbc.feature;
+package com.sbc.feature.rift;
 
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import com.sbc.util.CameraUtils;
-import com.sbc.util.Config;
-import com.sbc.util.DelayUtils;
-import com.sbc.util.InteractUtils;
-import com.sbc.util.ListenerManager;
-import com.sbc.util.PlayerCamera;
-
+import com.sbc.util.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
+import static com.sbc.data.Constants.IMPEL_REGEX;
+
 public class AutoImpel {
     private static final MinecraftClient client = MinecraftClient.getInstance();
-    private static final Pattern pattern = Pattern.compile("Impel:\\s+(?:§.\\s*)*([A-Z]+(?:\\s+[A-Z]+)*)\\s+(?:§.\\s*)*(\\d+(?:\\.\\d+)?)s");
-    private static Consumer<Text> callback;
 
     private static float lastSubtitleTime = -1f; // last unique subtitle time
-    private static long lastAttemptWallTime = 0L; // to control retry rate
+    private static long lastAttemptTime = 0L; // to control retry rate
 
     public static void init() {
-        callback = subtitle -> {
+        Consumer<Text> callback = subtitle -> {
             if (!Boolean.TRUE.equals(Config.getConfig("auto-impel"))) return;
             String input = subtitle.getString();
-            Matcher matcher = pattern.matcher(input);
+            Matcher matcher = IMPEL_REGEX.matcher(input);
 
             if (!matcher.find()) return;
 
@@ -37,6 +30,11 @@ public class AutoImpel {
 
         ListenerManager.registerSubtitleListener(callback);
     }
+
+    public static void reset(){
+        lastSubtitleTime = -1f;
+        lastAttemptTime = 0L;
+    }
     
     public static void handleSubtitle(String action, float subtitleTime) {
         float rate = ((Number) Config.getConfig("impel-rate")).floatValue();
@@ -45,7 +43,7 @@ public class AutoImpel {
         long now = System.currentTimeMillis();
 
         // Only allow retry every 'rate' seconds
-        if ((now - lastAttemptWallTime) < rate * 1000) return;
+        if ((now - lastAttemptTime) < rate * 1000) return;
 
         // If same subtitleTime, it's a retry; otherwise it's a new subtitle
         boolean isNewSubtitle = Math.abs(subtitleTime - lastSubtitleTime) > 0.001f;
@@ -53,12 +51,11 @@ public class AutoImpel {
 
         // Block early if retrying failed actions like JUMP mid-air
         if ("JUMP".equals(action) && (client.player == null || !client.player.isOnGround())) {
-            lastAttemptWallTime = now;
+            lastAttemptTime = now;
             return;
         }
 
-        // Passed all checks; trigger action
-        lastAttemptWallTime = now;
+        lastAttemptTime = now;
 
         if (delay < (subtitleTime - 0.1f)) {
             DelayUtils.ms((int) (delay * 1000), () -> impel(action));

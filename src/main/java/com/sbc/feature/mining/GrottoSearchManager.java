@@ -1,4 +1,4 @@
-package com.sbc.feature;
+package com.sbc.feature.mining;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -29,8 +29,8 @@ import net.minecraft.util.math.Vec3d;
 public class GrottoSearchManager {
     public static volatile boolean loopActive = false;
     public static volatile boolean active = false;
-    private static ArrayList<UUID> entryIds = new ArrayList<>();
-    private static ArrayList<BlockPos> foundBlocks = new ArrayList<>();
+    private static final ArrayList<UUID> entryIds = new ArrayList<>();
+    private static final ArrayList<BlockPos> foundBlocks = new ArrayList<>();
     private static volatile boolean found = false;
     private static Thread searchLoopThread = null;
     private static Thread manualScanTaskThread = null;
@@ -121,7 +121,7 @@ public class GrottoSearchManager {
         searchLoopThread = new Thread(() -> {
             try {
                 while (!Thread.currentThread().isInterrupted() && loopActive && !found) {
-                    ChatUtils.sendServerMessage("/warp " + (String) Config.getConfig("warp-out"));
+                    ChatUtils.sendServerMessage("/warp " + Config.getConfig("warp-out"));
                     
                 	if ((float) Config.getConfig("delay") > 0.0f) {
                 		sleepInterruptibly((int)(float) Config.getConfig("delay") * 1000);
@@ -132,7 +132,7 @@ public class GrottoSearchManager {
                 	
                 	if (!loopActive) break;
 
-                	ChatUtils.sendServerMessage("/warp " + (String) Config.getConfig("warp-in"));
+                	ChatUtils.sendServerMessage("/warp " + Config.getConfig("warp-in"));
 
                     Object lock = new Object();
                     AtomicBoolean foundTask = new AtomicBoolean(false);
@@ -163,7 +163,7 @@ public class GrottoSearchManager {
                                 Identifier id = Identifier.tryParse(soundId);
                                 SoundEvent soundEvent = Registries.SOUND_EVENT.get(id);
 
-                                SoundUtils.playSound((float) volume, (float) pitch, soundEvent);
+                                SoundUtils.playSound(volume, pitch, soundEvent);
                         	}
                             synchronized (lock) { lock.notify(); }
                         },

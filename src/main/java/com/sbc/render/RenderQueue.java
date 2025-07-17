@@ -49,7 +49,7 @@ public class RenderQueue {
 						RenderHelper.renderFilled(context, renderEntry.coords.get(0), renderEntry.coords.get(1), renderEntry.color, true);
 					}
 					else {
-						throw new IllegalStateException("Invalid coordinate count for FILLED_THROUGH_WALLS: " + renderEntry.coords.size() + " in " + renderEntry.toString());
+						throw new IllegalStateException("Invalid coordinate count for FILLED_THROUGH_WALLS: " + renderEntry.coords.size() + " in " + renderEntry);
 					}
 					break;
 				case LINES:
@@ -62,7 +62,7 @@ public class RenderQueue {
 						RenderHelper.renderOutline(context, renderEntry.coords.get(0), renderEntry.coords.get(1), renderEntry.color, renderEntry.lineWidth, true);
 					}
 					else {
-						throw new IllegalStateException("Invalid coordinate count for LINES_THROUGH_WALLS: " + renderEntry.coords.size() + " in " + renderEntry.toString());
+						throw new IllegalStateException("Invalid coordinate count for LINES_THROUGH_WALLS: " + renderEntry.coords.size() + " in " + renderEntry);
 					}
 					break;
 			}

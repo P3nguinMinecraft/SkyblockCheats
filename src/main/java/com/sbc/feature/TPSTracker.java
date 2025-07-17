@@ -2,8 +2,6 @@ package com.sbc.feature;
 
 import java.util.ArrayList;
 
-import com.sbc.util.ChatUtils;
-
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 
@@ -14,7 +12,7 @@ public class TPSTracker {
     private static double mspt = -1f;
     private static double tps = -1f;
     
-    private static ArrayList<Double> msptList = new ArrayList<>();
+    private static final ArrayList<Double> msptList = new ArrayList<>();
     
     private static boolean integrated = false;
     

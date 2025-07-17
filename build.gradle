@@ -1,10 +1,9 @@
-import net.fabricmc.loom.task.RemapJarTask
-
 plugins {
 	id 'fabric-loom' version "1.10-SNAPSHOT"
 	id 'maven-publish'
 	id 'java'
 	id 'com.gradleup.shadow' version "9.0.0-beta17"
+	id 'org.jetbrains.kotlin.jvm' version "2.1.0-Beta2"
 }
 
 version = project.mod_version
@@ -16,7 +15,7 @@ base {
 	version = project.mod_version
 
 	if (mod_version.endsWith('-dev')) {
-		version += "." + new Date().format('MMdd.HHmmss')
+		version += "." + new Date().format('MM.dd-HH.mm.ss')
 	} else {
 		version += "+" + project.minecraft_version
 	}
@@ -24,7 +23,15 @@ base {
 
 repositories {
 	mavenCentral()
-	maven { url = "https://maven.fabricmc.net/" }
+	maven {
+		url = "https://maven.fabricmc.net/"
+	}
+	maven {
+		url = "https://repo.essential.gg/repository/maven-public"
+	}
+	flatDir {
+		dirs 'libs'
+	}
 }
 
 dependencies {
@@ -32,7 +39,15 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	shadow(implementation "org.apache.commons:commons-math4-legacy:4.0-beta1")
+	modImplementation(include("org.jetbrains.kotlin:kotlin-stdlib:2.1.0-Beta2"))
+
+	shadow(implementation("org.apache.commons:commons-math4-legacy:4.0-beta1"))
+
+	implementation(include("gg.essential:vigilance:$project.vigilanceVersion"))
+	implementation(include("gg.essential:elementa:$project.elementaVersion"))
+	modImplementation(include("gg.essential:universalcraft-$project.minecraft_version-fabric:$project.ucVersion"))
+
+	modCompileOnly name: "sodium-fabric-0.6.13+mc1.21.5"
 }
 
 loom {
@@ -78,13 +93,16 @@ processResources {
 sourceSets {
 	main {
 		java {
-			srcDirs = ['src/main/java']
+			srcDirs = ['src/main/java', 'src/main/kotlin']
 		}
 		resources {
 			srcDirs = ['src/main/resources']
 		}
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
 	}
 }
+
 
 publishing {
 	publications {
@@ -94,6 +112,12 @@ publishing {
 	}
 	repositories {
 		// published repos
+	}
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+	kotlinOptions {
+		jvmTarget = "17"
 	}
 }
 
@@ -117,3 +141,6 @@ tasks.register("generateModConstants") {
 }
 
 compileJava.dependsOn(tasks.generateModConstants)
+
+apply plugin: 'idea'
+apply plugin: 'kotlin'

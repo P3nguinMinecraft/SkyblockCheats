@@ -12,14 +12,16 @@ public class GhostBlock {
 	
     public static void init() {
         AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
-            if (!keyPressed || !(boolean) Config.getConfig("ghostblock")) return ActionResult.PASS;
+            if (!keyPressed || !(boolean) Config.getConfig("ghost-block")) return ActionResult.PASS;
 
             if (world.isClient) {
                 MinecraftClient client = MinecraftClient.getInstance();
+
                 client.execute(() -> {
                     world.setBlockState(pos, Blocks.AIR.getDefaultState(), 19);
                 });
-                return ActionResult.SUCCESS;
+
+                return ActionResult.FAIL;
             }
             return ActionResult.PASS;
         });

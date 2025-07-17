@@ -1,6 +1,5 @@
-package com.sbc.feature;
+package com.sbc.feature.skyblock.beachball;
 
-import com.sbc.util.ChatUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -20,7 +19,7 @@ public class Predictor {
     public final double originalDistance;
 
     public double[][] coeffs;
-    private ArrayList<Vec3d> predictedPath = new ArrayList<>();
+    private final ArrayList<Vec3d> predictedPath = new ArrayList<>();
 
     public Predictor(long time, Vec3d pos){
         this.startTime = time;
