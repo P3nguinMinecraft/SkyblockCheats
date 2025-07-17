@@ -1,4 +1,4 @@
-# CURRENT RELEASE: v1.1.3
+# CURRENT RELEASE: v1.1.4
 ## About
 #### Fabric 1.21.5 Mod for Hypixel Skyblock
 
