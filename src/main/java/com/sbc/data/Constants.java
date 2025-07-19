@@ -1,6 +1,8 @@
 package com.sbc.data;
 
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -22,4 +24,20 @@ public class Constants {
     public static final Pattern IMPEL_REGEX = Pattern.compile("Impel:\\s+(?:§.\\s*)*([A-Z]+(?:\\s+[A-Z]+)*)\\s+(?:§.\\s*)*(\\d+(?:\\.\\d+)?)s");
 
     public static final String CONFIG_FILE_PATH = "./config/skyblockcheats/config.toml";
+
+    public static final Set<String> CRYSTAL_HOLLOWS_LOCATIONS = Set.of(
+            "Jungle",
+            "Jungle Temple",
+            "Mithril Deposits",
+            "Mines of Divan",
+            "Dragon's Lair",
+            "Precursor Remnants",
+            "Lost Precursor City",
+            "Goblin Holdout",
+            "Goblin Queen's Den",
+            "Crystal Nucleus",
+            "Magma Fields",
+            "Khazad-dûm",
+            "Fairy Grotto"
+    );
 }

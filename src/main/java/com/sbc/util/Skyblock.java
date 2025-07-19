@@ -1,5 +1,6 @@
 package com.sbc.util;
 
+import com.sbc.data.Constants;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 
@@ -11,11 +12,7 @@ public class Skyblock {
         ClientTickEvents.END_CLIENT_TICK.register(Skyblock::tick);
     }
     public static void tick(MinecraftClient client){
-        inCH = ScoreboardUtils.contains("Jungle")
-                || ScoreboardUtils.contains("Mithril Deposits")
-                || ScoreboardUtils.contains("Precursor Remnants")
-                || ScoreboardUtils.contains("Goblin Holdout")
-                || ScoreboardUtils.contains("Crystal Nucleus");
+        inCH = Constants.CRYSTAL_HOLLOWS_LOCATIONS.stream().anyMatch(ScoreboardUtils::contains);
 
         inMountaintop = ScoreboardUtils.contains("The Mountaintop");
     }
