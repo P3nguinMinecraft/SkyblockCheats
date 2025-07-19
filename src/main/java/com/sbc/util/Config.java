@@ -152,6 +152,7 @@ public class Config {
         setDefault("auto-visit", false);
         setDefault("anvil-helper", false);
         setDefault("anvil-delay", 4);
+        setDefault("anti-spleef", false);
     }
     
     private static void setDefault(String key, Object value) {
