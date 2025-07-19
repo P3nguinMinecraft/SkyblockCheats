@@ -1,32 +1,10 @@
-v1.1.4
+v1.1.5
 
-- Added Scoreboard / Sidebar Util
-    - Used for checking locations and perhaps more checks in the future
+- Fixed Disable Break Cooldown not working properly
+- Added Anti-Spleef
+    - /sbc config set anti-spleef [true/false]
+    - Prevents you from mining blocks under you unless mining straight down
 
-- Timite Helper
-    - /sbc config set timite-helper [true/false]
-    - Automatically ages and mines timite based on your configurations, prioritizing finishing "sets" or the ratio set below:
-    - /sbc config set gun-cd -> Cooldown for the Time Gun in ticks, anything <15 works, 10 is recommended
-    - /sbc config set youngite-ratio / timite-ratio / obsolite-ratio
-    - /sbc config set timite-hitboxes [true/false] to modify interaction boxes and change the texture to a normal stained glass block
-        - Applies Sodium compatibility mixin because of new pipeline
-
-- Auto Ubik
-    - /sbc config set auto-ubik [true/false]
-    - Automatically steals when playing Split or Steal against a 100% Split opponent
-
-- Disable Block Breaking Cooldown
-    - /sbc config set disable-break-cooldown [true/false]
-    - Disables the 4gt cooldown between breaking blocks
-
-- Auto Visit
-    - /sbc config set auto-visit [true/false]
-    - Automatically confirms visit to island when you do /visit
-
-- Anvil Helper
-    - /sbc config set anvil-helper [true/false]
-    - Displays a book (toggle) in anvil screen that, when clicked, starts to combine books in your inventory with exactly matching enchants
-
-- Separated features into more packages
-
-Looking towards a functional config GUI using Malilib or Essential Vigilance / Elementa
+- Added Powder Chests
+    - Changes the hitboxes of powder chests to 1x1x1, and disables the interaction box when opened
+    - /sbc config set powder-hitboxes [true/false]

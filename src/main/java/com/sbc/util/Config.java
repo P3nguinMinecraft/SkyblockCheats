@@ -153,6 +153,7 @@ public class Config {
         setDefault("anvil-helper", false);
         setDefault("anvil-delay", 4);
         setDefault("anti-spleef", false);
+        setDefault("powder-hitboxes", false);
     }
     
     private static void setDefault(String key, Object value) {

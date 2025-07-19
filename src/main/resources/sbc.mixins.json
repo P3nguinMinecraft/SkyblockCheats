@@ -10,6 +10,7 @@
         "ClientPlayerInteractionManagerMixin",
         "ClientPlayNetworkHandlerMixin",
         "ClientWorldMixin",
+        "ChestBlockMixin",
         "EntityRenderDispatcherMixin",
         "HandledScreenMixin",
         "HorizontalConnectingBlockMixin",

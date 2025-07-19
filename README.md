@@ -68,6 +68,21 @@ Features for Bouncy Beach Ball in Year of the Seal
 - Auto bounce
 - Full auto bounce (macro)
 
+#### Lumie Helper
+Features for Sea Lumies
+- Changes Sea Pickle interaction boxes to 1x1x1, removes it for Kelp and Seagrass
+  - `/sbc config set lumie-hitboxes [true/false]`
+- Stops the rendering of Kelp and Seagrass blocks
+  - `/sbc config set lumie-hideblocks [true/false]`
+
+#### Hide Leaves
+`/sbc config set hide-leaves [true/false]`
+Hides leaves for Fig and Mangrove trees, allowing you to break through them
+
+#### Block Blank Hit Sound
+`/sbc config set block-blank-hit-sound [true/false]`
+Blocks the sound of hits that deal no damage
+
 #### Entity Rendering
 `/sbc render [entity]`
 Toggles specific entity rendering
@@ -101,6 +116,14 @@ Automatically confirms visit to island when you do /visit
 `/sbc config set anvil-helper [true/false]`
 Displays a book (toggle) in anvil screen that, when clicked, starts to combine books in your inventory with exactly matching enchants
 
+#### Anti-Spleef
+`/sbc config set anti-spleef [true/false]`
+Prevents you from mining blocks under you unless mining straight down
+
+#### Powder Chests
+Features for Powder Grinding, specifically involving Powder Chests
+- Changes the hitboxes of Powder Chests to 1x1x1, and disables interaction box when opened
+  - `/sbc config set powder-hitboxes [true/false]`
 
 ## Config
 `/sbc config list`: Lists all config options and values
@@ -179,7 +202,12 @@ Default: false<br>
 Default: false<br>
 <b>auto-visit</b>: Automatically confirms visit to island when you do /visit (true/false) <br>
 Default: false<br>
-
+<b>anvil-helper</b>: Displays a book in anvil screen that, when clicked, starts to combine books in your inventory with exactly matching enchants (true/false) <br>
+Default: false<br>
+<b>anti-spleef</b>: Prevents you from mining blocks under you unless mining straight down (true/false) <br>
+Default: false<br>
+<b>powder-hitboxes</b>: Changes the hitboxes of Powder Chests to 1x1x1, and disables interaction box when opened (true/false) <br>
+Default: false<br>
 
 ## Contact
 DM `windows1267` on discord for any questions, issues, or suggestions
