@@ -1,4 +1,4 @@
-package com.sbc.feature;
+package com.sbc.feature.tool;
 
 import com.sbc.util.ChatUtils;
 import com.sbc.util.Config;

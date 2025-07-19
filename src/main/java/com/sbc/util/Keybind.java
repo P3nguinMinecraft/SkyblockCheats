@@ -2,8 +2,8 @@ package com.sbc.util;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.sbc.feature.Autoclicker;
-import com.sbc.feature.GhostBlock;
+import com.sbc.feature.tool.Autoclicker;
+import com.sbc.feature.tool.GhostBlock;
 import com.sbc.feature.mining.GrottoSearchManager;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;

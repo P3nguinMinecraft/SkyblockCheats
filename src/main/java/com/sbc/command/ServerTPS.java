@@ -1,7 +1,7 @@
 package com.sbc.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.sbc.feature.TPSTracker;
+import com.sbc.feature.server.TPSTracker;
 import com.sbc.util.ChatUtils;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;

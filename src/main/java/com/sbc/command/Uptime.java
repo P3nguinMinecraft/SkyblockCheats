@@ -1,7 +1,7 @@
 package com.sbc.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.sbc.feature.ServerUptime;
+import com.sbc.feature.server.ServerUptime;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;

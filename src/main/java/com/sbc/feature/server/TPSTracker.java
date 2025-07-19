@@ -1,4 +1,4 @@
-package com.sbc.feature;
+package com.sbc.feature.server;
 
 import java.util.ArrayList;
 
