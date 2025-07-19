@@ -52,6 +52,7 @@ public class SkyblockCheats implements ClientModInitializer {
         UbikCube.init();
         AutoVisit.init();
         AnvilHelper.init();
+        Skyblock.init();
         PowderChest.init();
         config.Config.INSTANCE.init();
         LOGGER.info("SkyblockCheats started!");

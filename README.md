@@ -121,10 +121,11 @@ Displays a book (toggle) in anvil screen that, when clicked, starts to combine b
 Prevents you from mining blocks under you unless mining straight down
 
 #### Powder Chests
-Features for Powder Grinding, specifically involving Powder Chests
-- Changes the hitboxes of Powder Chests to 1x1x1, and disables interaction box when opened
+Features for powder grinding, specifically involving powder chests
+- Changes the hitboxes of powder chests to 1x1x1, and disables interaction box when opened
   - `/sbc config set powder-hitboxes [true/false]`
-
+- Automatically drill swaps to first +powder in hotbar and opens powder chests
+  - `/sbc config set auto-open-powder [true/false]`
 ## Config
 `/sbc config list`: Lists all config options and values
 `/sbc config set [name] [new value]`: Changes configs
@@ -206,7 +207,9 @@ Default: false<br>
 Default: false<br>
 <b>anti-spleef</b>: Prevents you from mining blocks under you unless mining straight down (true/false) <br>
 Default: false<br>
-<b>powder-hitboxes</b>: Changes the hitboxes of Powder Chests to 1x1x1, and disables interaction box when opened (true/false) <br>
+<b>powder-hitboxes</b>: Changes the hitboxes of powder chests to 1x1x1, and disables interaction box when opened (true/false) <br>
+Default: false<br>
+<b>auto-open-powder</b>: Automatically drill swaps to first +powder in hotbar and opens powder chests (true/false) <br>
 Default: false<br>
 
 ## Contact

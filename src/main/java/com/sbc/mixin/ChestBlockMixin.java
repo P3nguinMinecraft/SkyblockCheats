@@ -7,6 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
@@ -20,9 +21,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ChestBlockMixin {
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     private void modifyChestOutline(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if (Boolean.TRUE.equals(Config.getConfig("powder-hitboxes")) && Skyblock.inCH()) {
+        if (Boolean.TRUE.equals(Config.getConfig("powder-hitboxes")) && Skyblock.inCH) {
             if (state.isOf(Blocks.CHEST)){
-                if (PowderChest.clicked.contains(pos)){
+                if (!PowderChest.isOpen(pos, MinecraftClient.getInstance())){
                     cir.setReturnValue(VoxelShapes.fullCube());
                 } else {
                     cir.setReturnValue(VoxelShapes.empty());

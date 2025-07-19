@@ -7,14 +7,19 @@ import java.util.stream.Collectors;
 
 import com.mojang.serialization.JsonOps;
 import com.sbc.command.Debug;
+import com.sbc.feature.mining.PowderChest;
 import config.Config;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextCodecs;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 
 public class DebugList {
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -94,6 +99,14 @@ public class DebugList {
             else {
                 ChatUtils.sendDebugMessage("Found Chrono Pickaxe in slot " + pickaxeSlot);
             }
+        });
+        Debug.addCommand("chest", () -> {
+            HitResult hit = client.crosshairTarget;
+            if (!(hit instanceof BlockHitResult blockhit)) return;
+            BlockPos pos = blockhit.getBlockPos();
+            queue.add(new ScheduledCommand(() -> {
+                ChatUtils.sendDebugMessage(PowderChest.isOpen(pos, client));
+            }, 40, 5));
         });
 
 //        Debug.addCommand("mine", () -> {

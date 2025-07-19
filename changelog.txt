@@ -7,4 +7,6 @@ v1.1.5
 
 - Added Powder Chests
     - Changes the hitboxes of powder chests to 1x1x1, and disables the interaction box when opened
-    - /sbc config set powder-hitboxes [true/false]
+        - /sbc config set powder-hitboxes [true/false]
+    - Automatically drill swaps to first +powder in hotbar and opens powder chests
+        - /sbc config set auto-open-powder [true/false]

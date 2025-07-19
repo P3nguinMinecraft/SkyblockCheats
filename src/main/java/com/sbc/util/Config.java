@@ -154,6 +154,7 @@ public class Config {
         setDefault("anvil-delay", 4);
         setDefault("anti-spleef", false);
         setDefault("powder-hitboxes", false);
+        setDefault("auto-open-powder", false);
     }
     
     private static void setDefault(String key, Object value) {

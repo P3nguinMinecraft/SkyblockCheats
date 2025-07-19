@@ -55,7 +55,7 @@ public class AbstractBlockMixin {
             }
         }
 
-        if (Boolean.TRUE.equals(Config.getConfig("powder-hitboxes")) && Skyblock.inCH()) {
+        if (Boolean.TRUE.equals(Config.getConfig("powder-hitboxes")) && Skyblock.inCH) {
             if (state.isOf(Blocks.CHEST)){
                 cir.setReturnValue(switch (state.get(ChestBlock.CHEST_TYPE)){
                     case SINGLE -> SINGLE_SHAPE;

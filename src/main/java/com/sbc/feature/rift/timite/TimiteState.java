@@ -2,6 +2,7 @@ package com.sbc.feature.rift.timite;
 
 import com.sbc.util.Config;
 import com.sbc.util.ScoreboardUtils;
+import com.sbc.util.Skyblock;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 
@@ -21,6 +22,6 @@ public class TimiteState {
     }
 
     public static boolean getTimite(){
-        return Boolean.TRUE.equals(Config.getConfig("timite-hitboxes")) && ScoreboardUtils.contains("The Mountaintop");
+        return Boolean.TRUE.equals(Config.getConfig("timite-hitboxes")) && Skyblock.inMountaintop;
     }
 }
