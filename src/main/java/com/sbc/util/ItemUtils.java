@@ -88,4 +88,9 @@ public class ItemUtils {
         String lore = getLoreAsString(stack);
         return matchLore.equals(lore);
     }
+
+    public static boolean containsLore(ItemStack stack, String matchLore) {
+        String lore = getLoreAsString(stack);
+        return lore.contains(matchLore);
+    }
 }

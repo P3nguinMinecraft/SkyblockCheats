@@ -57,6 +57,12 @@ public class InventoryUtils {
         });
     }
 
+    public static ArrayList<ItemStack> getItemsLoreContains(String lore){
+        return getItems(itemStack -> {
+            return ItemUtils.containsLore(itemStack, lore);
+        });
+    }
+
     public static ArrayList<Integer> getItemSlots(Predicate<ItemStack> cond){
         ArrayList<Integer> slots = new ArrayList<>();
         ArrayList<ItemStack> items = getItems();
@@ -93,6 +99,12 @@ public class InventoryUtils {
         });
     }
 
+    public static ArrayList<Integer> getItemSlotsLoreContains(String lore){
+        return getItemSlots(itemStack -> {
+            return ItemUtils.containsLore(itemStack, lore);
+        });
+    }
+
     public static int countItems(ArrayList<Integer> slots){
         int count = 0;
         ArrayList<ItemStack> items = getItems();
@@ -112,6 +124,11 @@ public class InventoryUtils {
 
     public static int countItems(String id){
         return countItems(getItemSlots(id));
+    }
+
+    public static int currentSlot(){
+        if (client.player == null) return -1;
+        return client.player.getInventory().getSelectedSlot();
     }
 
     public static void setSlot(int slot) {
