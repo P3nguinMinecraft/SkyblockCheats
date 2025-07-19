@@ -94,7 +94,7 @@ public class DebugList {
             ArrayList<Integer> pickaxeSlots = InventoryUtils.getItemSlots("CHRONO_PICKAXE");
             int pickaxeSlot = pickaxeSlots.isEmpty() ? -1 : pickaxeSlots.get(0) > 8 ? -1 : pickaxeSlots.get(0);
             if (pickaxeSlot == -1){
-                ChatUtils.addMessage("Did not find Chrono Pickaxe in your hotbar.");
+                ChatUtils.sendDebugMessage("Did not find Chrono Pickaxe in your hotbar.");
             }
             else {
                 ChatUtils.sendDebugMessage("Found Chrono Pickaxe in slot " + pickaxeSlot);
