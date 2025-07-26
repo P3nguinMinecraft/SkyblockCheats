@@ -126,6 +126,11 @@ Features for powder grinding, specifically involving powder chests
   - `/sbc config set powder-hitboxes [true/false]`
 - Automatically drill swaps to first +powder in hotbar and opens powder chests
   - `/sbc config set auto-open-powder [true/false]`
+
+#### Glass Pane Fix
+`/sbc config set pane-fix [true/false]`
+Fixes glass panes to sync with the server like 1.8
+
 ## Config
 `/sbc config list`: Lists all config options and values
 `/sbc config set [name] [new value]`: Changes configs
@@ -210,6 +215,8 @@ Default: false<br>
 <b>powder-hitboxes</b>: Changes the hitboxes of powder chests to 1x1x1, and disables interaction box when opened (true/false) <br>
 Default: false<br>
 <b>auto-open-powder</b>: Automatically drill swaps to first +powder in hotbar and opens powder chests (true/false) <br>
+Default: false<br>
+<b>pane-fix</b>: Fixes glass panes to sync with the server like 1.8 (true/false) <br>
 Default: false<br>
 
 ## Contact

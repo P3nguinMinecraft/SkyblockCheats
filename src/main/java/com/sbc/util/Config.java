@@ -155,6 +155,7 @@ public class Config {
         setDefault("anti-spleef", false);
         setDefault("powder-hitboxes", false);
         setDefault("auto-open-powder", false);
+        setDefault("fix-panes", false);
     }
     
     private static void setDefault(String key, Object value) {

@@ -10,3 +10,7 @@ v1.1.5
         - /sbc config set powder-hitboxes [true/false]
     - Automatically drill swaps to first +powder in hotbar and opens powder chests
         - /sbc config set auto-open-powder [true/false]
+
+- Added Glass Pane Fix
+    - Fixes glass panes to sync with the server like 1.8
+        - /sbc config set pane-fix [true/false]
