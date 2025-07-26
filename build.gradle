@@ -29,9 +29,6 @@ repositories {
 	maven {
 		url = "https://repo.essential.gg/repository/maven-public"
 	}
-	flatDir {
-		dirs 'libs'
-	}
 }
 
 dependencies {
@@ -46,8 +43,6 @@ dependencies {
 	implementation(include("gg.essential:vigilance:$project.vigilanceVersion"))
 	implementation(include("gg.essential:elementa:$project.elementaVersion"))
 	modImplementation(include("gg.essential:universalcraft-$project.minecraft_version-fabric:$project.ucVersion"))
-
-	modCompileOnly name: "sodium-fabric-0.6.13+mc1.21.5"
 }
 
 loom {
