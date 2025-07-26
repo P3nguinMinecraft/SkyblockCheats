@@ -46,7 +46,7 @@ dependencies {
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/SBC.accesswidener")
+	accessWidenerPath = file("src/main/resources/sbc.accesswidener")
 }
 
 tasks.withType(JavaCompile).configureEach {
