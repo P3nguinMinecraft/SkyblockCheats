@@ -2,6 +2,7 @@ package com.sbc.feature.skyblock.beachball;
 
 import java.util.*;
 
+import com.sbc.command.Debug;
 import com.sbc.data.Constants;
 import com.sbc.data.Textures;
 import com.sbc.object.Color;
@@ -33,10 +34,20 @@ public class BeachBall {
     private static boolean tempOverwrite = false;
 
     public static void init() {
+        Debug.addCommand("resetball", () -> {
+            predictors.clear();
+            ids.clear();
+            bounces = -1;
+            walkTarget = null;
+            state = BallState.BOUNCING;
+            activated = false;
+            tempOverwrite = false;
+        });
+
         WorldRenderEvents.AFTER_ENTITIES.register(BeachBall::render);
         ClientTickEvents.END_CLIENT_TICK.register(BeachBall::tick);
         ListenerManager.registerOverlayListener((t) -> {
-            String message = t.toString();
+            String message = t.getString();
             bounces = parseBounces(message);
             if (bounces > 0 && bounces < 40) tempOverwrite = false;
             if (bounces >= 40 && tempOverwrite){
@@ -61,7 +72,7 @@ public class BeachBall {
     }
 
     private static int parseBounces(String message){
-            String key = "Bounces:";
+            String key = "Bounces: ";
             int index = message.indexOf(key);
             if (index == -1) return -1;
 
@@ -145,7 +156,7 @@ public class BeachBall {
         }
         if (id != -1){
             Vec3d pos = client.world.getEntityById(id).getPos();
-            return new Vec3d(pos.x, client.player.getPos().y, pos.z);
+            return new Vec3d(pos.x, client.player.getY(), pos.z);
         }
         return null;
     }
@@ -188,8 +199,15 @@ public class BeachBall {
                             activated = false;
                             bounces = 0;
                             tempOverwrite = true;
-                            InteractUtils.rightClick();
-                            state = BallState.BOUNCING;
+                            int slot = getSlot();
+                            if (slot == -1){
+                                ChatUtils.addMessage("§2[SBC§r§b-BB§r§2] §cDid not find §l§eBouncy Beach Ball§r §cin your hotbar.");
+                            }
+                            else {
+                                InventoryUtils.setSlot(slot);
+                                InteractUtils.rightClick();
+                                state = BallState.BOUNCING;
+                            }
                         }
                     }
                 }
@@ -198,7 +216,17 @@ public class BeachBall {
                     double dx = walkTarget.x - client.player.getX();
                     double dz = walkTarget.z - client.player.getZ();
 
-                    KeyboardUtils.sneaking = walkTarget.distanceTo(client.player.getPos()) < 0.3;
+                    if (walkTarget.distanceTo(client.player.getPos()) < 0.3){
+                        if ((boolean) Config.getConfig("beachball-snap")){
+                            client.player.setPos(walkTarget.x, walkTarget.y, walkTarget.z);
+                        }
+                        else {
+                            KeyboardUtils.sneaking = true;
+                        }
+                    }
+                    else {
+                        KeyboardUtils.sneaking = false;
+                    }
 
                     if (method == walkMethod.LOOK) {
                         if (walkTarget.distanceTo(client.player.getPos()) > MovementUtils.getStopDistance() + 0.2) {
@@ -221,6 +249,11 @@ public class BeachBall {
                 }
             });
         }
+    }
+
+    private static int getSlot(){
+        ArrayList<Integer> slots = InventoryUtils.getItemSlots("BOUNCY_BEACH_BALL");
+        return slots.isEmpty() ? -1: slots.get(0) > 8 ? -1 : slots.get(0);
     }
 
     public enum walkMethod {

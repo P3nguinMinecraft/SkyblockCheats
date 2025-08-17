@@ -14,3 +14,8 @@ v1.1.5
 - Added Glass Pane Fix
     - Fixes glass panes to sync with the server like 1.8
         - /sbc config set pane-fix [true/false]
+
+- Beach ball patches
+    - Added hotbar support when launching a new ball
+    - Allowed precision snapping when close
+        - /sbc config set beachball-snap [true/false]
