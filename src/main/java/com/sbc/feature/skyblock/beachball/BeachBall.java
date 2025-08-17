@@ -56,6 +56,7 @@ public class BeachBall {
         });
         ListenerManager.registerMessageListener((s) -> {
             if (s.contains("in the air for") || s.contains("hit the wall after")){
+                KeyboardUtils.sneaking = false;
                 activated = true;
                 if (state == BallState.BOUNCING){
                     if ((boolean) Config.getConfig("fullauto-beachball")){

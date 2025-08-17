@@ -56,6 +56,8 @@ public class World {
 		GrottoSearchManager.endScanTasks();
 		BeachBall.predictors.clear();
 		BeachBall.activated = false;
+		KeyboardUtils.reset();
+		KeyboardUtils.sneaking = false;
 		AutoImpel.reset();
 		TimiteHelper.trackers.clear();
 	}
