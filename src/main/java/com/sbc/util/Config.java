@@ -136,6 +136,7 @@ public class Config {
         setDefault("impel-rate", 0.5f);
         setDefault("beachball-predictor", true);
         setDefault("auto-beachball", false);
+        setDefault("beachball-snap", false);
         setDefault("fullauto-beachball", false);
         setDefault("lumie-hitboxes", false);
         setDefault("lumie-hideblocks", false);
