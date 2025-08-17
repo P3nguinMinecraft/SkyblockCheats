@@ -55,7 +55,7 @@ public class BeachBall {
             }
         });
         ListenerManager.registerMessageListener((s) -> {
-            if (s.contains("in the air for") || s.contains("hit the wall after")){
+            if (s.contains("in the air for") || s.contains("hit the wall")){
                 KeyboardUtils.sneaking = false;
                 activated = true;
                 if (state == BallState.BOUNCING){
