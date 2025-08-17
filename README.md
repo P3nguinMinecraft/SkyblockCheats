@@ -65,8 +65,16 @@ Completes impels automatically in Vampire Slayer
 #### Beach Ball
 Features for Bouncy Beach Ball in Year of the Seal
 - Renders landing prediction
+  - `/sbc config set beachball-predictor [true/false]`
 - Auto bounce
+  - Automatically bounces the beach ball, requires predictor to be on
+  - `/sbc config set auto-beachball [true/false]`
+- Precision snap
+  - Snaps to the precise location if close enough - BE CAREFUL, MIGHT BE DETECTABLE
+  - `/sbc config set beachball-snap [true/false]`
 - Full auto bounce (macro)
+  - `/sbc config set fullauto-beachball [true/false]`
+  - Fully automatically bounces the beach ball, requires auto-beachball. Hotbar beach ball items and go to -100 102 0 in Dungeon Hub using Etherwarp
 
 #### Lumie Helper
 Features for Sea Lumies
@@ -178,9 +186,11 @@ Default: 0.3 <br>
 Default: 0.5 <br>
 <b>beachball-predictor</b>: Enables all beach ball features and draws a predicted trajectory based on projectile models. Required for all beach ball features <br>
 Default: true <br>
-<b>auto-beachball</b>: Automatically bounces the beach ball, requires predictor to be on
+<b>auto-beachball</b>: Automatically bounces the beach ball, requires predictor to be on <br>
 Default: false <br>
-<b>fullauto-beachball</b>: Fully automatically bounces the beach ball, requires auto-beachball. Hold beach ball items and go to -100 102 0 in Dungeon Hub using Etherwarp <br>
+<b>beachball-snap</b>: Snaps to the precise location if close enough - BE CAREFUL, MIGHT BE DETECTABLE <br>
+Default: false <br>
+<b>fullauto-beachball</b>: Fully automatically bounces the beach ball, requires auto-beachball. Hotbar beach ball items and go to -100 102 0 in Dungeon Hub using Etherwarp <br>
 Default: false <br>
 <b>lumie-hitboxes</b>: Changes Sea Pickle interaction boxes to 1x1x1, removes it for Kelp and Seagrass (true/false) <br>
 Default: false <br>
