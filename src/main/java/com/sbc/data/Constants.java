@@ -1,7 +1,9 @@
 package com.sbc.data;
 
+import com.sbc.object.BallBounds;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -19,7 +21,8 @@ public class Constants {
         return isInRegion;
     };
 
-    public static final Vec3d DUNGEON_HUB_BALL = new Vec3d(-110, 102, 0);
+
+    public static final BallBounds DUNGEON_HUB_BALL =  new BallBounds(new Vec3d(-110, 102, 0), -143, -78.3, -41, 41);
 
     public static final Pattern IMPEL_REGEX = Pattern.compile("Impel:\\s+(?:§.\\s*)*([A-Z]+(?:\\s+[A-Z]+)*)\\s+(?:§.\\s*)*(\\d+(?:\\.\\d+)?)s");
 

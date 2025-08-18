@@ -5,6 +5,7 @@ import java.util.*;
 import com.sbc.command.Debug;
 import com.sbc.data.Constants;
 import com.sbc.data.Textures;
+import com.sbc.object.BallBounds;
 import com.sbc.object.Color;
 import com.sbc.render.RenderHelper;
 import com.sbc.util.*;
@@ -28,6 +29,7 @@ public class BeachBall {
     public static final Map<Integer, Predictor> predictors = new HashMap<>();
     private static final Set<Integer> ids = new HashSet<>();
     private static int bounces = -1;
+    private static BallBounds bounds;
     private static Vec3d walkTarget;
     private static BallState state = BallState.BOUNCING;
     public static boolean activated = false;
@@ -60,6 +62,13 @@ public class BeachBall {
                 activated = true;
                 if (state == BallState.BOUNCING){
                     if ((boolean) Config.getConfig("fullauto-beachball")){
+                        if (ScoreboardUtils.contains("Dungeon Hub")){
+                            bounds = Constants.DUNGEON_HUB_BALL;
+                        }
+                        else {
+
+                            return;
+                        }
                         state = BallState.GO_TO_CENTER;
                     }
                 }
@@ -177,7 +186,17 @@ public class BeachBall {
                     case BOUNCING -> {
                         if (bounces >= 40) {
                             if ((boolean) Config.getConfig("fullauto-beachball")){
-                                state = BallState.GO_TO_CENTER;
+                                if (ScoreboardUtils.contains("Dungeon Hub")){
+                                    bounds = Constants.DUNGEON_HUB_BALL;
+                                }
+                                else {
+                                    bounds = null;
+                                    ChatUtils.addMessage("§2[SBC§r§b-BB§r§2] §cYou are not in a supported island for Full Auto. Setting turned off.");
+                                    Config.setConfig("fullauto-beachball", false);
+                                }
+                                if (bounds != null) {
+                                    state = BallState.GO_TO_CENTER;
+                                }
                             }
                         }
                         else {
@@ -186,10 +205,12 @@ public class BeachBall {
                     }
 
                     case GO_TO_CENTER -> {
-                        walkTarget = Constants.DUNGEON_HUB_BALL;
-                        if (client.player.getPos().distanceTo(walkTarget) < 3) {
-                            KeyboardUtils.reset();
-                            state = BallState.WAIT_FOR_LAND_AND_RESTART;
+                        if ((boolean) Config.getConfig("fullauto-beachball")) {
+                            walkTarget = bounds.getCenter();
+                            if (client.player.getPos().distanceTo(walkTarget) < 3) {
+                                KeyboardUtils.reset();
+                                state = BallState.WAIT_FOR_LAND_AND_RESTART;
+                            }
                         }
                     }
 
@@ -213,7 +234,7 @@ public class BeachBall {
                     }
                 }
 
-                if (walkTarget != null && state != BallState.WAIT_FOR_LAND_AND_RESTART) {
+                if (walkTarget != null && state != BallState.WAIT_FOR_LAND_AND_RESTART && bounds.inBounds(walkTarget)) {
                     double dx = walkTarget.x - client.player.getX();
                     double dz = walkTarget.z - client.player.getZ();
 
