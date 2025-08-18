@@ -22,7 +22,8 @@ public class Constants {
     };
 
 
-    public static final BallBounds DUNGEON_HUB_BALL =  new BallBounds(new Vec3d(-110, 102, 0), -143, -78.3, -41, 41);
+    public static final BallBounds DUNGEON_HUB_BALL = new BallBounds(new Vec3d(-110, 102, 0), -143, -78.3, -41, 41);
+    public static final BallBounds HUB_BALL = new BallBounds(new Vec3d(-101, 69, 17), -122.7, -90.3, 0, 31);
 
     public static final Pattern IMPEL_REGEX = Pattern.compile("Impel:\\s+(?:§.\\s*)*([A-Z]+(?:\\s+[A-Z]+)*)\\s+(?:§.\\s*)*(\\d+(?:\\.\\d+)?)s");
 

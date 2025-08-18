@@ -65,8 +65,10 @@ public class BeachBall {
                         if (ScoreboardUtils.contains("Dungeon Hub")){
                             bounds = Constants.DUNGEON_HUB_BALL;
                         }
+                        else if (ScoreboardUtils.contains("Forest")){
+                            bounds = Constants.HUB_BALL;
+                        }
                         else {
-
                             return;
                         }
                         state = BallState.GO_TO_CENTER;
@@ -188,6 +190,9 @@ public class BeachBall {
                             if ((boolean) Config.getConfig("fullauto-beachball")){
                                 if (ScoreboardUtils.contains("Dungeon Hub")){
                                     bounds = Constants.DUNGEON_HUB_BALL;
+                                }
+                                else if (ScoreboardUtils.contains("Forest")){
+                                    bounds = Constants.HUB_BALL;
                                 }
                                 else {
                                     bounds = null;
