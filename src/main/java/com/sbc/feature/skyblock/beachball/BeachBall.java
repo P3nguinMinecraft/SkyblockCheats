@@ -70,7 +70,7 @@ public class BeachBall {
                         state = BallState.GO_TO_CENTER;
                     }
                 }
-                if (state == BallState.GO_TO_CENTER) {
+                else if (state == BallState.GO_TO_CENTER) {
                     state = BallState.WAIT_FOR_LAND_AND_RESTART;
                 }
             }
@@ -184,7 +184,7 @@ public class BeachBall {
             client.execute(() -> {
                 if (!(Boolean) Config.getConfig("auto-beachball") || client.world == null || client.player == null) return;
 
-                updateBounds();
+                if ((boolean) Config.getConfig("fullauto-beachball") && getTarget() != null) updateBounds();
 
                 switch (state) {
                     case BOUNCING -> {
@@ -193,6 +193,9 @@ public class BeachBall {
                                 if (bounds != null) {
                                     state = BallState.GO_TO_CENTER;
                                 }
+                            }
+                            else {
+                                walkTarget = null;
                             }
                         }
                         else {
