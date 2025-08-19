@@ -165,9 +165,8 @@ public class BeachBall {
         if (id != -1){
             Vec3d pos = client.world.getEntityById(id).getPos();
             if (bounds != null){
-                double dist = pos.squaredDistanceTo(bounds.getCenter());
-                Vec3d offset = bounds.getCenter().relativize(pos).negate().multiply(0.1 / dist);
-                pos = pos.add(MathUtils.clamp(offset.x, -0.2, 0.2), 0, MathUtils.clamp(offset.z, -0.2, 0.2));
+                Vec3d offset = bounds.getCenter().relativize(pos).multiply(0.03); // 10 blocks = 0.3 offset
+                pos = pos.add(MathUtils.clamp(offset.x, -0.3, 0.3), 0, MathUtils.clamp(offset.z, -0.3, 0.3));
             }
             return new Vec3d(pos.x, client.player.getY(), pos.z);
         }
@@ -275,7 +274,7 @@ public class BeachBall {
             if (ScoreboardUtils.contains("Dungeon Hub")){
                 bounds = Constants.DUNGEON_HUB_BALL;
             }
-            else if (ScoreboardUtils.contains("Forest") || ScoreboardUtils.contains("Mountain")){
+            else if (ScoreboardUtils.contains("Forest") || ScoreboardUtils.contains("Mountain") || ScoreboardUtils.contains("Ruins")){
                 bounds = Constants.HUB_BALL;
             }
             else {
