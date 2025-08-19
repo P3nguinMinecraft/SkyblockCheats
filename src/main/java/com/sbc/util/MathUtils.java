@@ -26,4 +26,8 @@ public class MathUtils {
         }
         return sum / doubles.size();
     }
+
+    public static double clamp(double value, double min, double max){
+        return Math.max(min, Math.min(max, value));
+    }
 }

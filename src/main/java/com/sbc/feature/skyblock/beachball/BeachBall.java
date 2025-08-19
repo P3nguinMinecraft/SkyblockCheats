@@ -46,6 +46,10 @@ public class BeachBall {
             tempOverwrite = false;
         });
 
+        Debug.addCommand("printball", () -> {
+            ChatUtils.sendMessage(state.name());
+        });
+
         WorldRenderEvents.AFTER_ENTITIES.register(BeachBall::render);
         ClientTickEvents.END_CLIENT_TICK.register(BeachBall::tick);
         ListenerManager.registerOverlayListener((t) -> {
@@ -62,15 +66,7 @@ public class BeachBall {
                 activated = true;
                 if (state == BallState.BOUNCING){
                     if ((boolean) Config.getConfig("fullauto-beachball")){
-                        if (ScoreboardUtils.contains("Dungeon Hub")){
-                            bounds = Constants.DUNGEON_HUB_BALL;
-                        }
-                        else if (ScoreboardUtils.contains("Forest")){
-                            bounds = Constants.HUB_BALL;
-                        }
-                        else {
-                            return;
-                        }
+                        if (!updateBounds()) return;
                         state = BallState.GO_TO_CENTER;
                     }
                 }
@@ -168,6 +164,11 @@ public class BeachBall {
         }
         if (id != -1){
             Vec3d pos = client.world.getEntityById(id).getPos();
+            if (bounds != null){
+                double dist = pos.squaredDistanceTo(bounds.getCenter());
+                Vec3d offset = bounds.getCenter().relativize(pos).negate().multiply(0.1 / dist);
+                pos = pos.add(MathUtils.clamp(offset.x, -0.2, 0.2), 0, MathUtils.clamp(offset.z, -0.2, 0.2));
+            }
             return new Vec3d(pos.x, client.player.getY(), pos.z);
         }
         return null;
@@ -184,21 +185,12 @@ public class BeachBall {
             client.execute(() -> {
                 if (!(Boolean) Config.getConfig("auto-beachball") || client.world == null || client.player == null) return;
 
+                updateBounds();
+
                 switch (state) {
                     case BOUNCING -> {
                         if (bounces >= 40) {
                             if ((boolean) Config.getConfig("fullauto-beachball")){
-                                if (ScoreboardUtils.contains("Dungeon Hub")){
-                                    bounds = Constants.DUNGEON_HUB_BALL;
-                                }
-                                else if (ScoreboardUtils.contains("Forest")){
-                                    bounds = Constants.HUB_BALL;
-                                }
-                                else {
-                                    bounds = null;
-                                    ChatUtils.addMessage("§2[SBC§r§b-BB§r§2] §cYou are not in a supported island for Full Auto. Setting turned off.");
-                                    Config.setConfig("fullauto-beachball", false);
-                                }
                                 if (bounds != null) {
                                     state = BallState.GO_TO_CENTER;
                                 }
@@ -239,7 +231,7 @@ public class BeachBall {
                     }
                 }
 
-                if (walkTarget != null && state != BallState.WAIT_FOR_LAND_AND_RESTART && bounds.inBounds(walkTarget)) {
+                if (walkTarget != null && state != BallState.WAIT_FOR_LAND_AND_RESTART && (bounds == null || bounds.inBounds(walkTarget))) {
                     double dx = walkTarget.x - client.player.getX();
                     double dz = walkTarget.z - client.player.getZ();
 
@@ -276,6 +268,25 @@ public class BeachBall {
                 }
             });
         }
+    }
+
+    private static boolean updateBounds(){
+        if ((boolean) Config.getConfig("fullauto-beachball")){
+            if (ScoreboardUtils.contains("Dungeon Hub")){
+                bounds = Constants.DUNGEON_HUB_BALL;
+            }
+            else if (ScoreboardUtils.contains("Forest") || ScoreboardUtils.contains("Mountain")){
+                bounds = Constants.HUB_BALL;
+            }
+            else {
+                bounds = null;
+                ChatUtils.addMessage("§2[SBC§r§b-BB§r§2] §cYou are not in a supported island for Full Auto. Setting turned off.");
+                Config.setConfig("fullauto-beachball", false);
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     private static int getSlot(){
