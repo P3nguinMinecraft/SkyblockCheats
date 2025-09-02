@@ -52,7 +52,7 @@ public class AnvilHelper {
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             clientTicks++;
-            if (client.currentScreen != currentScreen) {
+            if (!active || client.currentScreen != currentScreen) {
                 stop();
                 return;
             }
@@ -155,7 +155,6 @@ public class AnvilHelper {
     }
 
     private static void doAction(HelperState state){
-        System.out.println(state.name());
         if (state == HelperState.RETRIEVE || state == HelperState.COMBINE){
             client.execute(() -> {
                 client.interactionManager.clickSlot(handler.syncId, ACTION_SLOT, 1, SlotActionType.PICKUP, client.player);
