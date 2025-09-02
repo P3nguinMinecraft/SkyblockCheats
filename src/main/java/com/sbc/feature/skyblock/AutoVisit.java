@@ -1,6 +1,8 @@
 package com.sbc.feature.skyblock;
 
+import com.sbc.util.ChatUtils;
 import com.sbc.util.Config;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -13,6 +15,10 @@ import net.minecraft.screen.slot.SlotActionType;
 
 public class AutoVisit {
     private static final MinecraftClient client = MinecraftClient.getInstance();
+    public static Screen currentScreen;
+    private static ScreenHandler handler;
+    public static volatile boolean active = false;
+
     public static void init() {
         ScreenEvents.AFTER_INIT.register((client,screen,scaledWidth,scaledHeight)-> {
             if (!(boolean) Config.getConfig("auto-visit")) return;
@@ -21,13 +27,13 @@ public class AutoVisit {
 
             new Thread(() -> AutoVisit.start(screen)).start();
         });
-    }
 
-    public static void start(Screen screen){
-        HandledScreen<?> handledScreen = (HandledScreen<?>) screen;
-        ScreenHandler handler = handledScreen.getScreenHandler();
-        Boolean clicked = false;
-        do {
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (!active || client.currentScreen != currentScreen) {
+                stop();
+                return;
+            }
+
             for (int i = 0; i < handler.slots.size(); i++) {
                 Slot slot = handler.slots.get(i);
                 ItemStack stack = slot.getStack();
@@ -35,15 +41,24 @@ public class AutoVisit {
                     client.execute(() -> {
                         client.interactionManager.clickSlot(handler.syncId, slot.id, 1, SlotActionType.PICKUP, client.player);
                     });
-                    clicked = true;
+                    stop();
                     break;
                 }
             }
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        } while (client.currentScreen == screen && !clicked);
+        });
+    }
+
+    public static void start(Screen screen) {
+        active = true;
+        currentScreen = screen;
+        HandledScreen<?> handledScreen = (HandledScreen<?>) screen;
+        handler = handledScreen.getScreenHandler();
+    }
+
+    public static void stop() {
+        if (active) {
+            active = false;
+            currentScreen = null;
+        }
     }
 }
