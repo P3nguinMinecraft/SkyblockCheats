@@ -45,6 +45,7 @@ public class AnvilHelper {
             if (!(boolean) Config.getConfig("anvil-helper")) return;
             if (!(screen instanceof HandledScreen<?>)) return;
             if (!screen.getTitle().getString().contains("Anvil")) return;
+            if (screen.getTitle().getString().contains("Reforge Anvil")) return;
 
             new Thread(() -> AnvilHelper.start(screen)).start();
         });
@@ -91,7 +92,6 @@ public class AnvilHelper {
     }
 
     private static void tick(){
-        System.out.print("tick - ");
         status = getStatus();
         doAction(status);
     }
