@@ -32,11 +32,11 @@ public class AutoMelody {
 		DIAMOND_BLOCK_STACK.set(DataComponentTypes.CUSTOM_NAME, Text.literal("§2[SBC] §r§dAutoMelody"));
 
     	ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
-    		if (!(boolean) Config.getConfig("auto-melody")) return;
+			if (!(boolean) Config.getConfig("auto-melody")) return;
     		if (!(screen instanceof HandledScreen<?>)) return;
     	    if (!screen.getTitle().getString().contains("Harp")) return;
 
-    	    AutoMelody.start(screen);
+    	    start(screen);
     	});
     	
     	ClientTickEvents.END_CLIENT_TICK.register(client -> {

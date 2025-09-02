@@ -47,7 +47,7 @@ public class AnvilHelper {
             if (!screen.getTitle().getString().contains("Anvil")) return;
             if (screen.getTitle().getString().contains("Reforge Anvil")) return;
 
-            new Thread(() -> AnvilHelper.start(screen)).start();
+            start(screen);
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
