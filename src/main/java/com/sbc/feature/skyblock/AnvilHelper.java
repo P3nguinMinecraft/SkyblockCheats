@@ -32,7 +32,7 @@ public class AnvilHelper {
     public static Screen currentScreen;
     private static ScreenHandler handler;
     public static volatile boolean active = false;
-    public static volatile boolean injected = false;
+    public static volatile boolean inGui = false;
     private static HelperState status = HelperState.IDLE;
     private static int[] slots = new int[2]; // -1: Not found
     private static long clientTicks = 0;
@@ -56,7 +56,7 @@ public class AnvilHelper {
                 stop();
                 return;
             }
-            if (injected && !(handler.getSlot(0).getStack().isOf(Items.KNOWLEDGE_BOOK) || handler.getSlot(0).getStack().isOf(Items.BOOK))){
+            if (inGui && !(handler.getSlot(0).getStack().isOf(Items.KNOWLEDGE_BOOK) || handler.getSlot(0).getStack().isOf(Items.BOOK))){
                 injectBook(active);
             }
             if (!active){
@@ -71,12 +71,12 @@ public class AnvilHelper {
         HandledScreen<?> handledScreen = (HandledScreen<?>) screen;
         handler = handledScreen.getScreenHandler();
         currentScreen = screen;
-        injected = true;
+        inGui = true;
     }
 
     public static void stop(){
-        if (injected) {
-            injected = false;
+        if (inGui) {
+            inGui = false;
             currentScreen = null;
             active = false;
         }
