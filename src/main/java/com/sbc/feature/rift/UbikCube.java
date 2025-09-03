@@ -54,6 +54,7 @@ public class UbikCube {
     }
 
     public static void start(Screen screen){
+        // TODO: Recode to remove busy waiting
         HandledScreen<?> handledScreen = (HandledScreen<?>) screen;
         handler = handledScreen.getScreenHandler();
         boolean foundStats = false;
