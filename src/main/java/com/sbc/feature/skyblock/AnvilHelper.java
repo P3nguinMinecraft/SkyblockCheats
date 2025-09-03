@@ -52,7 +52,7 @@ public class AnvilHelper {
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             clientTicks++;
-            if (!active || client.currentScreen != currentScreen) {
+            if (!inGui || client.currentScreen != currentScreen) {
                 stop();
                 return;
             }

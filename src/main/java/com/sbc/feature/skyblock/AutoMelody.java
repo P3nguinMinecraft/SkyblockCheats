@@ -22,7 +22,7 @@ public class AutoMelody {
     private static Screen currentScreen;
     private static ScreenHandler handler;
     private static int tick = 0;
-    public static volatile boolean active = false;
+    public static volatile boolean inGui = false;
     private static final int[] delayedClick = new int[2];
 
     public static void init() {
@@ -41,7 +41,7 @@ public class AutoMelody {
     	
     	ClientTickEvents.END_CLIENT_TICK.register(client -> {
     		tick++;
-    	    if (!active || client.currentScreen != currentScreen) {
+    	    if (!inGui || client.currentScreen != currentScreen) {
     	        stop();
     	        return;
     	    }
@@ -70,16 +70,16 @@ public class AutoMelody {
     }
 
     public static void start(Screen screen) {
-    	active = true;
-    	currentScreen = screen;
 		HandledScreen<?> handledScreen = (HandledScreen<?>) screen;
-    	handler = handledScreen.getScreenHandler();
+		handler = handledScreen.getScreenHandler();
+		currentScreen = screen;
+		inGui = true;
     	ChatUtils.addMessage("§2[SBC] §r§dAutoMelody started");
     }
     
     public static void stop() {
-    	if (active) {
-            active = false;
+    	if (inGui) {
+            inGui = false;
             currentScreen = null;
             ChatUtils.addMessage("§2[SBC] §r§dAutoMelody stopped");
         }
