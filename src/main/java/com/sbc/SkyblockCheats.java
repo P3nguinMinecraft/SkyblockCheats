@@ -1,6 +1,7 @@
 package com.sbc;
 
 import com.sbc.command.Render;
+import com.sbc.feature.hunting.RepeatFusion;
 import com.sbc.feature.mining.PowderChest;
 import com.sbc.feature.rift.AutoImpel;
 import com.sbc.feature.rift.UbikCube;
@@ -54,6 +55,7 @@ public class SkyblockCheats implements ClientModInitializer {
         AnvilHelper.init();
         Skyblock.init();
         PowderChest.init();
+        RepeatFusion.init();
         config.Config.INSTANCE.init();
         LOGGER.info("SkyblockCheats started!");
         ChatUtils.sendDebugMessage("[SBC] DEBUG MODE is enabled!");

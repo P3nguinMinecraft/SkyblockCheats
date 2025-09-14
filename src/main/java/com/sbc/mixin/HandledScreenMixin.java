@@ -1,5 +1,6 @@
 package com.sbc.mixin;
 
+import com.sbc.feature.hunting.RepeatFusion;
 import com.sbc.feature.skyblock.AnvilHelper;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.screen.slot.Slot;
@@ -20,6 +21,10 @@ public class HandledScreenMixin {
         if (focusedSlot == null) return;
         if (AnvilHelper.currentScreen == screen && focusedSlot.id == 0){
             AnvilHelper.registerClick();
+            cir.cancel();
+        }
+        if (RepeatFusion.currentScreen == screen && focusedSlot.id == 0){
+            RepeatFusion.registerClick();
             cir.cancel();
         }
     }
