@@ -4,11 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -157,6 +153,7 @@ public class Config {
         setDefault("powder-hitboxes", false);
         setDefault("auto-open-powder", false);
         setDefault("fix-panes", false);
+        setDefault("fusion-helper", false);
     }
     
     private static void setDefault(String key, Object value) {
@@ -165,13 +162,7 @@ public class Config {
 	}
     
     private static void cleanConfig() {
-        Iterator<String> iter = config.keySet().iterator();
-        while (iter.hasNext()) {
-            String key = iter.next();
-            if (!validKeys.contains(key)) {
-                iter.remove();
-            }
-        }
+        config.keySet().removeIf(key -> !validKeys.contains(key));
     }
 
     public static boolean setConfig(String key, Object value) {
@@ -190,13 +181,13 @@ public class Config {
         if (key.equals("rgbaBlockColor")) {
 			String[] parts = value.toString().split("-");
 			if (parts.length < 3 || parts.length > 4) {
-				ChatUtils.sendMessage("§cInvalid rgbaBlockColor format. Expected format: r-g-b-a Got " + parts.toString());
+				ChatUtils.sendMessage("§cInvalid rgbaBlockColor format. Expected format: r-g-b-a Got " + Arrays.toString(parts));
 				return false;
 			}
-			Float r = Float.parseFloat(parts[0].trim());
-			Float g = Float.parseFloat(parts[1].trim());
-			Float b = Float.parseFloat(parts[2].trim());
-			Float a = parts.length == 4 ? Float.parseFloat(parts[3].trim()) : 1.0f;
+			float r = Float.parseFloat(parts[0].trim());
+			float g = Float.parseFloat(parts[1].trim());
+			float b = Float.parseFloat(parts[2].trim());
+			float a = parts.length == 4 ? Float.parseFloat(parts[3].trim()) : 1.0f;
 			if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 || a < 0 || a > 1) {
 				ChatUtils.sendMessage("§cInvalid rgbaBlockColor values. Expected values: r(0-255)-g(0-255)-b(0-255)-a(0-1) Got " + r + "-" + g + "-" + b + "-" + a);
 				return false;

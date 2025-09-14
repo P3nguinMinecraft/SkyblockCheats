@@ -32,20 +32,19 @@ object Config : Vigilant(
     // examples
 
     @Property(
-        type = PropertyType.SWITCH, name = "Red Screen Fix",
-        description = "Fixes an issue in The Catacombs Floors 2 and 3 where the screen turns red on fancy graphics.",
-        category = "Dungeons", subcategory = "Miscellaneous",
-        i18nName = "skytils.config.dungeons.miscellaneous.red_screen_fix",
-        i18nCategory = "skytils.config.dungeons",
-        i18nSubcategory = "skytils.config.dungeons.miscellaneous"
+        type = PropertyType.SWITCH, name = "Example Toggle",
+        description = "This is the description",
+        category = "Category Name",
+        subcategory = "Subcategory Name"
     )
-    var worldborderFix = true
+    var example = true
 
     private object ConfigSorting : SortingBehavior() {
         override fun getCategoryComparator(): Comparator<in Category> = Comparator { o1, o2 ->
-            if (o1.name == "General") return@Comparator -1
-            if (o2.name == "General") return@Comparator 1
-            else compareValuesBy(o1.name, o2.name)
+            //if (o1.name == "General") return@Comparator -1
+            //if (o2.name == "General") return@Comparator 1
+            //else
+                compareValuesBy(o1.name, o2.name)
         }
     }
 }
