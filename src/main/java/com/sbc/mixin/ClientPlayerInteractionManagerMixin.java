@@ -1,11 +1,15 @@
 package com.sbc.mixin;
 
+import com.sbc.feature.hunting.Lasso;
 import com.sbc.util.ChatUtils;
 import com.sbc.util.Config;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.spongepowered.asm.mixin.Mixin;
@@ -47,6 +51,16 @@ public class ClientPlayerInteractionManagerMixin {
             if (client.world.getBlockState(pos).isOf(Blocks.CHEST)){
                 cir.cancel();
             }
+        }
+    }
+
+    @Inject(method = "interactItem", at = @At("HEAD"), cancellable = true)
+    private void interactItem(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir){
+        if (Boolean.TRUE.equals(Config.getConfig("lasso-blockreel")) && Lasso.blockClick){
+            cir.cancel();
+        }
+        else {
+            Lasso.clicked();
         }
     }
 }

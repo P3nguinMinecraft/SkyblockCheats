@@ -154,6 +154,8 @@ public class Config {
         setDefault("auto-open-powder", false);
         setDefault("fix-panes", false);
         setDefault("fusion-helper", false);
+        setDefault("lasso-blockreel", false);
+        setDefault("lasso-autoreel", false);
     }
     
     private static void setDefault(String key, Object value) {
