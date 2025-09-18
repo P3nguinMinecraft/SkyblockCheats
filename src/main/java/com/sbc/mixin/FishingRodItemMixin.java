@@ -1,6 +1,6 @@
 package com.sbc.mixin;
 
-import com.sbc.feature.fishing.TrophyMacro;
+import com.sbc.feature.fishing.FishingMacro;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FishingRodItem;
 import net.minecraft.util.ActionResult;
@@ -15,6 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class FishingRodItemMixin {
     @Inject(method = "use", at = @At("HEAD"))
     private static void onUse(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<ActionResult> cir){
-        TrophyMacro.rodCast(world, user, hand);
+        FishingMacro.rodCast(world, user, hand);
     }
 }

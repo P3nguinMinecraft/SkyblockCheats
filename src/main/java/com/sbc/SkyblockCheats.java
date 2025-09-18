@@ -1,6 +1,7 @@
 package com.sbc;
 
 import com.sbc.command.Render;
+import com.sbc.feature.fishing.FishingMacro;
 import com.sbc.feature.hunting.Lasso;
 import com.sbc.feature.hunting.RepeatFusion;
 import com.sbc.feature.mining.PowderChest;
@@ -58,6 +59,7 @@ public class SkyblockCheats implements ClientModInitializer {
         PowderChest.init();
         RepeatFusion.init();
         Lasso.init();
+        FishingMacro.init();
         config.Config.INSTANCE.init();
         LOGGER.info("SkyblockCheats started!");
         ChatUtils.sendDebugMessage("[SBC] DEBUG MODE is enabled!");

@@ -156,6 +156,7 @@ public class Config {
         setDefault("fusion-helper", false);
         setDefault("lasso-blockreel", false);
         setDefault("lasso-autoreel", false);
+        setDefault("fishing-macro", false);
     }
     
     private static void setDefault(String key, Object value) {
