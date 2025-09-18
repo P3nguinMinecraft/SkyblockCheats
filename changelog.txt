@@ -19,3 +19,17 @@ v1.1.5
     - Added hotbar support when launching a new ball
     - Allowed precision snapping when close
         - /sbc config set beachball-snap [true/false]
+
+- Added Fusion Helper
+    - Repeats previous fusion in Fusion Machine (Togglable)
+        - /sbc config set fusion-helper [true/false]
+
+- Added Lasso features
+    - Blocks invalid reels
+        - /sbc config set lasso-blockreel [true/false]
+    - Auto-reel when ready
+        - /sbc config set lasso-autoreel [true/false]
+
+- Added Fishing Macro
+    - Automatically reels and recasts the rod, best used for trophy fishing because Hypixel has anti-macro for sea creatures
+        - /sbc config set fishing-macro [true/false]

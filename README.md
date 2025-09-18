@@ -1,4 +1,4 @@
-# CURRENT RELEASE: v1.1.4
+# CURRENT RELEASE: v1.1.5
 ## About
 #### Fabric 1.21.5 Mod for Hypixel Skyblock
 
@@ -139,6 +139,20 @@ Features for powder grinding, specifically involving powder chests
 `/sbc config set pane-fix [true/false]`
 Fixes glass panes to sync with the server like 1.8
 
+#### Fusion Helper
+Repeats previous fusion in Fusion Machine
+- `/sbc config set fusion-helper [true/false]`
+
+#### Lasso
+- Blocks invalid reels
+  - `/sbc config set lasso-blockreel [true/false]`
+- Auto-reel when ready
+  - `/sbc config set lasso-autoreel [true/false]`
+
+#### Fishing Macro
+Automatically reels and recasts the rod, best used for trophy fishing because Hypixel has anti-macro for sea creatures
+- `/sbc config set fishing-macro [true/false]`
+
 ## Config
 `/sbc config list`: Lists all config options and values
 `/sbc config set [name] [new value]`: Changes configs
@@ -228,6 +242,15 @@ Default: false<br>
 Default: false<br>
 <b>pane-fix</b>: Fixes glass panes to sync with the server like 1.8 (true/false) <br>
 Default: false<br>
+<b>fusion-helper</b>: Repeats previous fusion in Fusion Machine (true/false) <br>
+Default: false<br>
+<b>lasso-blockreel</b>: Blocks invalid reels (true/false) <br>
+Default: false<br>
+<b>lasso-autoreel</b>: Auto-reel when ready (true/false) <br>
+Default: false<br>
+<b>fishing-macro</b>: Automatically reels and recasts the rod (true/false) <br>
+Default: false<br>
+
 
 ## Contact
 DM `windows1267` on discord for any questions, issues, or suggestions
