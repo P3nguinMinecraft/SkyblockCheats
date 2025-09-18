@@ -12,6 +12,7 @@
         "ClientWorldMixin",
         "ChestBlockMixin",
         "EntityRenderDispatcherMixin",
+        "FishingRodItemMixin",
         "HandledScreenMixin",
         "HorizontalConnectingBlockMixin",
         "InGameHudMixin",
