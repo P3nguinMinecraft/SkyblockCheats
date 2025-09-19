@@ -157,6 +157,7 @@ public class Config {
         setDefault("lasso-blockreel", false);
         setDefault("lasso-autoreel", false);
         setDefault("fishing-macro", false);
+        setDefault("slugfish-toggle", false);
     }
     
     private static void setDefault(String key, Object value) {

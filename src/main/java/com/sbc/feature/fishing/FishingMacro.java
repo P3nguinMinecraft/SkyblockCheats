@@ -1,6 +1,7 @@
 package com.sbc.feature.fishing;
 
 import com.sbc.util.Config;
+import com.sbc.util.DelayUtils;
 import com.sbc.util.InteractUtils;
 import com.sbc.util.TextUtils;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -17,14 +18,18 @@ import java.util.ArrayList;
 public class FishingMacro {
     private static final ArrayList<ArmorStandEntity> potentialArmorStands = new ArrayList<>();
     private static ArmorStandEntity armorStand = null;
-    private static long lastTick = 0;
+    private static int cd1 = 0;
+    private static int cd2 = 0;
+    private static int timeSince = 0;
 
     public static void init(){
         ClientTickEvents.END_CLIENT_TICK.register(FishingMacro::tick);
     }
 
     public static void tick(MinecraftClient client){
-        lastTick++;
+        cd1 = Math.max(cd1 - 1, 0);
+        cd2 = Math.max(cd2 - 1, 0);
+        timeSince = Math.max(timeSince + 1, 500);
         if (!(boolean) Config.getConfig("fishing-macro")) return;
         if (client.player == null || client.world == null) return;
         if (!client.player.getMainHandStack().getItem().asItem().equals(Items.FISHING_ROD)){
@@ -49,18 +54,20 @@ public class FishingMacro {
         }
 
         if (armorStand != null && TextUtils.getFormattedText(armorStand.getCustomName()).equals("§c§l!!!§r")){
-            if ((boolean) Config.getConfig("fishing-macro")){
-                if (lastTick > 5) {
-                    InteractUtils.rightClick();
-                    lastTick = 0;
+            if ((boolean) Config.getConfig("fishing-macro") && cd1 <= 0){
+                if (!(boolean) Config.getConfig("slugfish-toggle") || timeSince > 400) {
+                    DelayUtils.tick(0, InteractUtils::rightClick);
+                    cd1 = 10;
+                    cd2 = 2;
                 }
             }
         }
         else {
             if ((boolean) Config.getConfig("fishing-macro")){
-                if (client.player.fishHook == null && lastTick > 5){
-                    InteractUtils.rightClick();
-                    lastTick = 0;
+                if (client.player.fishHook == null && cd2 <= 0){
+                    DelayUtils.tick(0, InteractUtils::rightClick);
+                    cd2 = 10;
+                    timeSince = 0;
                 }
             }
         }
