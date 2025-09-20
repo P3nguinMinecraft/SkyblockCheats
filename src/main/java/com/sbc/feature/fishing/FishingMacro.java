@@ -29,7 +29,7 @@ public class FishingMacro {
     public static void tick(MinecraftClient client){
         cd1 = Math.max(cd1 - 1, 0);
         cd2 = Math.max(cd2 - 1, 0);
-        timeSince = Math.max(timeSince + 1, 500);
+        timeSince = Math.min(timeSince + 1, 500);
         if (!(boolean) Config.getConfig("fishing-macro") && !(boolean) Config.getConfig("fishing-autoreel")) return;
         if (client.player == null || client.world == null) return;
         if (!client.player.getMainHandStack().getItem().asItem().equals(Items.FISHING_ROD)){
