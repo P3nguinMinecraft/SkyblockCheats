@@ -157,6 +157,7 @@ public class Config {
         setDefault("lasso-blockreel", false);
         setDefault("lasso-autoreel", false);
         setDefault("fishing-macro", false);
+        setDefault("fishing-autoreel", false);
         setDefault("slugfish-toggle", false);
     }
     

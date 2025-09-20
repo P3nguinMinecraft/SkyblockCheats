@@ -30,7 +30,7 @@ public class FishingMacro {
         cd1 = Math.max(cd1 - 1, 0);
         cd2 = Math.max(cd2 - 1, 0);
         timeSince = Math.max(timeSince + 1, 500);
-        if (!(boolean) Config.getConfig("fishing-macro")) return;
+        if (!(boolean) Config.getConfig("fishing-macro") && !(boolean) Config.getConfig("fishing-autoreel")) return;
         if (client.player == null || client.world == null) return;
         if (!client.player.getMainHandStack().getItem().asItem().equals(Items.FISHING_ROD)){
             clearStands();
@@ -54,7 +54,7 @@ public class FishingMacro {
         }
 
         if (armorStand != null && TextUtils.getFormattedText(armorStand.getCustomName()).equals("§c§l!!!§r")){
-            if ((boolean) Config.getConfig("fishing-macro") && cd1 <= 0){
+            if (((boolean) Config.getConfig("fishing-macro") || (boolean) Config.getConfig("fishing-autoreel")) && cd1 <= 0){
                 if (!(boolean) Config.getConfig("slugfish-toggle") || timeSince > 400) {
                     DelayUtils.tick(0, InteractUtils::rightClick);
                     cd1 = 10;
@@ -67,7 +67,6 @@ public class FishingMacro {
                 if (client.player.fishHook == null && cd2 <= 0){
                     DelayUtils.tick(0, InteractUtils::rightClick);
                     cd2 = 10;
-                    timeSince = 0;
                 }
             }
         }
@@ -76,6 +75,7 @@ public class FishingMacro {
     public static void rodCast(World world, PlayerEntity user, Hand hand){
         if (!user.equals(MinecraftClient.getInstance().player)) return;
         clearStands();
+        timeSince = 0;
     }
 
     private static void clearStands(){
