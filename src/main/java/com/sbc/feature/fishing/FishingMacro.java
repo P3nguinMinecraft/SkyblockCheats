@@ -62,12 +62,17 @@ public class FishingMacro {
                 }
             }
         }
+        else if (client.player.fishHook != null){
+            if (client.player.fishHook.getHookedEntity() != null && cd1 <= 0){
+                DelayUtils.tick(0, InteractUtils::rightClick);
+                cd1 = 10;
+                cd2 = 2;
+            }
+        }
         else {
-            if ((boolean) Config.getConfig("fishing-macro")){
-                if (client.player.fishHook == null && cd2 <= 0){
-                    DelayUtils.tick(0, InteractUtils::rightClick);
-                    cd2 = 10;
-                }
+            if ((boolean) Config.getConfig("fishing-macro") && cd2 <= 0){
+                DelayUtils.tick(0, InteractUtils::rightClick);
+                cd2 = 10;
             }
         }
     }

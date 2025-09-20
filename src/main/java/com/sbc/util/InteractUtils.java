@@ -16,6 +16,7 @@ public class InteractUtils {
     }
 
     public static void rightClick() {
+		if (client.currentScreen != null) return;
     	rClick.accept(MinecraftClient.getInstance());
     }
 
