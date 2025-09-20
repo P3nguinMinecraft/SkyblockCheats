@@ -150,8 +150,13 @@ Repeats previous fusion in Fusion Machine
   - `/sbc config set lasso-autoreel [true/false]`
 
 #### Fishing Macro
-Automatically reels and recasts the rod, best used for trophy fishing because Hypixel has anti-macro for sea creatures
-- `/sbc config set fishing-macro [true/false]`
+Features for automating fishing
+- Automatically reels and recasts the rod, best used for trophy fishing because Hypixel has anti-macro for sea creatures
+  - `/sbc config set fishing-macro [true/false]`
+- Support for slugfish (20 seconds before reel)
+  - `/sbc config set slugfish-toggle [true/false]`
+- Singular auto fish mode (does not recast for sea creatures)
+  - `/sbc config set fishing-autoreel [true/false]`
 
 ## Config
 `/sbc config list`: Lists all config options and values
@@ -249,6 +254,10 @@ Default: false<br>
 <b>lasso-autoreel</b>: Auto-reel when ready (true/false) <br>
 Default: false<br>
 <b>fishing-macro</b>: Automatically reels and recasts the rod (true/false) <br>
+Default: false<br>
+<b>slugfish-toggle</b>: Support for slugfish, waiting 20 seconds before reeling (true/false) <br>
+Default: false<br>
+<b>fishing-autoreel</b>: Singular auto fish mode, which does not recast for sea creatures (true/false) <br>
 Default: false<br>
 
 

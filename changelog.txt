@@ -1,1 +1,7 @@
 v1.1.5-dev
+
+- Fishing Macro Improvements
+    - Added support for slugfish (20 seconds before reel)
+        - /sbc config set slugfish-toggle [true/false]
+    - Added singular auto fish mode (does not recast for sea creatures)
+        - /sbc config set fishing-autoreel [true/false]
